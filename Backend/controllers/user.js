@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const db = require("../models/index");
 const CryptoJS = require("crypto-js");
 
 //personnalisation de KEY et IV pour la comparaison lors du login
@@ -28,18 +28,18 @@ exports.signup = (req, res, next) => {
 		// on hash le mot de passe
 		.hash(req.body.password, 10)
 		.then((hash) => {
+			console.log(req.body);
 			//on crée un user en cryptant le mail et en ajoutant le hash 
-			const user = new User({
-				email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString(),
-				password: hash,
-			});
-			//on enregistre dans la bdd
-			user.save()
+				db.User.create({
+					username: req.body.username,
+					email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString(),
+					password: hash,
+				})
 				.then(() => {
 					res.status(201).json({ message: "Utilisateur créé avec succès"});
 				})
 				.catch((error) => {
-					res.status(400).json({ error });
+					res.status(400).json(error);
 				});
 		})
 		.catch((error) => {
@@ -56,7 +56,7 @@ exports.login = (req, res, next) => {
 		return res.status(401).json({ message: "Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux"});
 	}
 	//on cherche le user avec le même email crypté
-	User.findOne({ email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString() })
+	db.User.findOne({ where: { email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString() } })
 		.then((user) => {
 			if (!user) {
 				return res.status(401).json({ error: "Utilisateur non enregistré" });
