@@ -1,27 +1,32 @@
 require("dotenv").config();
 
 const mysql = require("mysql");
+const { Sequelize } = require("sequelize");
 const express = require("express");
 const path = require("path");
-
 
 const userRoutes = require("./routes/user");
 
 const app = express();
 
-// on connecte la bdd 
-const dataBase = mysql.createConnection({
-	host: process.env.HOST,
-	user: process.env.USERNAME,
-	password: process.env.PASSWORD
-});
-dataBase.connect(function(err) {
-	if (err) {
-		console.log("Connexion à la base de données: ECHEC ");
-	}else {
-		console.log("Connexion à la base de données: SUCCES ");
+// on connecte la bdd
+const sequelize = new Sequelize(
+	"groupomania",
+	process.env.USERNAME,
+	process.env.PASSWORD,
+	{
+		dialect: "mysql",
+		host: process.env.HOST,
 	}
-});
+);
+sequelize
+	.authenticate()
+	.then(() => {
+		console.log("Connexion à la base de données: SUCCES !");
+	})
+	.catch((err) => {
+		console.log("Connexion à la base de données: ECHEC ", err);
+	});
 
 // on paramètre les headers pour eviter les erreurs cors
 app.use((req, res, next) => {
