@@ -29,11 +29,18 @@ exports.signup = (req, res, next) => {
 		.hash(req.body.password, 10)
 		.then((hash) => {
 			console.log(req.body);
+			const userObj = JSON.parse({
+				username: req.body.username,
+				email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString(),
+				password: hash,
+			})
+			console.log("userObj");
 			//on crée un user en cryptant le mail et en ajoutant le hash 
-				db.User.create({
-					username: req.body.username,
-					email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString(),
-					password: hash,
+				db.user.create({
+					...userObj,
+					avatar: `${req.protocol}://${req.get("host")}/images/${
+						req.file.filename
+					}`,
 				})
 				.then(() => {
 					res.status(201).json({ message: "Utilisateur créé avec succès"});

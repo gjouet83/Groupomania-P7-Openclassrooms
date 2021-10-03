@@ -14,7 +14,7 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "users",
+    "username": "root",
     "password": "Plex1001px",
     "database": "groupomania",
     "host": "127.0.0.1",
