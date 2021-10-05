@@ -6,7 +6,7 @@ const express = require("express");
 const path = require("path");
 
 const userRoutes = require("./routes/user");
-const profilRoutes = require("./routes/profil");
+
 
 const app = express();
 
@@ -47,6 +47,6 @@ app.use(express.json());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/users", userRoutes);
-app.use("/api/profils", profilRoutes);
+
 
 module.exports = app;

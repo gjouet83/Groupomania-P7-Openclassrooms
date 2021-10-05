@@ -9,6 +9,13 @@ const key = CryptoJS.enc.Hex.parse(process.env.KEY);
 const iv = CryptoJS.enc.Hex.parse(process.env.IV);
 
 // regex pour la protection d'injection de code
+const validFields = (field) => {
+	return /^[\sa-zA-Z0-9ÀÂÇÈÉÊËÎÔÙÛàâçèéêëîôöùû\.\(\)\[\]\"\'\-,;:\/!\?]+$/g.test(
+		field
+	);
+};
+
+// regex pour la protection d'injection de code
 const validEmail = (email) => {
     return /^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(email);
 };
@@ -88,12 +95,38 @@ exports.login = (req, res, next) => {
 		});
 };
 
+exports.updateProfil = (req, res, next) => {
+	console.log(req);
+    if (!validFields(req.body.name)) {
+		return res.status(406).json({ message: "Caractères non autorisés" });
+	}
+	if (!validFields(req.body.givenname)) {
+		return res.status(406).json({ message: "Caractères non autorisés" });
+	}
+    const updatedProfil = req.file
+    ? {
+            ...req.body,
+            avatar: `${req.protocol}://${req.get("host")}/images/${
+                req.file.filename
+            }`,
+      }
+    : { ...req.body };
+	console.log(req.body);
+    db.user.update({...updatedProfil }, { where : { id: req.query.id} })
+    .then(() => {
+        res.status(200).json({ message:"Profil modifié avec SUCCES !"})
+    }).catch(() => {
+        res.status(400).json({ error:"ECHEC de la modification du profil"})
+    })
+};
+
 exports.deleteUser = (req, res, next) => {
 	db.user.findOne({ where: { id: req.query.id }})
-	.then((user) => {	
+	.then((user) => {
+		console.log(user);	
 		//on supprime le fichier
-		const filename = user.avatar.split("Backend/images/")[1];
-		fs.unlink(`Backend/images/userId-${filename}`, () => {
+		const filename = user.avatar.split("images/")[1];
+		fs.unlink(`images/${filename}`, () => {
 			user.destroy({ where: { id: req.query.id }})
 				.then(() => {
 					res.status(200).json({

@@ -22,6 +22,18 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      name: {
+        type: Sequelize.STRING
+      },
+      givenname: {
+        type: Sequelize.STRING
+      },
+      birthday: {
+        type: Sequelize.DATEONLY
+      },
+      avatar: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATEONLY
