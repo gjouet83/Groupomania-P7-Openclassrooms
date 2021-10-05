@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../models/index");
 const CryptoJS = require("crypto-js");
+const fs = require("fs");
 
 //personnalisation de KEY et IV pour la comparaison lors du login
 const key = CryptoJS.enc.Hex.parse(process.env.KEY);
@@ -28,21 +29,14 @@ exports.signup = (req, res, next) => {
 		// on hash le mot de passe
 		.hash(req.body.password, 10)
 		.then((hash) => {
-			console.log(req.body);
-			const userObj = JSON.parse({
-				username: req.body.username,
-				email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString(),
-				password: hash,
-			})
-			console.log("userObj");
 			//on crée un user en cryptant le mail et en ajoutant le hash 
 				db.user.create({
-					...userObj,
-					avatar: `${req.protocol}://${req.get("host")}/images/${
-						req.file.filename
-					}`,
+					username: req.body.username,
+					email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString(),
+					password: hash,
 				})
 				.then(() => {
+					console.log(req.params);
 					res.status(201).json({ message: "Utilisateur créé avec succès"});
 				})
 				.catch((error) => {
@@ -63,7 +57,7 @@ exports.login = (req, res, next) => {
 		return res.status(401).json({ message: "Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux"});
 	}
 	//on cherche le user avec le même email crypté
-	db.User.findOne({ where: { email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString() } })
+	db.user.findOne({ where: { email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString() } })
 		.then((user) => {
 			if (!user) {
 				return res.status(401).json({ error: "Utilisateur non enregistré" });
@@ -81,7 +75,7 @@ exports.login = (req, res, next) => {
 						token: jwt.sign(
 							{ userId: user._id },
 							process.env.USER_TOKEN,
-							{ expiresIn: "4h" }
+							{ expiresIn: "48h" }
 						),
 					});
 				})
@@ -92,4 +86,26 @@ exports.login = (req, res, next) => {
 		.catch((error) => {
 			res.status(501).json({ error });
 		});
+};
+
+exports.deleteUser = (req, res, next) => {
+	db.user.findOne({ where: { id: req.query.id }})
+	.then((user) => {	
+		//on supprime le fichier
+		const filename = user.avatar.split("Backend/images/")[1];
+		fs.unlink(`Backend/images/userId-${filename}`, () => {
+			user.destroy({ where: { id: req.query.id }})
+				.then(() => {
+					res.status(200).json({
+						message: "Compte supprimé avec SUCCES !",
+					});
+				})
+				.catch((error) => {
+					res.status(400).json({ error });
+				});
+		});
+	})
+	.catch(() => {
+		res.status(500).json({ error:"Le compte utilisateur n'existe pas" });
+	});
 };

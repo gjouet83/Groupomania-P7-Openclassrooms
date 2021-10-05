@@ -6,14 +6,15 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.DataTypes.INTEGER.UNSIGNED
       },
       userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.DataTypes.INTEGER.UNSIGNED,
+        onDelete: "CASCADE",
         references: {
           model:"users",
-          key:"id"
+          key:"id",
         }
       },
       name: {

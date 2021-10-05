@@ -10,17 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.profil.belongsTO(models.user, {
-        foreignKey: {
-          allowNull: false
-        }
-      })
+      profil.belongsTo(models.user);
     }
   };
   profil.init({
-    userId: DataTypes.INTEGER.UNSIGNED,
-    name: DataTypes.STRING(50),
-    givenname: DataTypes.STRING(50),
+    userId: DataTypes.INTEGER,
+    name: DataTypes.STRING,
+    givenname: DataTypes.STRING,
     birthday: DataTypes.DATEONLY,
     avatar: DataTypes.STRING
   }, {
