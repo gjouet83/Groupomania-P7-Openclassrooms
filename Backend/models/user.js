@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       user.hasMany(models.post, {onDelete: "cascade"});
+      user.hasMany(models.like, {onDelete: "cascade"});
+      user.hasMany(models.comment, {onDelete: "cascade"});
     }
   };
   user.init({

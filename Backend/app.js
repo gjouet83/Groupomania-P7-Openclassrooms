@@ -1,11 +1,13 @@
 require("dotenv").config();
 
-const mysql = require("mysql");
 const { Sequelize } = require("sequelize");
 const express = require("express");
 const path = require("path");
 
 const userRoutes = require("./routes/user");
+const postRoutes = require("./routes/post");
+const commentRoutes = require("./routes/comment");
+const likeRoutes = require("./routes/like");
 
 
 const app = express();
@@ -47,6 +49,9 @@ app.use(express.json());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/likes", likeRoutes);
 
 
 module.exports = app;

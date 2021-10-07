@@ -43,7 +43,6 @@ exports.signup = (req, res, next) => {
 					password: hash,
 				})
 				.then(() => {
-					console.log(req.params);
 					res.status(201).json({ message: "Utilisateur créé avec succès"});
 				})
 				.catch((error) => {
@@ -95,8 +94,16 @@ exports.login = (req, res, next) => {
 		});
 };
 
-exports.updateProfil = (req, res, next) => {
-	console.log(req);
+exports.getOneUser = (req, res, next) => {
+	db.user.findOne({ where: {id: req.query.id}})
+	.then((user) => {
+		res.status(200).json(user);
+	}).catch(() => {
+		res.status(400).json({error:"Utilisateur introuvable"});
+	})
+};
+
+exports.updateUser = (req, res, next) => {
     if (!validFields(req.body.name)) {
 		return res.status(406).json({ message: "Caractères non autorisés" });
 	}
@@ -111,32 +118,30 @@ exports.updateProfil = (req, res, next) => {
             }`,
       }
     : { ...req.body };
-	console.log(req.body);
     db.user.update({...updatedProfil }, { where : { id: req.query.id} })
     .then(() => {
         res.status(200).json({ message:"Profil modifié avec SUCCES !"})
     }).catch(() => {
-        res.status(400).json({ error:"ECHEC de la modification du profil"})
+		res.status(400).json({ error:"ECHEC de la modification du profil"});
     })
 };
 
 exports.deleteUser = (req, res, next) => {
 	db.user.findOne({ where: { id: req.query.id }})
-	.then((user) => {
-		console.log(user);	
+	.then((user) => {	
 		//on supprime le fichier
-		const filename = user.avatar.split("images/")[1];
-		fs.unlink(`images/${filename}`, () => {
+		const filename = "userId-" + req.query.id;
+		fs.unlink(`images/${filename}`,() => {
 			user.destroy({ where: { id: req.query.id }})
-				.then(() => {
-					res.status(200).json({
-						message: "Compte supprimé avec SUCCES !",
-					});
-				})
-				.catch((error) => {
-					res.status(400).json({ error });
+			.then(() => {
+				res.status(200).json({
+					message: "Compte supprimé avec SUCCES !",
 				});
-		});
+			})
+			.catch((error) => {
+				res.status(400).json({ error });
+			});
+		})
 	})
 	.catch(() => {
 		res.status(500).json({ error:"Le compte utilisateur n'existe pas" });
