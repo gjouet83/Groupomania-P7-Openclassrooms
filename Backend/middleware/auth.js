@@ -8,12 +8,12 @@ module.exports = (req, res, next) => {
     //on récupère le userId de l'object décodedToken et on le test dans le if
     const userId = decodedToken.userId;
     if (req.body.userId && req.body.userId !== userId) {
-      throw "Utilisateur non enregistré";
+      throw "Utilisateur non autorisé";
     } else {
       next();
     }
   } catch {
-    res.status(403).json({error: new Error("Requête invalide")
+    res.status(403).json({error: "Utilisateur non autorisé"
     });
   }
 };

@@ -8,10 +8,15 @@ const validFields = (field) => {
 	);
 };
 
-exports.getAllPost = (req, res, next) => {
-	db.post.findAll().then((posts) => {
-		res.status(200).json(posts);
-	});
+exports.getAllPosts = (req, res, next) => {
+	db.post
+		.findAll({ order: [["createdAt", "DESC"]] })
+		.then((posts) => {
+			res.status(200).json(posts);
+		})
+		.catch((err) => {
+			res.status(400).json(err);
+		});
 };
 
 exports.createPost = (req, res, next) => {
@@ -23,14 +28,12 @@ exports.createPost = (req, res, next) => {
 	}
 	const newPost = req.file
 		? {
-				userId: req.query.id,
 				...req.body,
 				attachment: `${req.protocol}://${req.get("host")}/images/${
 					req.file.filename
 				}`,
 		  }
 		: {
-				userId: req.query.id,
 				...req.body,
 		  };
 	db.post
@@ -61,32 +64,51 @@ exports.updatePost = (req, res, next) => {
 		  }
 		: { ...req.body };
 	db.post
-		.update({ ...updatedPost }, { where: { id: req.query.id } })
-		.then(() => {
-			res.status(200).json({ message: "Post modifié avec SUCCES !" });
+		.findOne({ where: { userId: req.body.userId, id: req.body.id } })
+		.then((post) => {
+			post.update({ ...updatedPost })
+				.then(() => {
+					res.status(200).json({
+						message: "Post modifié avec SUCCES !",
+					});
+				})
+				.catch(() => {
+					res.status(400).json({
+						error: "ECHEC de la modification du post",
+					});
+				});
 		})
 		.catch(() => {
-			res.status(400).json({ error: "ECHEC de la modification du post" });
+			res.status(400).json({
+				error: "Utilisateur non autorisé ou post inexistant",
+			});
 		});
 };
 
 exports.deletePost = (req, res, next) => {
 	db.post
-		.findOne({ where: { id: req.query.id } })
+		.findOne({ where: { id: req.body.id, userId: req.body.userId } })
 		.then((post) => {
+            if (!post) {
+                throw err;
+            }
 			//on supprime le fichier
-			const filename = post.attachment.split("images/")[1];
-			fs.unlink(`images/${filename}`, () => {
-				db.post.destroy({ where: { id: req.query.id } })
-					.then(() => {
-						res.status(200).json({
-							message: "Post supprimé avec SUCCES !",
-						});
-					})
-					.catch((error) => {
-						res.status(400).json({ error });
+			if (post.attachement) {
+				const filename = post.attachment.split("images/")[1];
+				fs.unlink(`images/${filename}`, () => {
+					console.log("image supprimée");
+				});
+			}
+			post
+				.destroy()
+				.then(() => {
+					res.status(200).json({
+						message: "Post supprimé avec SUCCES !",
 					});
-			});
+				})
+				.catch((error) => {
+					res.status(400).json({ error });
+				});
 		})
 		.catch(() => {
 			res.status(500).json({ error: "Le post n'existe pas" });

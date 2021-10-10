@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   like.init({
-    userId: DataTypes.INTEGER,
-    postId: DataTypes.INTEGER,
-    like: DataTypes.INTEGER,
-    dislike: DataTypes.INTEGER
+    userId: DataTypes.INTEGER.UNSIGNED,
+    postId: DataTypes.INTEGER.UNSIGNED,
+    like: DataTypes.INTEGER.UNSIGNED,
+    dislike: DataTypes.INTEGER.UNSIGNED
   }, {
     sequelize,
     modelName: 'like',
