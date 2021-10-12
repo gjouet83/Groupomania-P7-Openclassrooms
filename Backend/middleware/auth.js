@@ -7,13 +7,13 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.USER_TOKEN);
     //on récupère le userId de l'object décodedToken et on le test dans le if
     const userId = decodedToken.userId;
-    if (req.body.userId && req.body.userId !== userId) {
+    const admin = decodedToken.admin;
+    if (req.body.userId && (req.body.userId !== userId && !admin)) {
       throw "Utilisateur non autorisé";
     } else {
       next();
     }
   } catch {
-    res.status(403).json({error: "Utilisateur non autorisé"
-    });
+    res.status(403).json({error: "Utilisateur non autorisé"});
   }
 };

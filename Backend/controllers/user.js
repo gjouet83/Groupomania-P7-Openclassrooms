@@ -32,37 +32,30 @@ exports.signup = (req, res, next) => {
 		return res.status(401).json({ message: "Email non valide" });
 	}
 	if (!validPassword(req.body.password)) {
-		return res
-			.status(401)
-			.json({
-				message:
-					"Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux",
-			});
+		return res.status(401).json({
+			message:
+				"Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux",
+		});
 	}
 	bcrypt
 		// on hash le mot de passe
 		.hash(req.body.password, 10)
 		.then((hash) => {
 			//on crée un user en cryptant le mail et en ajoutant le hash
-			db.user
-				.create({
+			db.user.create({
 					username: req.body.username,
-					email: CryptoJS.AES.encrypt(req.body.email, key, {
-						iv: iv,
-					}).toString(),
+					email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv,}).toString(),
 					password: hash,
 				})
 				.then(() => {
-					res.status(201).json({
-						message: "Utilisateur créé avec succès",
-					});
+					res.status(201).json({message: "Utilisateur créé avec succès"});
 				})
 				.catch((error) => {
 					res.status(400).json(error);
 				});
 		})
-		.catch((error) => {
-			res.status(500).json({ error });
+		.catch(() => {
+			res.status(500).json({error: "DataBase Error"});
 		});
 };
 
@@ -72,49 +65,40 @@ exports.login = (req, res, next) => {
 		return res.status(401).json({ message: "Email non valide" });
 	}
 	if (!validPassword(req.body.password)) {
-		return res
-			.status(401)
-			.json({
-				message:
-					"Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux",
-			});
+		return res.status(401).json({ message: "Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux"});
 	}
 	//on cherche le user avec le même email crypté
-	db.user
-		.findOne({
-			where: {
-				email: CryptoJS.AES.encrypt(req.body.email, key, {
-					iv: iv,
-				}).toString(),
-			},
+	db.user.findOne({
+			where: { email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv,}).toString()}
 		})
 		.then((user) => {
 			if (!user) {
-				return res
-					.status(401)
-					.json({ error: "Utilisateur non enregistré" });
+				return res.status(401).json({ error: "Utilisateur non enregistré" });
 			}
 			bcrypt
 				//on compare le hash du password
 				.compare(req.body.password, user.password)
 				.then((passwordOk) => {
 					if (!passwordOk) {
-						return res
-							.status(401)
-							.json({ error: "Mot de passe incorrect" });
+						return res.status(401).json({ error: "Mot de passe incorrect" });
 					}
+					const filename = "userId-" + user.id;
+					fs.mkdir(`images/${filename}`, () => {
+						res.status(200).json({
+							userId: user.id,
+							admin: user.admin,
+							token: jwt.sign(
+								{ userId: user.id, admin: user.admin },
+								process.env.USER_TOKEN,
+								{ expiresIn: "48h" }
+							),
+						});
+					})
 					// on crée un token
-					res.status(200).json({
-						userId: user.id,
-						token: jwt.sign(
-							{ userId: user.id },
-							process.env.USER_TOKEN,
-							{ expiresIn: "48h" }
-						),
-					});
+	
 				})
-				.catch((error) => {
-					res.status(500).json({ error });
+				.catch(() => {
+					res.status(500).json({ error: "DataBase Error"});
 				});
 		})
 		.catch((error) => {
@@ -123,13 +107,15 @@ exports.login = (req, res, next) => {
 };
 
 exports.getOneUser = (req, res, next) => {
-	db.user
-		.findOne({ where: { id: req.body.id } })
+	db.user.findOne({ where: { id: req.body.userId } })
 		.then((user) => {
+			if (!user) {
+				return res.status(404).json({ error: "Utilisateur non trouvé" });
+			}
 			res.status(200).json(user);
 		})
 		.catch(() => {
-			res.status(400).json({ error: "Utilisateur introuvable" });
+			res.status(500).json({ error: "DataBase Error" });
 		});
 };
 
@@ -143,38 +129,32 @@ exports.updateUser = (req, res, next) => {
 	const updatedProfil = req.file
 		? {
 				...req.body,
-				avatar: `${req.protocol}://${req.get("host")}/images/${
+				avatar: `${req.protocol}://${req.get("host")}/images/userId-${req.body.userId}/${
 					req.file.filename
 				}`,
 		  }
 		: { ...req.body };
-	db.user
-		.update({ ...updatedProfil }, { where: { id: req.body.userId } })
+	db.user.update({ ...updatedProfil }, { where: { id: req.body.userId } })
 		.then(() => {
 			res.status(200).json({ message: "Profil modifié avec SUCCES !" });
 		})
 		.catch(() => {
-			res.status(400).json({
-				error: "ECHEC de la modification du profil",
-			});
+			res.status(400).json({ error: "ECHEC de la modification du profil" });
 		});
 };
 
 exports.deleteUser = (req, res, next) => {
-	db.user
-		.findOne({ where: { id: req.body.userId } })
+	db.user.findOne({ where: { id: req.body.userId } })
 		.then((user) => {
 			if (!user) {
-				throw err;
+				return res.status(404).json({ error: "Utilisateur non trouvé" });
 			}
 			//on supprime le fichier
-			const filename = "userId-" + req.body.id;
-			fs.unlink(`images/${filename}`, () => {
-				user.destroy({ where: { id: req.body.userId } })
+			const filename = "userId-" + user.id;
+			fs.rmdir(`images/${filename}`,{ recursive: true}, () => {
+				user.destroy()
 					.then(() => {
-						res.status(200).json({
-							message: "Compte supprimé avec SUCCES !",
-						});
+						res.status(200).json({message: "Compte supprimé avec SUCCES !"});
 					})
 					.catch((error) => {
 						res.status(400).json({ error });
@@ -182,8 +162,6 @@ exports.deleteUser = (req, res, next) => {
 			});
 		})
 		.catch(() => {
-			res.status(500).json({
-				error: "Le compte utilisateur n'existe pas",
-			});
+			res.status(500).json({ error: "DataBase Error"});
 		});
 };

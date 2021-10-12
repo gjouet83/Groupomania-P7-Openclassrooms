@@ -6,8 +6,9 @@ const multer = require("../middleware/multer-posts");
 const router = express.Router();
 
 router.get("/", auth, commentCtrl.getComments);
+router.get("/:id", auth, commentCtrl.getOneComment);
 router.post("/", auth, multer, commentCtrl.createComment);
-router.put("/", auth, multer, commentCtrl.updateComment);
-router.delete("/", auth, commentCtrl.deleteComment);
+router.put("/:id", auth, multer, commentCtrl.updateComment);
+router.delete("/:id", auth, commentCtrl.deleteComment);
 
 module.exports = router;

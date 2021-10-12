@@ -9,13 +9,12 @@ const validFields = (field) => {
 };
 
 exports.getAllPosts = (req, res, next) => {
-	db.post
-		.findAll({ order: [["createdAt", "DESC"]] })
+	db.post.findAll({ order: [["createdAt", "DESC"]] })
 		.then((posts) => {
 			res.status(200).json(posts);
 		})
-		.catch((err) => {
-			res.status(400).json(err);
+		.catch(() => {
+			res.status(500).json({ error: "DataBase Error"});
 		});
 };
 
@@ -29,15 +28,14 @@ exports.createPost = (req, res, next) => {
 	const newPost = req.file
 		? {
 				...req.body,
-				attachment: `${req.protocol}://${req.get("host")}/images/${
+				attachment: `${req.protocol}://${req.get("host")}/images/userId-${req.body.userId}/${
 					req.file.filename
 				}`,
 		  }
 		: {
 				...req.body,
 		  };
-	db.post
-		.create({
+	db.post.create({
 			...newPost,
 		})
 		.then(() => {
@@ -58,59 +56,51 @@ exports.updatePost = (req, res, next) => {
 	const updatedPost = req.file
 		? {
 				...req.body,
-				attachment: `${req.protocol}://${req.get("host")}/images/${
+				attachment: `${req.protocol}://${req.get("host")}/images/userId-${req.body.userId}/${
 					req.file.filename
 				}`,
 		  }
 		: { ...req.body };
-	db.post
-		.findOne({ where: { userId: req.body.userId, id: req.body.id } })
+	db.post.findOne({ where: { id: req.params.id } })
 		.then((post) => {
+            if (!post) {
+				return res.status(404).json({ error: "Post non trouvé" });
+			}
 			post.update({ ...updatedPost })
 				.then(() => {
-					res.status(200).json({
-						message: "Post modifié avec SUCCES !",
-					});
+					res.status(200).json({ message: "Post modifié avec SUCCES !"});
 				})
 				.catch(() => {
-					res.status(400).json({
-						error: "ECHEC de la modification du post",
-					});
+					res.status(400).json({error: "ECHEC de la modification du post"});
 				});
 		})
 		.catch(() => {
-			res.status(400).json({
-				error: "Utilisateur non autorisé ou post inexistant",
-			});
+			res.status(500).json({error: "DataBase Error1"});
 		});
 };
 
 exports.deletePost = (req, res, next) => {
-	db.post
-		.findOne({ where: { id: req.body.id, userId: req.body.userId } })
+	db.post.findOne({ where: { id: req.params.id } })
 		.then((post) => {
             if (!post) {
-                throw err;
-            }
+				return res.status(404).json({ error: "Post non trouvé" });
+			}
 			//on supprime le fichier
 			if (post.attachement) {
-				const filename = post.attachment.split("images/")[1];
-				fs.unlink(`images/${filename}`, () => {
+				const filename = post.attachment.split(`images/userId-${req.body.userId}`)[1];
+				fs.unlink(`images/userId-${req.body.userId}/${filename}`, () => {
 					console.log("image supprimée");
 				});
 			}
-			post
-				.destroy()
+			post.destroy()
 				.then(() => {
-					res.status(200).json({
-						message: "Post supprimé avec SUCCES !",
-					});
+					res.status(200).json({message: "Post supprimé avec SUCCES !"});
 				})
 				.catch((error) => {
 					res.status(400).json({ error });
 				});
 		})
 		.catch(() => {
-			res.status(500).json({ error: "Le post n'existe pas" });
+			res.status(500).json({ error: "DataBase Error" });
 		});
 };

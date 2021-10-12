@@ -42,6 +42,11 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.DATEONLY,
 			},
+      admin: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: 0,
+      },
 		});
 	},
 	down: async (queryInterface, Sequelize) => {
