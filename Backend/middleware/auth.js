@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
     const userId = decodedToken.userId;
     const admin = decodedToken.admin;
     if (req.body.userId && (req.body.userId !== userId && !admin)) {
-      throw "Utilisateur non autorisé";
+      res.status(403).json({ error: "Utilisateur non autorisé"});
     } else {
       next();
     }

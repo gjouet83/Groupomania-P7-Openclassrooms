@@ -102,7 +102,7 @@ exports.login = (req, res, next) => {
 				});
 		})
 		.catch((error) => {
-			res.status(501).json({ error });
+			res.status(error.status).json({ error });
 		});
 };
 

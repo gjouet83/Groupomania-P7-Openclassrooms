@@ -28,11 +28,9 @@ module.exports = {
 			},
 			like: {
 				type: Sequelize.DataTypes.INTEGER.UNSIGNED,
-				defaultValue: 0,
 			},
 			dislike: {
 				type: Sequelize.DataTypes.INTEGER.UNSIGNED,
-				defaultValue: 0,
 			},
 			createdAt: {
 				allowNull: false,

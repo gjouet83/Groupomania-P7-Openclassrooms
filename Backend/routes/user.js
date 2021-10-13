@@ -5,10 +5,10 @@ const multer = require("../middleware/multer");
 
 const router = express.Router();
 
-router.get("/", userCtrl.getOneUser);
+router.get("/", auth, userCtrl.getOneUser);
 router.post("/signup", userCtrl.signup);
 router.post("/login", userCtrl.login);
-router.put("/", auth, multer, userCtrl.updateUser);
-router.delete("/", auth, userCtrl.deleteUser);
+router.put("/update/:id", auth, multer, userCtrl.updateUser);
+router.delete("/delete/:id", auth, userCtrl.deleteUser);
 
 module.exports = router;
