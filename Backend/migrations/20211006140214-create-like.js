@@ -27,10 +27,14 @@ module.exports = {
 				},
 			},
 			like: {
+        allowNull: false,
 				type: Sequelize.DataTypes.INTEGER.UNSIGNED,
+        defaultValue: 0
 			},
 			dislike: {
+        allowNull: false,
 				type: Sequelize.DataTypes.INTEGER.UNSIGNED,
+        defaultValue: 0
 			},
 			createdAt: {
 				allowNull: false,

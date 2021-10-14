@@ -9,7 +9,19 @@ const validFields = (field) => {
 };
 
 exports.getAllPosts = (req, res, next) => {
-	db.post.findAll({ order: [["createdAt", "DESC"]] })
+	db.post.findAll({
+        include:[
+            {
+                model: db.user,
+                attributes: ['username']
+            },
+            {
+                model: db.like,
+                attributes: ["like","dislike"]
+            }
+        ],
+        order: [["createdAt", "DESC"]] 
+    })
 		.then((posts) => {
 			res.status(200).json(posts);
 		})

@@ -9,7 +9,11 @@ const validFields = (field) => {
 };
 
 exports.getComments = (req, res, next) => {
-	db.comment.findAll({
+	db.comment.findAndCountAll({
+            include:[{
+                model: db.user,
+                attributes: ['username']
+            }],
 			where: { postId: req.body.postId },
 			order: [["createdAt", "DESC"]],
 		})

@@ -1,7 +1,7 @@
 const db = require("../models/index");
 
 exports.getLikes = (req, res, next) => {
-	db.like.findAll({ where: { postId: req.body.postId } })
+	db.like.findAndCountAll({ where: { postId: req.body.postId } })
 		.then((likes) => {
 			res.status(200).json(likes);
 		})
@@ -21,7 +21,6 @@ exports.createLike = (req, res, next) => {
                 postId: req.body.postId,
                 dislike: 1
             }: {...req.body};
-            console.log(likeOrDislike);
             db.like.create({...likeOrDislike})
             .then(() => {
                 res.status(200).json({ message: "Like ajouté avec SUCCES !"});

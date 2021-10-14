@@ -112,7 +112,7 @@ exports.getOneUser = (req, res, next) => {
 			if (!user) {
 				return res.status(404).json({ error: "Utilisateur non trouvé" });
 			}
-			res.status(200).json(user);
+			res.status(200).json({user});
 		})
 		.catch(() => {
 			res.status(500).json({ error: "DataBase Error" });
