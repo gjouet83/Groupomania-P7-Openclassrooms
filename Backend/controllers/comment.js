@@ -10,18 +10,22 @@ const validFields = (field) => {
 
 exports.getComments = (req, res, next) => {
 	db.comment.findAndCountAll({
-            include:[{
-                model: db.user,
-                attributes: ['username']
-            }],
+        //jointure table users (username)
+			include: [
+				{
+					model: db.user,
+					attributes: ["username"],
+				},
+			],
 			where: { postId: req.body.postId },
+            // ordre par date de la plus recente a la plus ancienne
 			order: [["createdAt", "DESC"]],
 		})
 		.then((comments) => {
 			res.status(200).json(comments);
 		})
-		.catch(() => {
-			res.status(500).json({ error: "DataBase Error" });
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };
 
@@ -33,8 +37,8 @@ exports.getOneComment = (req, res, next) => {
 			}
 			res.status(200).json(comment);
 		})
-		.catch(() => {
-			res.status(500).json({ error: "DataBase Error" });
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };
 
@@ -42,16 +46,13 @@ exports.createComment = (req, res, next) => {
 	if (!validFields(req.body.content)) {
 		return res.status(406).json({ message: "Caractères non autorisés" });
 	}
+    // on test si la requête contient un fichier
 	const newComment = req.file
 		? {
 				...req.body,
-				attachment: `${req.protocol}://${req.get("host")}/images/userId-${req.body.userId}/${
-					req.file.filename
-				}`,
+				attachment: `${req.protocol}://${req.get("host")}/images/userId-${req.body.userId}/${req.file.filename}`,
 		  }
-		: {
-				...req.body,
-		  };
+		: { ...req.body };
 	db.comment.create({
 			...newComment,
 		})
@@ -70,12 +71,11 @@ exports.updateComment = (req, res, next) => {
 	if (!validFields(req.body.content)) {
 		return res.status(406).json({ message: "Caractères non autorisés" });
 	}
+    //on test si la requête contient un fichier
 	const updatedComment = req.file
 		? {
 				...req.body,
-				attachment: `${req.protocol}://${req.get("host")}/images/userId-${req.body.userId}/${
-					req.file.filename
-				}`,
+				attachment: `${req.protocol}://${req.get("host")}/images/userId-${req.body.userId}/${req.file.filename}`,
 		  }
 		: { ...req.body };
 	db.comment.findOne({ where: { id: req.params.id } })
@@ -85,14 +85,18 @@ exports.updateComment = (req, res, next) => {
 			}
 			comment.update({ ...updatedComment })
 				.then(() => {
-					res.status(200).json({ message: "Commentaire modifié avec SUCCES !"});
+					res.status(200).json({
+						message: "Commentaire modifié avec SUCCES !",
+					});
 				})
 				.catch(() => {
-					res.status(400).json({ error: "ECHEC de la modification du post"});
+					res.status(400).json({
+						error: "ECHEC de la modification du post",
+					});
 				});
 		})
-		.catch(() => {
-			res.status(500).json({ error: "DataBase Error"});
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };
 
@@ -107,19 +111,20 @@ exports.deleteComment = (req, res, next) => {
 			//on supprime le fichier
 			if (comment.attachment) {
 				const filename = comment.attachment.split(`images/userId-${req.body.userId}`)[1];
-				fs.unlink(`images/userId-${req.body.userId}/${filename}`, () => {
-					console.log("image supprimée");
-				});
+				fs.unlink(`images/userId-${req.body.userId}/${filename}`,() => {
+						console.log("image supprimée");
+					}
+				);
 			}
 			comment.destroy()
 				.then(() => {
-					res.status(200).json({ message: "Commentaire supprimé avec SUCCES !" });
+					res.status(200).json({message: "Commentaire supprimé avec SUCCES !" });
 				})
 				.catch((error) => {
 					res.status(400).json({ error });
 				});
 		})
-		.catch(() => {
-			res.status(500).json({ error: "DataBase Error" });
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };

@@ -10,6 +10,7 @@ const validFields = (field) => {
 
 exports.getAllPosts = (req, res, next) => {
 	db.post.findAll({
+        // jointure table user et like
         include:[
             {
                 model: db.user,
@@ -20,13 +21,14 @@ exports.getAllPosts = (req, res, next) => {
                 attributes: ["like","dislike"]
             }
         ],
+        // ordre par date de la plus recente a la plus ancienne
         order: [["createdAt", "DESC"]] 
     })
 		.then((posts) => {
 			res.status(200).json(posts);
 		})
-		.catch(() => {
-			res.status(500).json({ error: "DataBase Error"});
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };
 
@@ -37,6 +39,7 @@ exports.createPost = (req, res, next) => {
 	if (!validFields(req.body.content)) {
 		return res.status(406).json({ message: "Caractères non autorisés" });
 	}
+    // on test si la requête contient un fichier
 	const newPost = req.file
 		? {
 				...req.body,
@@ -65,12 +68,11 @@ exports.updatePost = (req, res, next) => {
 	if (!validFields(req.body.content)) {
 		return res.status(406).json({ message: "Caractères non autorisés" });
 	}
+    // on test si la requête contient un fichier
 	const updatedPost = req.file
 		? {
 				...req.body,
-				attachment: `${req.protocol}://${req.get("host")}/images/userId-${req.body.userId}/${
-					req.file.filename
-				}`,
+				attachment: `${req.protocol}://${req.get("host")}/images/userId-${req.body.userId}/${req.file.filename}`,
 		  }
 		: { ...req.body };
 	db.post.findOne({ where: { id: req.params.id } })
@@ -86,8 +88,8 @@ exports.updatePost = (req, res, next) => {
 					res.status(400).json({error: "ECHEC de la modification du post"});
 				});
 		})
-		.catch(() => {
-			res.status(500).json({error: "DataBase Error1"});
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };
 
@@ -112,7 +114,7 @@ exports.deletePost = (req, res, next) => {
 					res.status(400).json({ error });
 				});
 		})
-		.catch(() => {
-			res.status(500).json({ error: "DataBase Error" });
+		.catch((error) => {
+			res.status(500).json({ error  });
 		});
 };

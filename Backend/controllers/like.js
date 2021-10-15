@@ -5,17 +5,21 @@ exports.getLikes = (req, res, next) => {
 		.then((likes) => {
 			res.status(200).json(likes);
 		})
-		.catch((err) => {
-			res.status(500).json(err);
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };
 
 exports.createLike = (req, res, next) => {
+    //on cherche si un like existe avec le postId et le userId
     db.like.findOne({where: { postId: req.body.postId, userId: req.body.userId }})
     .then((like) => {
+        // si il existe => fonction update en lui passant la requête et le like trouvé
         if(like) {
             updateLike(req, res, like);
+            // sinon on crée le like en fonction de la valeur de like:
         } else {
+            // si like= -1 alors c'est un dislike, si like= 1 alors c'est un like => on recopie juste la requête
             const likeOrDislike = req.body.like === -1 ? {
                 userId: req.body.userId,
                 postId: req.body.postId,
@@ -25,13 +29,13 @@ exports.createLike = (req, res, next) => {
             .then(() => {
                 res.status(200).json({ message: "Like ajouté avec SUCCES !"});
             })
-            .catch((err) => {
-                res.status(400).json(err);
+            .catch((error) => {
+                res.status(400).json({ error });
             })
         }
     })
-    .catch((err) => {
-        res.status(400).json(err);
+    .catch((error) => {
+        res.status(400).json({ error });
     })
 
 };

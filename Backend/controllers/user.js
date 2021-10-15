@@ -51,11 +51,11 @@ exports.signup = (req, res, next) => {
 					res.status(201).json({message: "Utilisateur créé avec succès"});
 				})
 				.catch((error) => {
-					res.status(400).json(error);
+					res.status(400).json({ error });
 				});
 		})
-		.catch(() => {
-			res.status(500).json({error: "DataBase Error"});
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };
 
@@ -82,27 +82,27 @@ exports.login = (req, res, next) => {
 					if (!passwordOk) {
 						return res.status(401).json({ error: "Mot de passe incorrect" });
 					}
+					// creation d'un dossier user contenant touts ses photos
 					const filename = "userId-" + user.id;
 					fs.mkdir(`images/${filename}`, () => {
 						res.status(200).json({
 							userId: user.id,
 							admin: user.admin,
+							// on crée un token contenant le userId et admin (true, false)
 							token: jwt.sign(
-								{ userId: user.id, admin: user.admin },
+								{ userId: user.id, admin: user.admin }, 
 								process.env.USER_TOKEN,
-								{ expiresIn: "48h" }
+								{ expiresIn: "24h" }
 							),
 						});
 					})
-					// on crée un token
-	
 				})
-				.catch(() => {
-					res.status(500).json({ error: "DataBase Error"});
+				.catch((error) => {
+					res.status(500).json({ error });
 				});
 		})
 		.catch((error) => {
-			res.status(error.status).json({ error });
+			res.status(500).json({ error });
 		});
 };
 
@@ -112,10 +112,10 @@ exports.getOneUser = (req, res, next) => {
 			if (!user) {
 				return res.status(404).json({ error: "Utilisateur non trouvé" });
 			}
-			res.status(200).json({user});
+			res.status(200).json({ user });
 		})
-		.catch(() => {
-			res.status(500).json({ error: "DataBase Error" });
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };
 
@@ -126,6 +126,7 @@ exports.updateUser = (req, res, next) => {
 	if (!validFields(req.body.givenname)) {
 		return res.status(406).json({ message: "Caractères non autorisés" });
 	}
+	//on teste si la requête possède un fichier ou non
 	const updatedProfil = req.file
 		? {
 				...req.body,
@@ -149,7 +150,7 @@ exports.deleteUser = (req, res, next) => {
 			if (!user) {
 				return res.status(404).json({ error: "Utilisateur non trouvé" });
 			}
-			//on supprime le fichier
+			//on supprime le dossier du user correspondant
 			const filename = "userId-" + user.id;
 			fs.rmdir(`images/${filename}`,{ recursive: true}, () => {
 				user.destroy()
@@ -161,7 +162,7 @@ exports.deleteUser = (req, res, next) => {
 					});
 			});
 		})
-		.catch(() => {
-			res.status(500).json({ error: "DataBase Error"});
+		.catch((error) => {
+			res.status(500).json({ error });
 		});
 };
