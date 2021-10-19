@@ -12,6 +12,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
+    "sass-prod": "sass ./src/sass/style.scss:./src/style/style.css --style compressed",
+    "sass-dev": "sass --watch ./src/sass/style.scss:./src/style/style.css",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -34,5 +36,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "sass": "^1.43.2"
   }
 }

@@ -1,0 +1,12 @@
+.header {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    background-color: $backgroundColorHeader;
+    &__title {
+        color:white;
+    }
+    &__logo {
+        height: 50px;
+    }
+}
