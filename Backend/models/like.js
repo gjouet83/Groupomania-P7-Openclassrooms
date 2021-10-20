@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class like extends Model {
     /**
@@ -13,15 +11,18 @@ module.exports = (sequelize, DataTypes) => {
       like.belongsTo(models.user);
       like.belongsTo(models.post);
     }
-  };
-  like.init({
-    userId: DataTypes.INTEGER.UNSIGNED,
-    postId: DataTypes.INTEGER.UNSIGNED,
-    like: DataTypes.INTEGER.UNSIGNED,
-    dislike: DataTypes.INTEGER.UNSIGNED
-  }, {
-    sequelize,
-    modelName: 'like',
-  });
+  }
+  like.init(
+    {
+      userId: DataTypes.INTEGER.UNSIGNED,
+      postId: DataTypes.INTEGER.UNSIGNED,
+      like: DataTypes.INTEGER.UNSIGNED,
+      dislike: DataTypes.INTEGER.UNSIGNED,
+    },
+    {
+      sequelize,
+      modelName: 'like',
+    }
+  );
   return like;
 };

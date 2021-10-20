@@ -4,7 +4,7 @@ const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
   'image/png': 'png',
-  'image/gif': 'gif'
+  'image/gif': 'gif',
 };
 
 const storage = multer.diskStorage({
@@ -15,8 +15,11 @@ const storage = multer.diskStorage({
     //on crée l'extension grace au mimetypes
     const extension = MIME_TYPES[file.mimetype];
     //on crée un nom de fichier constitué de la date et de l'extention
-    callback(null, "userId-" + req.body.userId + "posts" + Date.now() + "." + extension);
-  }
+    callback(
+      null,
+      'userId-' + req.body.userId + 'posts' + Date.now() + '.' + extension
+    );
+  },
 });
 
-module.exports = multer({storage: storage}).single('image');
+module.exports = multer({ storage: storage }).single('image');

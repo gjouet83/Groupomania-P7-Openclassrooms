@@ -1,9 +1,8 @@
 html {
-    body {
-        margin: 0;
-        #root {
-            @import "./header";
-        }
+  body {
+    margin: 0;
+    #root {
+      @import './header';
     }
+  }
 }
-

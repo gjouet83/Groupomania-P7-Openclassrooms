@@ -1,12 +1,24 @@
 .header {
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-    background-color: $backgroundColorHeader;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 20px;
+  background-color: $backgroundColorHeader;
+  &__name {
+    @include object-center;
     &__title {
-        color:white;
+      color: white;
     }
     &__logo {
-        height: 50px;
+      height: 50px;
     }
+  }
+  &__menu {
+    @include object-center;
+    padding-right: 20px;
+    height: 20px;
+    &__icon {
+      height: 30px;
+    }
+  }
 }
