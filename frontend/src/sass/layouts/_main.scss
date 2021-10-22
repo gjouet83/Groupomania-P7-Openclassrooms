@@ -1,0 +1,8 @@
+& > main {
+  span {
+    font-size: 14px;
+    font-family: 'Roboto-Regular';
+  }
+  @import '../pages/signup';
+  @import '../pages/login';
+}

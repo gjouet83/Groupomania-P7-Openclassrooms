@@ -1,8 +1,11 @@
 html {
+  font-size: 16px;
+  font-family: 'Roboto-Black';
   body {
     margin: 0;
     #root {
       @import './header';
+      @import './main';
     }
   }
 }

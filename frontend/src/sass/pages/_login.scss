@@ -1,0 +1,67 @@
+.login {
+  &__title {
+    text-align: center;
+    line-height: 50px;
+  }
+  &__form {
+    &__email {
+      display: block;
+      text-align: center;
+      margin: 15px;
+      font-size: 1.5rem;
+      &__lbl {
+        display: block;
+      }
+      &__input {
+        display: block;
+        margin: auto;
+        border-radius: 15px;
+        width: 70vw;
+        height: 2rem;
+        &__wrong {
+          border-color: red;
+          display: block;
+          margin: auto;
+          border-radius: 15px;
+          width: 70vw;
+          height: 2rem;
+        }
+      }
+    }
+    &__password {
+      display: block;
+      text-align: center;
+      margin: 15px;
+      font-size: 1.5rem;
+      &__lbl {
+        display: block;
+      }
+      &__input {
+        display: block;
+        margin: auto;
+        border-radius: 15px;
+        width: 70vw;
+        height: 2rem;
+        &__wrong {
+          border-color: red;
+          display: block;
+          margin: auto;
+          border-radius: 15px;
+          width: 70vw;
+          height: 2rem;
+        }
+      }
+    }
+    &__validate {
+      width: 40vw;
+      height: 2rem;
+      display: block;
+      margin: 30px auto 20px auto;
+      border-radius: 20px;
+      font-size: 1.5rem;
+    }
+  }
+  &__signuplink {
+    text-align: center;
+  }
+}

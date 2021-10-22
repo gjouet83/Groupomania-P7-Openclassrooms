@@ -1,4 +1,5 @@
 .header {
+  font-family: 'Roboto-Black';
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -13,12 +14,5 @@
       height: 50px;
     }
   }
-  &__menu {
-    @include object-center;
-    padding-right: 20px;
-    height: 20px;
-    &__icon {
-      height: 30px;
-    }
-  }
+  @import '../components/menuheader';
 }

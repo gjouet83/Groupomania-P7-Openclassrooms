@@ -28,6 +28,7 @@ const validPassword = (password) => {
 
 exports.signup = (req, res, next) => {
   //on teste les champs
+  console.log(req.body.email);
   if (!validEmail(req.body.email)) {
     return res.status(401).json({ message: 'Email non valide' });
   }
@@ -54,7 +55,7 @@ exports.signup = (req, res, next) => {
           res.status(201).json({ message: 'Utilisateur créé avec succès' });
         })
         .catch((error) => {
-          res.status(400).json({ error });
+          res.status(400).json(error.errors[0].message);
         });
     })
     .catch((error) => {

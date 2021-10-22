@@ -1,6 +1,6 @@
-import menu from '../assets/bars-solid.svg';
+import menu from '../assets/images/bars-solid.svg';
 
-const MenuButton = () => {
+const Menuheader = () => {
   return (
     <div className="header__menu">
       <img src={menu} alt="icone réglages" className="header__menu__icon" />
@@ -8,4 +8,4 @@ const MenuButton = () => {
   );
 };
 
-export default MenuButton;
+export default Menuheader;
