@@ -1,8 +1,10 @@
 & > main {
   span {
     font-size: 14px;
-    font-family: 'Roboto-Regular';
+    font-family: 'Poppins', sans-serif;
   }
   @import '../pages/signup';
   @import '../pages/login';
+  @import '../pages/home';
+  @import '../pages/create';
 }

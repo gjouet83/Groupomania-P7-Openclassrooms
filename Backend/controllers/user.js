@@ -28,13 +28,15 @@ const validPassword = (password) => {
 
 exports.signup = (req, res, next) => {
   //on teste les champs
-  console.log(req.body.email);
+  if (!validFields(req.body.username)) {
+    return res.status(401).json({ error: 'Caractères non valide' });
+  }
   if (!validEmail(req.body.email)) {
-    return res.status(401).json({ message: 'Email non valide' });
+    return res.status(401).json({ error: 'Email non valide' });
   }
   if (!validPassword(req.body.password)) {
     return res.status(401).json({
-      message:
+      error:
         'Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
     });
   }
@@ -50,6 +52,7 @@ exports.signup = (req, res, next) => {
             iv: iv,
           }).toString(),
           password: hash,
+          avatar: `${req.protocol}://${req.get('host')}/images/user-solid.svg`,
         })
         .then(() => {
           res.status(201).json({ message: 'Utilisateur créé avec succès' });
@@ -140,12 +143,15 @@ exports.updateUser = (req, res, next) => {
   //on teste si la requête possède un fichier ou non
   const updatedProfil = req.file
     ? {
-        ...req.body,
+        ...JSON.parse(req.body),
         avatar: `${req.protocol}://${req.get('host')}/images/userId-${
           req.body.userId
         }/${req.file.filename}`,
       }
-    : { ...req.body };
+    : {
+        ...req.body,
+        avatar: `${req.protocol}://${req.get('host')}/images/user-solid.svg`,
+      };
   db.user
     .update({ ...updatedProfil }, { where: { id: req.body.userId } })
     .then(() => {

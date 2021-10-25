@@ -1,7 +1,15 @@
-import React from 'react';
+import AddButton from '../components/AddButton';
+import Posts from '../components/Posts';
 
 const Home = () => {
-  return <React.Fragment></React.Fragment>;
+  return (
+    <main>
+      <section className="home">
+        <Posts />
+        <AddButton />
+      </section>
+    </main>
+  );
 };
 
 export default Home;

@@ -1,0 +1,6 @@
+.home {
+  display: flex;
+  justify-content: center;
+  @import '../components/posts';
+  @import '../components/addbutton';
+}

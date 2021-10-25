@@ -1,11 +1,12 @@
 html {
   font-size: 16px;
-  font-family: 'Roboto-Black';
+  font-family: 'Poppins', sans-serif;
   body {
     margin: 0;
     #root {
       @import './header';
       @import './main';
+      @import './footer';
     }
   }
 }
