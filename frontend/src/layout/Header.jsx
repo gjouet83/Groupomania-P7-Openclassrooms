@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
 const Header = () => {
@@ -29,22 +31,45 @@ const Header = () => {
       </div>
       <div className={`header__menu ${appear}`}>
         <div className="header__menu__area">
-          <Link
-            to="#"
-            className="header__menu__area__link clickable"
+          <FontAwesomeIcon
+            icon={faUser}
+            className="header__menu__area__icon"
             onClick={toggleClass}
-          ></Link>
-          <FontAwesomeIcon icon={faUser} className="header__menu__area__icon" />
+          />
         </div>
       </div>
-      <nav className={isMoved ? 'header__navbar__move' : 'header__navbar'}>
+      <nav className={isMoved ? 'header__navbar move' : 'header__navbar'}>
         <div className="header__navbar__params">
+          <Link
+            to="#"
+            className="header__navbar__params__link clickable"
+            onClick={toggleClass}
+          ></Link>
+          <div className="header__navbar__params__icon">
+            <FontAwesomeIcon icon={faSlidersH} />
+          </div>
           <span>Paramètres de connexion</span>
         </div>
         <div className="header__navbar__profil">
+          <Link
+            to="/profil"
+            className="header__navbar__profil__link clickable"
+            onClick={toggleClass}
+          ></Link>
+          <div className="header__navbar__profil__icon">
+            <FontAwesomeIcon icon={faUser} />
+          </div>
           <span>Profil</span>
         </div>
         <div className="header__navbar__logout">
+          <Link
+            to="#"
+            className="header__navbar__logout__link clickable"
+            onClick={toggleClass}
+          ></Link>
+          <div className="header__navbar__logout__icon">
+            <FontAwesomeIcon icon={faPowerOff} />
+          </div>
           <span>Déconnexion</span>
         </div>
       </nav>

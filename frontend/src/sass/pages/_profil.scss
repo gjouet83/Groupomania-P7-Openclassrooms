@@ -1,0 +1,24 @@
+.profil {
+  &__username {
+    &__lbl {
+    }
+    &__input {
+    }
+  }
+  &__userposts {
+    &__toggledisplay {
+      cursor: pointer;
+    }
+    &__title {
+    }
+    @import './posts';
+  }
+  &__usercomments {
+    &__toggledisplay {
+      cursor: pointer;
+    }
+    &__title {
+    }
+    @import './comments';
+  }
+}

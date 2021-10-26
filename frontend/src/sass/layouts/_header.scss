@@ -1,10 +1,9 @@
 .header {
   font-size: 0.8rem;
-  height: 70px;
+  height: 72px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding-left: 15px;
   background-color: $backgroundColorHeader;
   position: relative;
   &__name {
@@ -13,49 +12,77 @@
       color: white;
     }
     &__logo {
+      padding-left: 15px;
       height: 50px;
     }
   }
   &__menu {
     @include object-center;
-    width: 25vw;
     margin-left: auto;
+    margin-right: 20px;
     height: 20px;
     &__area {
       @include object-center;
+      cursor: pointer;
       position: relative;
       background-color: white;
       border-radius: 25px;
-      width: 45px;
-      height: 45px;
+      width: 48px;
+      height: 48px;
       &__icon {
         font-size: 2rem;
-        &:hover .navbar {
-          transform: translateY(-200px);
-        }
       }
     }
   }
   &__navbar {
+    position: relative;
+    top: -1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: $backgroundColorHeader;
+    overflow: hidden;
     width: 100vw;
-    left: 0;
-    top: 70px;
-    position: absolute;
     padding-left: 20px;
     color: white;
-    transition: all 0.5s ease-in-out;
-    transform: scaleY(0);
-    z-index: 0;
-    &__move {
-      width: 100vw;
-      left: 0;
-      top: 70px;
-      padding-left: 20px;
-      color: white;
-      background-color: $backgroundColorHeader;
-      position: absolute;
-      transition: all 0.5s ease-in-out;
-      transform: scaleY(60px);
+    transition: height 0.5s ease-in-out;
+    height: 0;
+    z-index: 1;
+    &__params {
+      position: relative;
+      display: flex;
+      align-items: center;
+      &__icon {
+        text-align: center;
+        width: 48px;
+        height: 48px;
+        font-size: 2rem;
+      }
+    }
+    &__profil {
+      position: relative;
+      display: flex;
+      align-items: center;
+      &__icon {
+        text-align: center;
+        width: 48px;
+        height: 48px;
+        font-size: 2rem;
+      }
+    }
+    &__logout {
+      position: relative;
+      display: flex;
+      align-items: center;
+      &__icon {
+        text-align: center;
+        width: 48px;
+        height: 48px;
+        font-size: 2rem;
+      }
     }
   }
+}
+.move {
+  height: 200px !important;
 }

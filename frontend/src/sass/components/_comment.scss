@@ -1,0 +1,23 @@
+&__comment {
+  display: flex;
+  justify-content: space-between;
+  background-color: lighten($backgroundPost, 20%);
+  width: 100vw;
+  padding: 20px 0 20px 0;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  &__author {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 20px;
+  }
+  &__main {
+    padding-right: 20px;
+    &__title {
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+}

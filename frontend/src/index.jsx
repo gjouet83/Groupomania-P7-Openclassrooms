@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from './layout/Header';
-import Footer from './layout/Footer';
-import Home from './pages/Home';
+import Posts from './pages/Posts';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Comments from './pages/Comments';
 import Profil from './pages/Profil';
 import Error from './pages/Error';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import './sass/style.scss';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,8 +21,8 @@ ReactDOM.render(
         <Route exact path="/login">
           <Login />
         </Route>
-        <Route exact path="/home">
-          <Home />
+        <Route exact path="/posts">
+          <Posts />
         </Route>
         <Route exact path="/profil">
           <Profil />
@@ -34,7 +34,6 @@ ReactDOM.render(
           <Error />
         </Route>
       </Switch>
-      <Footer />
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
