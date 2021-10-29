@@ -1,23 +1,69 @@
 .profil {
+  @include nav-page;
+  &__avatar {
+    margin: 20px auto 20px auto;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    overflow: hidden;
+    &__icon {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 10px 0;
+  }
   &__username {
     &__lbl {
+      display: block;
+      text-align: center;
     }
     &__input {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      height: 1.5rem;
+    }
+    &__validate {
+      display: block;
+      margin: 10px auto 20px auto;
     }
   }
   &__userposts {
-    &__toggledisplay {
-      cursor: pointer;
-    }
     &__title {
+      text-align: center;
+    }
+    &__toggledisplay {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 0px auto 10px auto;
+    }
+    &__list {
+      height: 0;
+      overflow: hidden;
     }
     @import './posts';
   }
   &__usercomments {
-    &__toggledisplay {
-      cursor: pointer;
-    }
     &__title {
+      text-align: center;
+    }
+    &__toggledisplay {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 0px auto 10px auto;
+    }
+    &__list {
+      height: 0;
+      overflow: hidden;
     }
     @import './comments';
   }

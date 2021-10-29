@@ -6,6 +6,8 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Comments from './pages/Comments';
 import Profil from './pages/Profil';
+import Params from './pages/Params';
+import Admin from './pages/Admin';
 import Error from './pages/Error';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './sass/style.scss';
@@ -15,6 +17,9 @@ ReactDOM.render(
     <Router>
       <Header />
       <Switch>
+        <Route exact path="/">
+          <Login />
+        </Route>
         <Route exact path="/signup">
           <Signup />
         </Route>
@@ -24,11 +29,17 @@ ReactDOM.render(
         <Route exact path="/posts">
           <Posts />
         </Route>
+        <Route exact path="/comments">
+          <Comments />
+        </Route>
         <Route exact path="/profil">
           <Profil />
         </Route>
-        <Route exact path="/comments">
-          <Comments />
+        <Route exact path="/params">
+          <Params />
+        </Route>
+        <Route exact path="/admin">
+          <Admin />
         </Route>
         <Route>
           <Error />

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
+import { faUserShield } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
 const Header = () => {
@@ -16,7 +17,9 @@ const Header = () => {
     setMove(!isMoved);
   };
   const appear =
-    location.pathname === '/signup' || location.pathname === '/login'
+    location.pathname === '/signup' ||
+    location.pathname === '/login' ||
+    location.pathname === '/'
       ? 'disappear'
       : '';
   return (
@@ -39,9 +42,20 @@ const Header = () => {
         </div>
       </div>
       <nav className={isMoved ? 'header__navbar move' : 'header__navbar'}>
+        <div className="header__navbar__admin">
+          <Link
+            to="/Admin"
+            className="header__navbar__admin__link clickable"
+            onClick={toggleClass}
+          ></Link>
+          <div className="header__navbar__admin__icon">
+            <FontAwesomeIcon icon={faUserShield} />
+          </div>
+          <span>Administrateur</span>
+        </div>
         <div className="header__navbar__params">
           <Link
-            to="#"
+            to="/Params"
             className="header__navbar__params__link clickable"
             onClick={toggleClass}
           ></Link>

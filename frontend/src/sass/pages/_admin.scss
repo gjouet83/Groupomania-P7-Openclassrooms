@@ -1,0 +1,12 @@
+.admin {
+  &__userarray {
+    &__element {
+      margin: auto;
+      td,
+      th {
+        padding: 20px;
+      }
+    }
+  }
+  @include nav-page;
+}
