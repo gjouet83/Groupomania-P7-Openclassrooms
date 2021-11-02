@@ -1,8 +1,17 @@
 const db = require('../models/index');
+const Sequelize = require('sequelize');
 
 exports.getLikes = (req, res, next) => {
+  console.log(req.query);
+
   db.like
-    .findAndCountAll({ where: { postId: req.body.postId } })
+    .findAll({
+      attributes: [
+        [Sequelize.fn('sum', Sequelize.col('like')), 'totalLikes'],
+        [Sequelize.fn('sum', Sequelize.col('dislike')), 'totaldislikes'],
+      ],
+      where: { postId: req.query.postId },
+    })
     .then((likes) => {
       res.status(200).json(likes);
     })

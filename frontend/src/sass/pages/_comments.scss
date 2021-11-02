@@ -42,6 +42,6 @@
     right: 10px;
     z-index: 2;
   }
-  @include nav-page;
+  @include navbar-page;
   @import '../components/comment';
 }

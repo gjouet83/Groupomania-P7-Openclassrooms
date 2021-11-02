@@ -1,5 +1,6 @@
 const db = require('../models/index');
 const fs = require('fs');
+const Sequelize = require('sequelize');
 
 // regex pour la protection d'injection de code
 const validFields = (field) => {
@@ -21,6 +22,10 @@ exports.getAllPosts = (req, res, next) => {
           model: db.like,
           attributes: ['like', 'dislike'],
         },
+        {
+          model: db.comment,
+          attributes: ['postId'],
+        },
       ],
       // ordre par date de la plus recente a la plus ancienne
       order: [['createdAt', 'DESC']],
@@ -34,6 +39,7 @@ exports.getAllPosts = (req, res, next) => {
 };
 
 exports.createPost = (req, res, next) => {
+  console.log(req);
   if (!validFields(req.body.title)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
   }

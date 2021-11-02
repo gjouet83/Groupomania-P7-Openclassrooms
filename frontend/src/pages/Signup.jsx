@@ -22,7 +22,8 @@ const Signup = () => {
         password: password,
       })
       .then((res) => {
-        console.log(res.data.message);
+        
+        window.location.assign("/login")
       })
       .catch((error) => {
         console.log(error.response.data);

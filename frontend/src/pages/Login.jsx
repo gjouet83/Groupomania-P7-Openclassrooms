@@ -9,7 +9,7 @@ const Login = () => {
   const [loginPassword, setLoginPassword] = useState(
     'login__form__email__input'
   );
-
+    
   const sendForm = (e) => {
     e.preventDefault();
     axios
@@ -18,7 +18,8 @@ const Login = () => {
         password: password,
       })
       .then((res) => {
-        console.log(res.data);
+        localStorage.setItem("user", JSON.stringify(res.data));
+        window.location.assign("/posts")
       })
       .catch((error) => {
         console.log(error.response.data);

@@ -16,6 +16,12 @@ const Header = () => {
   const toggleClass = () => {
     setMove(!isMoved);
   };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    window.location.assign("/login");
+  }
+
   const appear =
     location.pathname === '/signup' ||
     location.pathname === '/login' ||
@@ -79,7 +85,7 @@ const Header = () => {
           <Link
             to="#"
             className="header__navbar__logout__link clickable"
-            onClick={toggleClass}
+            onClick={logout}
           ></Link>
           <div className="header__navbar__logout__icon">
             <FontAwesomeIcon icon={faPowerOff} />

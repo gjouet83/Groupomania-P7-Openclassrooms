@@ -49,48 +49,16 @@
     height: 0;
     z-index: 3;
     &__admin {
-      position: relative;
-      display: flex;
-      align-items: center;
-      &__icon {
-        text-align: center;
-        width: 48px;
-        height: 48px;
-        font-size: 2rem;
-      }
+      @include icon-menu-navbar
     }
     &__params {
-      position: relative;
-      display: flex;
-      align-items: center;
-      &__icon {
-        text-align: center;
-        width: 48px;
-        height: 48px;
-        font-size: 2rem;
-      }
+      @include icon-menu-navbar
     }
     &__profil {
-      position: relative;
-      display: flex;
-      align-items: center;
-      &__icon {
-        text-align: center;
-        width: 48px;
-        height: 48px;
-        font-size: 2rem;
-      }
+      @include icon-menu-navbar
     }
     &__logout {
-      position: relative;
-      display: flex;
-      align-items: center;
-      &__icon {
-        text-align: center;
-        width: 48px;
-        height: 48px;
-        font-size: 2rem;
-      }
+      @include icon-menu-navbar
     }
   }
 }

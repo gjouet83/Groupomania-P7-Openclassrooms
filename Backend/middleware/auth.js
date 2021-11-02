@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
+  console.log(req.file);
   try {
     //on récupère le token a droite de bearer dans le header authorization
     const token = req.headers.authorization.split(' ')[1];
@@ -9,6 +10,7 @@ module.exports = (req, res, next) => {
     const userId = decodedToken.userId;
     const admin = decodedToken.admin;
     if (req.body.userId && req.body.userId !== userId && !admin) {
+      console.log('test');
       res.status(403).json({ error: 'Utilisateur non autorisé' });
     } else {
       next();

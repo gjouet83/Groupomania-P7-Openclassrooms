@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       post.hasMany(models.like, { onDelete: 'cascade' });
+      post.hasMany(models.comment, { onDelete: 'cascade' });
       post.belongsTo(models.user);
     }
   }
