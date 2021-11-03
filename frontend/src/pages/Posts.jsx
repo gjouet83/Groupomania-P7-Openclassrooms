@@ -10,14 +10,13 @@ const Posts = () => {
 
   const headers = {
     Authorization: `Bearer ${currentUser.token}`,
-    'Content-Type': 'multipart/form-data',
   };
   const [posts, setPosts] = useState([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [attachment, setAttachment] = useState();
 
-  useEffect(() => {
+  const getPosts = () => {
     axios
       .get('http://localhost:3000/api/posts/get', { headers })
       .then((datas) => {
@@ -26,10 +25,10 @@ const Posts = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
 
-  console.log(attachment);
   const sendForm = (e) => {
+    e.preventDefault();
     const post = {
       userId: currentUser.userId,
       admin: currentUser.admin,
@@ -55,6 +54,10 @@ const Posts = () => {
   const toggleClass = () => {
     setOpen(!isOpen);
   };
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   return (
     <main>
       <section className="posts">
@@ -102,7 +105,7 @@ const Posts = () => {
           </div>
         </form>
         {posts.map((post) => (
-          <Post post={post} />
+          <Post key={post.id} post={post} />
         ))}
         <div className="posts__addbutton">
           <Link

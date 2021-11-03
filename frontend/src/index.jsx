@@ -26,19 +26,19 @@ ReactDOM.render(
         <Route exact path="/login">
           <Login />
         </Route>
-        <Route exact path="/posts">
+        <Route path="/posts">
           <Posts />
         </Route>
-        <Route exact path="/comments">
+        <Route path="/comments">
           <Comments />
         </Route>
-        <Route exact path="/profil">
+        <Route path="/profil">
           <Profil />
         </Route>
-        <Route exact path="/params">
+        <Route path="/params">
           <Params />
         </Route>
-        <Route exact path="/admin">
+        <Route path="/admin">
           <Admin />
         </Route>
         <Route>

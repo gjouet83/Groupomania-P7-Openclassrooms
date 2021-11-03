@@ -2,8 +2,6 @@ const db = require('../models/index');
 const Sequelize = require('sequelize');
 
 exports.getLikes = (req, res, next) => {
-  console.log(req.query);
-
   db.like
     .findAll({
       attributes: [
@@ -11,6 +9,19 @@ exports.getLikes = (req, res, next) => {
         [Sequelize.fn('sum', Sequelize.col('dislike')), 'totaldislikes'],
       ],
       where: { postId: req.query.postId },
+    })
+    .then((likes) => {
+      res.status(200).json(likes);
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+};
+
+exports.getLikesByUser = (req, res, next) => {
+  db.like
+    .findOne({
+      where: { postId: req.query.postId, userId: req.query.userId },
     })
     .then((likes) => {
       res.status(200).json(likes);
@@ -42,7 +53,7 @@ exports.createLike = (req, res, next) => {
         db.like
           .create({ ...likeOrDislike })
           .then(() => {
-            res.status(200).json({ message: 'Like ajouté avec SUCCES !' });
+            res.status(200).json({ message: 'Vote effectué avec SUCCES !' });
           })
           .catch((error) => {
             res.status(400).json({ error });

@@ -6,6 +6,7 @@
 
 @mixin navbar-page {
   &__nav {
+    background-color: white;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
     padding-left: 20px;
@@ -13,6 +14,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 70px;
     &__title {
       margin-left: auto;
       text-align: right;

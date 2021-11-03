@@ -5,7 +5,9 @@
   flex-wrap: wrap;
   align-items: center;
   background-color: $backgroundColorHeader;
-  position: relative;
+  position: fixed;
+  top: 0px;
+  z-index: 3;
   &__name {
     @include object-center;
     &__title {
@@ -25,6 +27,7 @@
       @include object-center;
       cursor: pointer;
       position: relative;
+      right: 10px;
       background-color: white;
       border-radius: 25px;
       width: 48px;
@@ -49,16 +52,16 @@
     height: 0;
     z-index: 3;
     &__admin {
-      @include icon-menu-navbar
+      @include icon-menu-navbar;
     }
     &__params {
-      @include icon-menu-navbar
+      @include icon-menu-navbar;
     }
     &__profil {
-      @include icon-menu-navbar
+      @include icon-menu-navbar;
     }
     &__logout {
-      @include icon-menu-navbar
+      @include icon-menu-navbar;
     }
   }
 }

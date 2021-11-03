@@ -2,15 +2,67 @@ import Comment from '../components/Comment';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Comments = () => {
   const [isOpen, setOpen] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [attachment, setAttachment] = useState();
+  const currentUser = JSON.parse(localStorage.getItem('user'));
+  const search = useLocation().search;
+  const id = new URLSearchParams(search).get('postId');
+
+  const headers = {
+    Authorization: `Bearer ${currentUser.token}`,
+  };
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3000/api/comments/get/', {
+        headers: { Authorization: `Bearer ${currentUser.token}` },
+        params: { postId: id },
+      })
+      .then((comments) => {
+        if (comments.data.rows == []) {
+          return;
+        } else {
+          setComments(comments.data.rows);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isOpen]);
+
+  const sendForm = (e) => {
+    const comment = {
+      userId: currentUser.userId,
+      admin: currentUser.admin,
+      postId: id,
+      title: title,
+      content: content,
+      attachment: attachment,
+    };
+
+    axios
+      .post('http://localhost:3000/api/comments/create', comment, { headers })
+      .then((res) => {
+        window.location.reload();
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const toggleClass = () => {
     setOpen(!isOpen);
   };
+
   return (
     <main>
       <section className="comments">
@@ -28,45 +80,58 @@ const Comments = () => {
           </div>
           <h2 className="comments__nav__title">Commentaires</h2>
         </div>
-        <div
-          className={
-            isOpen
-              ? 'comments__createone opencreatepost'
-              : 'comments__createone'
-          }
-        >
-          <input
-            className="comments__createone__input"
-            placeholder="Redigez votre post ici"
-          ></input>
-          <div className="comments__createone__addfile">
-            <button
-              className="comments_createone__footer__cancel"
-              type="button"
-            >
-              Fichier
-            </button>
-            <span>lien vers le fichier</span>
+        <form onSubmit={sendForm}>
+          <div
+            className={
+              isOpen
+                ? 'comments__createone opencreatepost'
+                : 'comments__createone'
+            }
+          >
+            <input
+              type="text"
+              className="comments__createone__title"
+              placeholder="titre"
+              onChange={(e) => setTitle(e.target.value)}
+            ></input>
+            <textarea
+              className="comments__createone__input"
+              placeholder="Redigez votre post ici"
+              autoCapitalize="on"
+              onChange={(e) => setContent(e.target.value)}
+            ></textarea>
+            <div className="comments__createone__addfile">
+              <input
+                type="file"
+                accept="image/*"
+                id="contained-button-file"
+                onChange={(e) => setAttachment(e.target.value)}
+              />
+            </div>
+            <div className="comments__createone__footer">
+              <button
+                className="comments_createone__footer__cancel"
+                type="reset"
+                onClick={toggleClass}
+              >
+                Annuler
+              </button>
+              <button
+                className="comments_createone__footer__validate"
+                type="submit"
+                onClick={toggleClass}
+              >
+                Valider
+              </button>
+            </div>
           </div>
-          <div className="comments__createone__footer">
-            <button
-              className="comments_createone__footer__cancel"
-              type="button"
-            >
-              Annuler
-            </button>
-            <button
-              className="comments_createone__footer__validate"
-              type="button"
-            >
-              Valider
-            </button>
-          </div>
-        </div>
-        <Comment />
+        </form>
+        {comments.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))}
         <div className="comments__addbutton">
           <Link
-            to="#"
+            to={`/comments?postId=${id}`}
             className="comments__addbutton__link clickable"
             onClick={toggleClass}
           ></Link>

@@ -1,26 +1,28 @@
 import logo from '../assets/images/icon.svg';
+import AdminMenu from '../components/AdminMenu';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
-import { faUserShield } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
 const Header = () => {
   const title = 'Groupomania';
   const location = useLocation();
   const [isMoved, setMove] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem('user'));
+  const postsSection = currentUser ? <AdminMenu /> : null;
 
   const toggleClass = () => {
     setMove(!isMoved);
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
-    window.location.assign("/login");
-  }
+    localStorage.removeItem('user');
+    window.location.assign('/login');
+  };
 
   const appear =
     location.pathname === '/signup' ||
@@ -48,17 +50,7 @@ const Header = () => {
         </div>
       </div>
       <nav className={isMoved ? 'header__navbar move' : 'header__navbar'}>
-        <div className="header__navbar__admin">
-          <Link
-            to="/Admin"
-            className="header__navbar__admin__link clickable"
-            onClick={toggleClass}
-          ></Link>
-          <div className="header__navbar__admin__icon">
-            <FontAwesomeIcon icon={faUserShield} />
-          </div>
-          <span>Administrateur</span>
-        </div>
+        {postsSection}
         <div className="header__navbar__params">
           <Link
             to="/Params"
