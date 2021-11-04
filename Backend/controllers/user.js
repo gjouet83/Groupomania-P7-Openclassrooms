@@ -120,8 +120,9 @@ exports.login = (req, res, next) => {
 };
 
 exports.getOneUser = (req, res, next) => {
+  console.log(req.query);
   db.user
-    .findOne({ where: { id: req.body.userId } })
+    .findOne({ where: { id: req.query.id } })
     .then((user) => {
       if (!user) {
         return res.status(404).json({ error: 'Utilisateur non trouvé' });
@@ -134,6 +135,7 @@ exports.getOneUser = (req, res, next) => {
 };
 
 exports.updateUser = (req, res, next) => {
+  console.log(req.query);
   if (!validFields(req.body.name)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
   }
@@ -143,14 +145,13 @@ exports.updateUser = (req, res, next) => {
   //on teste si la requête possède un fichier ou non
   const updatedProfil = req.file
     ? {
-        ...JSON.parse(req.body),
+        ...req.body,
         avatar: `${req.protocol}://${req.get('host')}/images/userId-${
           req.body.userId
         }/${req.file.filename}`,
       }
     : {
         ...req.body,
-        avatar: `${req.protocol}://${req.get('host')}/images/user-solid.svg`,
       };
   db.user
     .update({ ...updatedProfil }, { where: { id: req.body.userId } })

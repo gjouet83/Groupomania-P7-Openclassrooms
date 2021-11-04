@@ -9,7 +9,8 @@ const MIME_TYPES = {
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, `images/userId-${req.body.userId}`);
+    console.log(req.data);
+    callback(null, `images/userId-${JSON.stringify(req.body.userId)}`);
   },
   filename: (req, file, callback) => {
     //on crée l'extension grace au mimetypes

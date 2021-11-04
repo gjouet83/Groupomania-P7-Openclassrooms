@@ -15,6 +15,7 @@ const Post = ({ post }) => {
   const [nbComments, setNbComments] = useState(0);
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
+  const ownerMenu = currentUser.userId == post.userId ? '' : 'disappear';
 
   const headers = {
     Authorization: `Bearer ${currentUser.token}`,
@@ -151,6 +152,18 @@ const Post = ({ post }) => {
       .catch(() => {});
   };
 
+  const deletePost = () => {
+    axios
+      .delete('http://localhost:3000/api/posts/delete/:id', {
+        headers: { Authorization: `Bearer ${currentUser.token}` },
+        params: { id: post.id },
+      })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(() => {});
+  };
+
   return (
     <div className="posts__post">
       <div className="posts__post__header">
@@ -229,6 +242,15 @@ const Post = ({ post }) => {
             Commentaires
           </span>
         </div>
+      </div>
+      <div className={`posts__post__ownerMenu ${ownerMenu}`}>
+        <button
+          className="posts__post__ownerMenu__delete"
+          type="button"
+          onClick={deletePost}
+        >
+          supprimer
+        </button>
       </div>
     </div>
   );

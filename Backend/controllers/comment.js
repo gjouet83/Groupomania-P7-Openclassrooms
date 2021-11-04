@@ -31,14 +31,22 @@ exports.getComments = (req, res, next) => {
     });
 };
 
-exports.getOneComment = (req, res, next) => {
+exports.getCommentByUser = (req, res, next) => {
   db.comment
-    .findOne({ where: { id: req.params.id } })
-    .then((comment) => {
-      if (!comment) {
-        return res.status(404).json({ error: 'Commentaire non trouvé' });
+    .findAll({
+      include: [
+        {
+          model: db.user,
+          attributes: ['username'],
+        },
+      ],
+      where: { userId: req.query.userId },
+    })
+    .then((comments) => {
+      if (!comments) {
+        return res.status(404).json({ error: 'Commentaires non trouvé' });
       }
-      res.status(200).json(comment);
+      res.status(200).json(comments);
     })
     .catch((error) => {
       res.status(500).json({ error });

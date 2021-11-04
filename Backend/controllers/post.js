@@ -38,8 +38,29 @@ exports.getAllPosts = (req, res, next) => {
     });
 };
 
+exports.getPostByUser = (req, res, next) => {
+  db.post
+    .findAll({
+      include: [
+        {
+          model: db.user,
+          attributes: ['username'],
+        },
+      ],
+      where: { userId: req.query.userId },
+    })
+    .then((posts) => {
+      if (!posts) {
+        return res.status(404).json({ error: 'posts non trouvé' });
+      }
+      res.status(200).json(posts);
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+};
+
 exports.createPost = (req, res, next) => {
-  console.log(req);
   if (!validFields(req.body.title)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
   }
@@ -107,7 +128,7 @@ exports.updatePost = (req, res, next) => {
 
 exports.deletePost = (req, res, next) => {
   db.post
-    .findOne({ where: { id: req.params.id } })
+    .findOne({ where: { id: req.query.id } })
     .then((post) => {
       if (!post) {
         return res.status(404).json({ error: 'Post non trouvé' });

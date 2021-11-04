@@ -36,9 +36,9 @@ const Comments = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [isOpen]);
+  }, []);
 
-  const sendForm = (e) => {
+  const sendForm = () => {
     const comment = {
       userId: currentUser.userId,
       admin: currentUser.admin,

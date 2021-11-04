@@ -10,11 +10,14 @@ const Posts = () => {
 
   const headers = {
     Authorization: `Bearer ${currentUser.token}`,
+    'Content-Type': 'application/json; charset=utf-8',
   };
   const [posts, setPosts] = useState([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [attachment, setAttachment] = useState();
+  const [image, setImage] = useState(null);
+
+  console.log(image);
 
   const getPosts = () => {
     axios
@@ -29,24 +32,19 @@ const Posts = () => {
 
   const sendForm = (e) => {
     e.preventDefault();
-    const post = {
-      userId: currentUser.userId,
-      admin: currentUser.admin,
-      title: title,
-      content: content,
-      attachment: attachment,
-    };
 
-    axios
-      .post('http://localhost:3000/api/posts/create', post, {
-        headers,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    let formData = new FormData();
+    formData.append('image', image);
+    formData.append('userId', currentUser.userId);
+    formData.append('title', title);
+    formData.append('content', content);
+
+    axios({
+      headers: headers,
+      url: 'http://localhost:3000/api/posts/create',
+      method: 'POST',
+      data: formData,
+    });
   };
 
   const [isOpen, setOpen] = useState(false);
@@ -83,8 +81,7 @@ const Posts = () => {
               <input
                 type="file"
                 accept="image/*"
-                id="contained-button-file"
-                onChange={(e) => setAttachment(e.target.value)}
+                onChange={(e) => setImage(e.target.files[0])}
               />
             </div>
             <div className="posts__createone__footer">

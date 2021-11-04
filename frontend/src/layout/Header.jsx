@@ -13,7 +13,7 @@ const Header = () => {
   const location = useLocation();
   const [isMoved, setMove] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const postsSection = currentUser ? <AdminMenu /> : null;
+  const adminSection = currentUser ? <AdminMenu /> : null;
 
   const toggleClass = () => {
     setMove(!isMoved);
@@ -50,7 +50,7 @@ const Header = () => {
         </div>
       </div>
       <nav className={isMoved ? 'header__navbar move' : 'header__navbar'}>
-        {postsSection}
+        {adminSection}
         <div className="header__navbar__params">
           <Link
             to="/Params"
