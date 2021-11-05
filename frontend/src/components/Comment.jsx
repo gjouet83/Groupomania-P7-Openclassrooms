@@ -7,7 +7,7 @@ const Comment = ({ comment }) => {
   const isProfilePage = window.location.pathname;
   const ownerMenu =
     (currentUser.userId == comment.userId || currentUser.admin == 1) &&
-    isProfilePage == '/profil'
+    (isProfilePage == '/profil' || currentUser.admin == 1)
       ? true
       : false;
 

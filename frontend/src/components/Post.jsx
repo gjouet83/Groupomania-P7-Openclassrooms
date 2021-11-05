@@ -19,7 +19,7 @@ const Post = ({ post }) => {
   const isProfilePage = window.location.pathname;
   const ownerMenu =
     (currentUser.userId == post.userId || currentUser.admin == 1) &&
-    isProfilePage == '/profil'
+    (isProfilePage == '/profil' || currentUser.admin == 1)
       ? true
       : false;
 
@@ -28,7 +28,7 @@ const Post = ({ post }) => {
   };
 
   const isFigure = post.attachment ? 'appear' : 'disappear';
-
+  console.log(colorLike);
   useEffect(() => {
     axios
       .get('http://localhost:3000/api/likes/get/', {
@@ -36,6 +36,7 @@ const Post = ({ post }) => {
         params: { postId: post.id },
       })
       .then((likes) => {
+        console.log(likes);
         axios
           .get('http://localhost:3000/api/comments/get/', {
             headers: { Authorization: `Bearer ${currentUser.token}` },
@@ -47,7 +48,6 @@ const Post = ({ post }) => {
           .catch((err) => {
             console.log(err);
           });
-        console.log(likes.data.map((s) => s.totalLikes));
         setNbLikes(likes.data.map((s) => s.totalLikes));
         setNbDislikes(likes.data.map((s) => s.totaldislikes));
       })
@@ -75,8 +75,8 @@ const Post = ({ post }) => {
               headers,
             })
             .then((ok) => {
-              setColorLike('');
-              window.location.reload();
+              setColorLike('green');
+
               console.log(ok);
             })
             .catch((err) => {
@@ -93,7 +93,7 @@ const Post = ({ post }) => {
               headers,
             })
             .then((ok) => {
-              setColorLike('green');
+              setColorLike('');
               window.location.reload();
               console.log(ok);
             })
@@ -125,7 +125,7 @@ const Post = ({ post }) => {
               headers,
             })
             .then((ok) => {
-              setColorDislike('');
+              setColorDislike('red');
               window.location.reload();
               console.log(ok);
             })
@@ -144,7 +144,7 @@ const Post = ({ post }) => {
             })
             .then(() => {
               window.location.reload();
-              setColorDislike('red');
+              setColorDislike('');
             })
             .catch((err) => {
               console.log(err);

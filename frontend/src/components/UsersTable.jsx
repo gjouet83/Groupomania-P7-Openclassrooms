@@ -33,7 +33,7 @@ const UsersTable = ({ user }) => {
   };
 
   useEffect(() => {
-    if (user.username == 'toyadmin') {
+    if (user.username == 'Admin') {
       setIsAdmin('disappear');
     }
     if (user.admin == 1) {

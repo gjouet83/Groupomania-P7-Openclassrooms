@@ -17,6 +17,7 @@ const Profil = () => {
   const [user, setUser] = useState(0);
   const [pseudo, setPseudo] = useState();
   const [profilImage, setProfilImage] = useState(0);
+  const isAdminAccount = currentUser.admin == 0 ? true : false;
 
   console.log(user);
 
@@ -105,6 +106,18 @@ const Profil = () => {
       .then((userPosts) => {
         setUserPosts(userPosts.data);
         console.log(userPosts.data);
+      })
+      .catch(() => {});
+  };
+
+  const deleteAccount = () => {
+    axios
+      .delete('http://localhost:3000/api/users/delete/:id', {
+        headers: { Authorization: `Bearer ${currentUser.token}` },
+        params: { userId: currentUser.userId },
+      })
+      .then(() => {
+        window.location.assign('/login');
       })
       .catch(() => {});
   };
@@ -221,6 +234,15 @@ const Profil = () => {
             <Comment key={`comment-${comment.id}`} comment={comment} />
           ))}
         </div>
+        {isAdminAccount ? (
+          <button
+            className="profil__deleteaccount"
+            type="button"
+            onClick={deleteAccount}
+          >
+            Supprimer mon compte
+          </button>
+        ) : null}
       </section>
     </main>
   );

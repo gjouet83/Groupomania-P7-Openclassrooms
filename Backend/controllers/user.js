@@ -144,6 +144,86 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
+exports.updateLogin = (req, res, next) => {
+  if (!validEmail(req.body.email)) {
+    return res.status(401).json({ message: 'Email non valide' });
+  }
+  db.user
+    .findOne({
+      where: {
+        email: CryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString(),
+      },
+    })
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({ error: 'Utilisateur non enregistré' });
+      }
+      db.user
+        .update(
+          {
+            email: CryptoJS.AES.encrypt(req.body.newEmail, key, {
+              iv: iv,
+            }).toString(),
+          },
+          { where: { id: req.body.userId } }
+        )
+        .then(() => {
+          res.status(200).json({ message: 'Email modifié avec SUCCES !' });
+        })
+        .catch(() => {
+          res.status(400).json({ error: 'ECHEC de la modification du profil' });
+        });
+    })
+    .catch(() => {});
+};
+
+exports.updatePassword = (req, res, next) => {
+  if (!validPassword(req.body.password)) {
+    return res.status(401).json({
+      error:
+        'Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
+    });
+  }
+  db.user
+    .findOne({ where: { id: req.body.userId } })
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({ error: 'Utilisateur non enregistré' });
+      }
+      bcrypt
+        //on compare le hash du password
+        .compare(req.body.password, user.password)
+        .then((passwordOk) => {
+          if (!passwordOk) {
+            return res.status(401).json({ error: 'Mot de passe incorrect' });
+          }
+          bcrypt
+            // on hash le mot de passe
+            .hash(req.body.newPassword, 10)
+            .then((hash) => {
+              db.user
+                .update(
+                  {
+                    password: hash,
+                  },
+                  { where: { id: req.body.userId } }
+                )
+                .then((res) => {
+                  res
+                    .status(200)
+                    .json({ message: 'Password modifié avec succès' });
+                });
+            })
+            .catch((error) => {
+              res.status(400).json({ error });
+            });
+        });
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+};
+
 exports.updateUser = (req, res, next) => {
   if (!validFields(req.body.name)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });

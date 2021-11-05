@@ -22,6 +22,7 @@ const Posts = () => {
     axios
       .get('http://localhost:3000/api/posts/get', { headers })
       .then((datas) => {
+        console.log(datas);
         setPosts(datas.data);
       })
       .catch((err) => {

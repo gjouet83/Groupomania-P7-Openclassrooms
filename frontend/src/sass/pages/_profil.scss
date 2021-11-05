@@ -70,4 +70,11 @@
     }
     @import './comments';
   }
+  &__deleteaccount {
+    display: block;
+    margin: 20px;
+    color: red;
+    margin-right: auto;
+    margin-left: auto;
+  }
 }
