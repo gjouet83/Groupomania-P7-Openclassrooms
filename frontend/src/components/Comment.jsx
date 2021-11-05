@@ -4,10 +4,13 @@ import axios from 'axios';
 
 const Comment = ({ comment }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
+  const isProfilePage = window.location.pathname;
   const ownerMenu =
-    currentUser.userId == comment.userId || currentUser.admin == 1
-      ? ''
-      : 'disappear';
+    (currentUser.userId == comment.userId || currentUser.admin == 1) &&
+    isProfilePage == '/profil'
+      ? true
+      : false;
+
   const deleteComment = () => {
     axios
       .delete('http://localhost:3000/api/comments/delete/:id', {
@@ -31,18 +34,19 @@ const Comment = ({ comment }) => {
         </div>
       </div>
       <div className="comments__comment__main">
-        <h2 className="comments__comment__main__title">test</h2>
         <p className="comments__comment__main__content">{comment.content}</p>
       </div>
-      <div className={`comments__comment__ownerMenu ${ownerMenu}`}>
-        <button
-          className="comments__comment__ownerMenu__delete"
-          type="button"
-          onClick={deleteComment}
-        >
-          supprimer
-        </button>
-      </div>
+      {ownerMenu ? (
+        <div className="comments__comment__ownerMenu">
+          <button
+            className="comments__comment__ownerMenu__delete"
+            type="button"
+            onClick={deleteComment}
+          >
+            supprimer
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };

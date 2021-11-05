@@ -6,6 +6,7 @@ import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
+import 'moment/locale/fr';
 import axios from 'axios';
 
 const Post = ({ post }) => {
@@ -15,10 +16,12 @@ const Post = ({ post }) => {
   const [nbComments, setNbComments] = useState(0);
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
+  const isProfilePage = window.location.pathname;
   const ownerMenu =
-    currentUser.userId == post.userId || currentUser.admin == 1
-      ? ''
-      : 'disappear';
+    (currentUser.userId == post.userId || currentUser.admin == 1) &&
+    isProfilePage == '/profil'
+      ? true
+      : false;
 
   const headers = {
     Authorization: `Bearer ${currentUser.token}`,
@@ -54,18 +57,6 @@ const Post = ({ post }) => {
   }, []);
 
   const sendLike = () => {
-    const like = {
-      userId: currentUser.userId,
-      postId: post.id,
-      like: 1,
-    };
-
-    const unlike = {
-      userId: currentUser.userId,
-      postId: post.id,
-      like: 0,
-    };
-
     axios
       .get('http://localhost:3000/api/likes/get/user', {
         headers: { Authorization: `Bearer ${currentUser.token}` },
@@ -73,9 +64,14 @@ const Post = ({ post }) => {
       })
       .then((likeByUser) => {
         console.log(likeByUser);
-        if (likeByUser.data.like === 1) {
+        if (likeByUser.data == null || likeByUser.data.like === 0) {
+          const like = {
+            userId: currentUser.userId,
+            postId: post.id,
+            like: 1,
+          };
           axios
-            .post('http://localhost:3000/api/likes/create/', unlike, {
+            .post('http://localhost:3000/api/likes/create/', like, {
               headers,
             })
             .then((ok) => {
@@ -86,9 +82,14 @@ const Post = ({ post }) => {
             .catch((err) => {
               console.log(err);
             });
-        } else if (!likeByUser || likeByUser.data.like === 0) {
+        } else if (likeByUser.data.like === 1) {
+          const unlike = {
+            userId: currentUser.userId,
+            postId: post.id,
+            like: 0,
+          };
           axios
-            .post('http://localhost:3000/api/likes/create/', like, {
+            .post('http://localhost:3000/api/likes/create/', unlike, {
               headers,
             })
             .then((ok) => {
@@ -107,27 +108,20 @@ const Post = ({ post }) => {
   };
 
   const sendDislike = () => {
-    const dislike = {
-      userId: currentUser.userId,
-      postId: post.id,
-      like: -1,
-    };
-
-    const undislike = {
-      userId: currentUser.userId,
-      postId: post.id,
-      like: 0,
-    };
-
     axios
       .get('http://localhost:3000/api/likes/get/user', {
         headers: { Authorization: `Bearer ${currentUser.token}` },
         params: { postId: post.id, userId: currentUser.userId },
       })
       .then((likeByUser) => {
-        if (likeByUser.data.dislike === 1) {
+        if (likeByUser.data == null || likeByUser.data.dislike === 0) {
+          const dislike = {
+            userId: currentUser.userId,
+            postId: post.id,
+            like: -1,
+          };
           axios
-            .post('http://localhost:3000/api/likes/create/', undislike, {
+            .post('http://localhost:3000/api/likes/create/', dislike, {
               headers,
             })
             .then((ok) => {
@@ -138,9 +132,14 @@ const Post = ({ post }) => {
             .catch((err) => {
               console.log(err);
             });
-        } else {
+        } else if (likeByUser.data.dislike === 1) {
+          const undislike = {
+            userId: currentUser.userId,
+            postId: post.id,
+            like: 0,
+          };
           axios
-            .post('http://localhost:3000/api/likes/create/', dislike, {
+            .post('http://localhost:3000/api/likes/create/', undislike, {
               headers,
             })
             .then(() => {
@@ -172,7 +171,7 @@ const Post = ({ post }) => {
       <div className="posts__post__header">
         <h2 className="posts__post__header__title">{post.title}</h2>
         <span className="posts__post__header__date">
-          Posté le {moment(`${post.createdAt}`).format('DD/MM/YYYY')}
+          Posté le {moment(`${post.createdAt}`).locale('fr').format('llll')}
         </span>
         <div className="posts__post__header__avatar">
           <FontAwesomeIcon icon={faUser} />
@@ -246,15 +245,17 @@ const Post = ({ post }) => {
           </span>
         </div>
       </div>
-      <div className={`posts__post__ownerMenu ${ownerMenu}`}>
-        <button
-          className="posts__post__ownerMenu__delete"
-          type="button"
-          onClick={deletePost}
-        >
-          supprimer
-        </button>
-      </div>
+      {ownerMenu ? (
+        <div className="posts__post__ownerMenu">
+          <button
+            className="posts__post__ownerMenu__delete"
+            type="button"
+            onClick={deletePost}
+          >
+            supprimer
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };

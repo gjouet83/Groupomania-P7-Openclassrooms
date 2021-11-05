@@ -27,11 +27,7 @@ const Comments = () => {
         params: { postId: id },
       })
       .then((comments) => {
-        if (comments.data.rows == []) {
-          return;
-        } else {
-          setComments(comments.data.rows);
-        }
+        setComments(comments.data.rows);
       })
       .catch((err) => {
         console.log(err);
@@ -43,7 +39,6 @@ const Comments = () => {
       userId: currentUser.userId,
       admin: currentUser.admin,
       postId: id,
-      title: title,
       content: content,
       attachment: attachment,
     };
@@ -88,12 +83,6 @@ const Comments = () => {
                 : 'comments__createone'
             }
           >
-            <input
-              type="text"
-              className="comments__createone__title"
-              placeholder="titre"
-              onChange={(e) => setTitle(e.target.value)}
-            ></input>
             <textarea
               className="comments__createone__input"
               placeholder="Redigez votre post ici"

@@ -13,7 +13,6 @@ const Posts = () => {
     'Content-Type': 'application/json; charset=utf-8',
   };
   const [posts, setPosts] = useState([]);
-  const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
 
@@ -34,7 +33,6 @@ const Posts = () => {
     let formData = new FormData();
     formData.append('image', image);
     formData.append('userId', currentUser.userId);
-    formData.append('title', title);
     formData.append('content', content);
 
     axios({
@@ -63,12 +61,6 @@ const Posts = () => {
               isOpen ? 'posts__createone opencreatepost' : 'posts__createone'
             }
           >
-            <input
-              type="text"
-              className="posts__createone__title"
-              placeholder="titre"
-              onChange={(e) => setTitle(e.target.value)}
-            ></input>
             <textarea
               className="posts__createone__input"
               placeholder="Redigez votre post ici"

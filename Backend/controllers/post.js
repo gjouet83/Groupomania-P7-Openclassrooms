@@ -61,9 +61,6 @@ exports.getPostByUser = (req, res, next) => {
 };
 
 exports.createPost = (req, res, next) => {
-  if (!validFields(req.body.title)) {
-    return res.status(406).json({ message: 'Caractères non autorisés' });
-  }
   if (!validFields(req.body.content)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
   }

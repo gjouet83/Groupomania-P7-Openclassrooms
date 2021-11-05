@@ -13,7 +13,13 @@ const Header = () => {
   const location = useLocation();
   const [isMoved, setMove] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const adminSection = currentUser && currentUser.admin ? '' : 'disappear';
+  const isAdmin = currentUser && currentUser.admin ? true : false;
+  const isNavbar =
+    location.pathname === '/signup' ||
+    location.pathname === '/login' ||
+    location.pathname === '/'
+      ? false
+      : true;
 
   const toggleClass = () => {
     setMove(!isMoved);
@@ -24,12 +30,6 @@ const Header = () => {
     window.location.assign('/login');
   };
 
-  const appear =
-    location.pathname === '/signup' ||
-    location.pathname === '/login' ||
-    location.pathname === '/'
-      ? 'disappear'
-      : '';
   return (
     <header className="header">
       <div className="header__name">
@@ -40,27 +40,31 @@ const Header = () => {
         />
         <h1 className="header__name__title">{title}</h1>
       </div>
-      <div className={`header__menu ${appear}`}>
-        <div className="header__menu__area">
-          <FontAwesomeIcon
-            icon={faUser}
-            className="header__menu__area__icon"
-            onClick={toggleClass}
-          />
-        </div>
-      </div>
-      <nav className={isMoved ? 'header__navbar move' : 'header__navbar'}>
-        <div className={`header__navbar__admin ${adminSection}`}>
-          <Link
-            to="/Admin"
-            className="header__navbar__admin__link clickable"
-            onClick={toggleClass}
-          ></Link>
-          <div className="header__navbar__admin__icon">
-            <FontAwesomeIcon icon={faUserShield} />
+      {isNavbar ? (
+        <div className="header__menu">
+          <div className="header__menu__area">
+            <FontAwesomeIcon
+              icon={faUser}
+              className="header__menu__area__icon"
+              onClick={toggleClass}
+            />
           </div>
-          <span>Administrateur</span>
         </div>
+      ) : null}
+      <nav className={isMoved ? 'header__navbar move' : 'header__navbar'}>
+        {isAdmin ? (
+          <div className="header__navbar__admin">
+            <Link
+              to="/Admin"
+              className="header__navbar__admin__link clickable"
+              onClick={toggleClass}
+            ></Link>
+            <div className="header__navbar__admin__icon">
+              <FontAwesomeIcon icon={faUserShield} />
+            </div>
+            <span>Administrateur</span>
+          </div>
+        ) : null}
         <div className="header__navbar__params">
           <Link
             to="/Params"

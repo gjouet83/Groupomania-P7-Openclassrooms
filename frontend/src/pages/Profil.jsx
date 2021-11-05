@@ -5,7 +5,6 @@ import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import Post from '../components/Post';
 import Comment from '../components/Comment';
-import Delete from '../components/Delete';
 import imageprofildefault from '../assets/images/user-solid.jpg';
 import axios from 'axios';
 
@@ -197,9 +196,6 @@ const Profil = () => {
         >
           {userPosts.map((post) => (
             <Post key={`post-${post.id}`} post={post} />
-          ))}
-          {userPosts.map((element) => (
-            <Delete key={`element-${element.id}`} element={element} />
           ))}
         </div>
         <h2 className="profil__usercomments__title">Mes commentaires</h2>

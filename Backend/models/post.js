@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
   post.init(
     {
       userId: DataTypes.INTEGER.UNSIGNED,
-      title: DataTypes.STRING(50),
       content: DataTypes.STRING(1000),
       attachment: DataTypes.STRING,
     },
