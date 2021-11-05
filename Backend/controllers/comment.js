@@ -121,7 +121,7 @@ exports.updateComment = (req, res, next) => {
 exports.deleteComment = (req, res, next) => {
   db.comment
     .findOne({
-      where: { id: req.params.id },
+      where: { id: req.query.id },
     })
     .then((comment) => {
       if (!comment) {

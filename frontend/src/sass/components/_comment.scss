@@ -20,4 +20,11 @@
       margin: 0;
     }
   }
+  &__ownerMenu {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    border-top: 1px solid;
+    padding: 20px 20px 0 20px;
+  }
 }

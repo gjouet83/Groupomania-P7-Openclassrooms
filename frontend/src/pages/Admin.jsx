@@ -1,8 +1,30 @@
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import UsersTable from '../components/UsersTable';
+import axios from 'axios';
 
 const Admin = () => {
+  const currentUser = JSON.parse(localStorage.getItem('user'));
+  const [users, setUsers] = useState([]);
+
+  const getUsers = () => {
+    axios
+      .get('http://localhost:3000/api/users/get/', {
+        headers: { Authorization: `Bearer ${currentUser.token}` },
+      })
+      .then((users) => {
+        setUsers(users.data.users);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    getUsers();
+  }, []);
+  console.log(users);
   return (
     <main>
       <section className="admin">
@@ -20,23 +42,9 @@ const Admin = () => {
           </div>
           <h2 className="admin__nav__title">Administrateur</h2>
         </div>
-        <div className="admin__userarray">
-          <table className="admin__userarray__element">
-            <tr>
-              <th>utilisateur</th>
-              <th>Admin</th>
-            </tr>
-            <tr>
-              <td>toy74</td>
-              <td>
-                <input type="checkbox" id="scales" name="scales"></input>
-              </td>
-              <td>
-                <button type="button">Supprimer</button>
-              </td>
-            </tr>
-          </table>
-        </div>
+        {users.map((user) => (
+          <UsersTable key={user.id} user={user} />
+        ))}
       </section>
     </main>
   );

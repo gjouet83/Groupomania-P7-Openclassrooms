@@ -15,7 +15,10 @@ const Post = ({ post }) => {
   const [nbComments, setNbComments] = useState(0);
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
-  const ownerMenu = currentUser.userId == post.userId ? '' : 'disappear';
+  const ownerMenu =
+    currentUser.userId == post.userId || currentUser.admin == 1
+      ? ''
+      : 'disappear';
 
   const headers = {
     Authorization: `Bearer ${currentUser.token}`,

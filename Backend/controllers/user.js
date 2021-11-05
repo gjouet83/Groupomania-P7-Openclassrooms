@@ -120,7 +120,6 @@ exports.login = (req, res, next) => {
 };
 
 exports.getOneUser = (req, res, next) => {
-  console.log(req.query);
   db.user
     .findOne({ where: { id: req.query.id } })
     .then((user) => {
@@ -134,8 +133,18 @@ exports.getOneUser = (req, res, next) => {
     });
 };
 
+exports.getAllUsers = (req, res, next) => {
+  db.user
+    .findAll()
+    .then((users) => {
+      res.status(200).json({ users });
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+};
+
 exports.updateUser = (req, res, next) => {
-  console.log(req.query);
   if (!validFields(req.body.name)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
   }
@@ -165,7 +174,7 @@ exports.updateUser = (req, res, next) => {
 
 exports.deleteUser = (req, res, next) => {
   db.user
-    .findOne({ where: { id: req.body.userId } })
+    .findOne({ where: { id: req.query.userId } })
     .then((user) => {
       if (!user) {
         return res.status(404).json({ error: 'Utilisateur non trouvé' });

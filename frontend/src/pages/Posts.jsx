@@ -31,8 +31,6 @@ const Posts = () => {
   };
 
   const sendForm = (e) => {
-    e.preventDefault();
-
     let formData = new FormData();
     formData.append('image', image);
     formData.append('userId', currentUser.userId);
