@@ -64,6 +64,7 @@ exports.createPost = (req, res, next) => {
   if (!validFields(req.body.content)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
   }
+  console.log(req.body);
   // on test si la requête contient un fichier
   const newPost = req.file
     ? {

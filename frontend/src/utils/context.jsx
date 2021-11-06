@@ -13,7 +13,6 @@ export const ImageProvider = ({ children }) => {
         params: { id: currentUser.userId },
       })
       .then((user) => {
-        console.log(user.data);
         setImageProfile(user.data.user.avatar);
       })
       .catch(() => {});

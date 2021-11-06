@@ -20,10 +20,9 @@ const Profil = () => {
   const [userPosts, setUserPosts] = useState([]);
   const [user, setUser] = useState(0);
   const [pseudo, setPseudo] = useState();
-  const [profilImage, setProfilImage] = useState(0);
+  const [profilImage, setProfilImage] = useState(null);
+  const [deleteImage, setDeleteImage] = useState([0]);
   const isAdminAccount = currentUser.admin == 0 ? true : false;
-
-  console.log(user);
 
   const toggleClassPosts = () => {
     setOpenPosts(!isOpenPosts);
@@ -33,13 +32,6 @@ const Profil = () => {
     setOpenComments(!isOpenComments);
   };
 
-  useEffect(() => {
-    getUser();
-    getPostByUser();
-    getCommentByUser();
-    getUserImageProfile();
-  }, []);
-
   const getUser = () => {
     axios
       .get('http://localhost:3000/api/users/get/:id', {
@@ -47,7 +39,6 @@ const Profil = () => {
         params: { id: currentUser.userId },
       })
       .then((user) => {
-        console.log(user.data);
         setUser(user.data.user);
       })
       .catch(() => {});
@@ -74,19 +65,23 @@ const Profil = () => {
       params: { userId: currentUser.userId },
       data: formData,
     });
+    window.location.reload();
   };
 
   const deleteProfilImage = () => {
-    let formData = new FormData();
-    formData.append('image', imageprofildefault);
-    formData.append('userId', currentUser.userId);
+    let deleteData = new FormData();
+
+    deleteData.append('image', profilImage);
+    console.log(profilImage);
     axios({
       headers: { Authorization: `Bearer ${currentUser.token}` },
       'Content-Type': 'application/json; charset=utf-8',
       url: 'http://localhost:3000/api/users/update/:id',
       method: 'PUT',
-      data: formData,
+      params: { userId: currentUser.userId },
+      data: deleteData,
     });
+    window.location.reload();
   };
 
   const getCommentByUser = () => {
@@ -97,7 +92,6 @@ const Profil = () => {
       })
       .then((userComments) => {
         setUserComments(userComments.data);
-        console.log(userComments.data);
       })
       .catch(() => {});
   };
@@ -110,7 +104,6 @@ const Profil = () => {
       })
       .then((userPosts) => {
         setUserPosts(userPosts.data);
-        console.log(userPosts.data);
       })
       .catch(() => {});
   };
@@ -126,6 +119,13 @@ const Profil = () => {
       })
       .catch(() => {});
   };
+
+  useEffect(() => {
+    getUser();
+    getPostByUser();
+    getCommentByUser();
+    getUserImageProfile();
+  }, []);
 
   return (
     <>

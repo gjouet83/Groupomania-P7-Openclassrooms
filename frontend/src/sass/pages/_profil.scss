@@ -1,6 +1,7 @@
 .profil {
   @include navbar-page;
   &__avatar {
+    background-image: url('../../assets/images/user-solid.jpg');
     display: flex;
     justify-content: center;
     margin: 20px auto 20px auto;

@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import moment from 'moment';
+import 'moment/locale/fr';
 
 const Comment = ({ comment }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
@@ -37,6 +37,9 @@ const Comment = ({ comment }) => {
           <span>{comment.user.username}</span>
         </div>
       </div>
+      <span className="comments__comment__date">
+        Posté le {moment(`${comment.createdAt}`).locale('fr').format('llll')}
+      </span>
       <div className="comments__comment__main">
         <p className="comments__comment__main__content">{comment.content}</p>
       </div>

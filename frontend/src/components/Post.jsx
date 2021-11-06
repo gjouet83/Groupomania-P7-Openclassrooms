@@ -9,7 +9,6 @@ import 'moment/locale/fr';
 import axios from 'axios';
 
 const Post = ({ post }) => {
-  console.log(post);
   const currentUser = JSON.parse(localStorage.getItem('user'));
   const [nbLikes, setNbLikes] = useState();
   const [nbDislikes, setNbDislikes] = useState();
@@ -27,7 +26,6 @@ const Post = ({ post }) => {
   const headers = {
     Authorization: `Bearer ${currentUser.token}`,
   };
-  console.log(colorLike);
   const getNbComment = () => {
     axios
       .get('http://localhost:3000/api/comments/get/', {
@@ -64,7 +62,6 @@ const Post = ({ post }) => {
         params: { postId: post.id, userId: currentUser.userId },
       })
       .then((likeStatus) => {
-        console.log(likeStatus);
         if (likeStatus.data.like === 1) {
           setColorLike('green');
         } else if (likeStatus.data.dislike === 1) {
@@ -83,7 +80,6 @@ const Post = ({ post }) => {
         params: { postId: post.id, userId: currentUser.userId },
       })
       .then((likeByUser) => {
-        console.log(likeByUser);
         if (likeByUser.data == null || likeByUser.data.like === 0) {
           const like = {
             userId: currentUser.userId,

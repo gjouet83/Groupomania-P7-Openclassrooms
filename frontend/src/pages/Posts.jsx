@@ -11,7 +11,6 @@ const Posts = () => {
 
   const headers = {
     Authorization: `Bearer ${currentUser.token}`,
-    'Content-Type': 'application/json; charset=utf-8',
   };
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState('');
@@ -32,16 +31,22 @@ const Posts = () => {
   };
 
   const sendForm = (e) => {
+    e.preventDefault();
+    console.log(image);
+    console.log(currentUser.userId);
+    console.log(content);
     let formData = new FormData();
     formData.append('image', image);
-    formData.append('userId', currentUser.userId);
-    formData.append('content', content);
 
-    axios({
-      headers: headers,
-      url: 'http://localhost:3000/api/posts/create',
-      method: 'POST',
-      data: formData,
+    formData.append('user', {
+      userId: currentUser.userId,
+      content: content,
+    });
+    axios.post('http://localhost:3000/api/posts/create', formData, {
+      headers: {
+        Authorization: `Bearer ${currentUser.token}`,
+        'Content-Type': 'multipart/form-data',
+      },
     });
   };
 
@@ -103,7 +108,7 @@ const Posts = () => {
             className="posts__addbutton__link clickable"
             onClick={toggleClass}
           ></Link>
-          <FontAwesomeIcon icon={faEdit} />
+          <FontAwesomeIcon className="posts__addbutton__icon" icon={faEdit} />
         </div>
       </section>
     </main>
