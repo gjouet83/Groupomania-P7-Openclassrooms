@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
+
 import axios from 'axios';
 
 const Posts = () => {
@@ -49,6 +50,7 @@ const Posts = () => {
   const toggleClass = () => {
     setOpen(!isOpen);
   };
+
   useEffect(() => {
     getPosts();
   }, []);
@@ -56,7 +58,7 @@ const Posts = () => {
   return (
     <main>
       <section className="posts">
-        <form onSubmit={sendForm}>
+        <form encType="multipart/form" onSubmit={sendForm}>
           <div
             className={
               isOpen ? 'posts__createone opencreatepost' : 'posts__createone'

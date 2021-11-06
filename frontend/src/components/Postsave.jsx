@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
@@ -9,15 +10,13 @@ import 'moment/locale/fr';
 import axios from 'axios';
 
 const Post = ({ post }) => {
-  console.log(post);
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const [nbLikes, setNbLikes] = useState();
-  const [nbDislikes, setNbDislikes] = useState();
-  const [nbComments, setNbComments] = useState();
+  const [nbLikes, setNbLikes] = useState(0);
+  const [nbDislikes, setNbDislikes] = useState(0);
+  const [nbComments, setNbComments] = useState(0);
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
   const isProfilePage = window.location.pathname;
-  const isFigure = post.attachment ? 'appear' : 'disappear';
   const ownerMenu =
     (currentUser.userId == post.userId || currentUser.admin == 1) &&
     (isProfilePage == '/profil' || currentUser.admin == 1)
@@ -27,54 +26,35 @@ const Post = ({ post }) => {
   const headers = {
     Authorization: `Bearer ${currentUser.token}`,
   };
-  console.log(colorLike);
-  const getNbComment = () => {
-    axios
-      .get('http://localhost:3000/api/comments/get/', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
-        params: { postId: post.id },
-      })
-      .then((comments) => {
-        setNbComments(comments.data.count);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
-  const getNbLikes = () => {
+  const isFigure = post.attachment ? 'appear' : 'disappear';
+  console.log(colorLike);
+  useEffect(() => {
     axios
       .get('http://localhost:3000/api/likes/get/', {
         headers: { Authorization: `Bearer ${currentUser.token}` },
         params: { postId: post.id },
       })
       .then((likes) => {
-        setNbLikes(likes.data.map((nb) => nb.totalLikes));
-        setNbDislikes(likes.data.map((nb) => nb.totaldislikes));
+        console.log(likes);
+        axios
+          .get('http://localhost:3000/api/comments/get/', {
+            headers: { Authorization: `Bearer ${currentUser.token}` },
+            params: { postId: post.id },
+          })
+          .then((comments) => {
+            setNbComments(comments.data.count);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        setNbLikes(likes.data.map((s) => s.totalLikes));
+        setNbDislikes(likes.data.map((s) => s.totaldislikes));
       })
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  const getLikeStatus = () => {
-    axios
-      .get('http://localhost:3000/api/likes/get/user', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
-        params: { postId: post.id, userId: currentUser.userId },
-      })
-      .then((likeStatus) => {
-        console.log(likeStatus);
-        if (likeStatus.data.like === 1) {
-          setColorLike('green');
-        } else if (likeStatus.data.dislike === 1) {
-          setColorDislike('red');
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  }, []);
 
   const sendLike = () => {
     axios
@@ -95,6 +75,7 @@ const Post = ({ post }) => {
               headers,
             })
             .then((ok) => {
+              setColorLike('green');
               window.location.reload();
               console.log(ok);
             })
@@ -112,6 +93,7 @@ const Post = ({ post }) => {
               headers,
             })
             .then((ok) => {
+              setColorLike('');
               window.location.reload();
               console.log(ok);
             })
@@ -160,10 +142,9 @@ const Post = ({ post }) => {
             .post('http://localhost:3000/api/likes/create/', undislike, {
               headers,
             })
-            .then((ok) => {
-              setColorDislike('');
+            .then(() => {
               window.location.reload();
-              console.log(ok);
+              setColorDislike('');
             })
             .catch((err) => {
               console.log(err);
@@ -185,12 +166,6 @@ const Post = ({ post }) => {
       .catch(() => {});
   };
 
-  useEffect(() => {
-    getLikeStatus();
-    getNbLikes();
-    getNbComment();
-  }, []);
-
   return (
     <div className="posts__post">
       <div className="posts__post__header">
@@ -198,13 +173,9 @@ const Post = ({ post }) => {
         <span className="posts__post__header__date">
           Posté le {moment(`${post.createdAt}`).locale('fr').format('llll')}
         </span>
-        <figure className="posts__post__header__avatar">
-          <img
-            className="posts__post__header__avatar__img"
-            src={post.user.avatar}
-            alt="photo de profil"
-          />
-        </figure>
+        <div className="posts__post__header__avatar">
+          <FontAwesomeIcon icon={faUser} />
+        </div>
         <span className="posts__post__header__author">
           {post.user.username}
         </span>

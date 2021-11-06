@@ -12,40 +12,43 @@ import PrivateRouteAdmin from './components/PrivateRouteAdmin';
 import Error from './pages/Error';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './sass/style.scss';
+import { ImageProvider } from './utils/context';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <Header />
-      <Switch>
-        <Route exact path="/">
-          <Login />
-        </Route>
-        <Route exact path="/signup">
-          <Signup />
-        </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route path="/posts">
-          <Posts />
-        </Route>
-        <Route path="/comments">
-          <Comments />
-        </Route>
-        <Route path="/profil">
-          <Profil />
-        </Route>
-        <Route path="/params">
-          <Params />
-        </Route>
-        <PrivateRouteAdmin path="/admin">
-          <Route component={Admin} />
-        </PrivateRouteAdmin>
-        <Route>
-          <Error />
-        </Route>
-      </Switch>
+      <ImageProvider>
+        <Header />
+        <Switch>
+          <Route exact path="/">
+            <Login />
+          </Route>
+          <Route exact path="/signup">
+            <Signup />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route path="/posts">
+            <Posts />
+          </Route>
+          <Route path="/comments">
+            <Comments />
+          </Route>
+          <Route path="/profil">
+            <Profil />
+          </Route>
+          <Route path="/params">
+            <Params />
+          </Route>
+          <PrivateRouteAdmin path="/admin">
+            <Route component={Admin} />
+          </PrivateRouteAdmin>
+          <Route>
+            <Error />
+          </Route>
+        </Switch>
+      </ImageProvider>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')

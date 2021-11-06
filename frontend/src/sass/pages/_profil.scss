@@ -1,16 +1,18 @@
 .profil {
   @include navbar-page;
   &__avatar {
+    display: flex;
+    justify-content: center;
     margin: 20px auto 20px auto;
     width: 100px;
     height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border-radius: 50px;
     overflow: hidden;
+
     &__icon {
-      width: 100%;
+      display: block;
+      object-fit: cover;
+      width: 98%;
       height: 100%;
     }
   }

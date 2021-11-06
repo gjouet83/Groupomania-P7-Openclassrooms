@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Header from '../layout/Header';
 
 const Signup = () => {
   const [login, setLogin] = useState();
@@ -22,8 +23,7 @@ const Signup = () => {
         password: password,
       })
       .then((res) => {
-        
-        window.location.assign("/login")
+        window.location.assign('/login');
       })
       .catch((error) => {
         console.log(error.response.data);
@@ -49,67 +49,70 @@ const Signup = () => {
   };
 
   return (
-    <main>
-      <section className="signup">
-        <h2 className="signup__title">Créer un compte</h2>
-        <form className="signup__form" onSubmit={sendForm}>
-          <div className="signup__form__pseudo">
-            <label className="signup__form__pseudo__lbl">
-              Pseudo:
-              <input
-                className={signupPseudo}
-                onChange={(e) => setPseudo(e.target.value)}
-                id="pseudo"
-                name="pseudo"
-                type="text"
-                required
-              />
-            </label>
+    <>
+      <Header />
+      <main>
+        <section className="signup">
+          <h2 className="signup__title">Créer un compte</h2>
+          <form className="signup__form" onSubmit={sendForm}>
+            <div className="signup__form__pseudo">
+              <label className="signup__form__pseudo__lbl">
+                Pseudo:
+                <input
+                  className={signupPseudo}
+                  onChange={(e) => setPseudo(e.target.value)}
+                  id="pseudo"
+                  name="pseudo"
+                  type="text"
+                  required
+                />
+              </label>
+            </div>
+            <div className="signup__form__email">
+              <label className="signup__form__email__lbl">
+                E-mail:
+                <input
+                  className={signupEmail}
+                  onChange={(e) => setLogin(e.target.value)}
+                  id="login"
+                  name="email"
+                  type="email"
+                  required
+                />
+                <span>exemple@provider.com</span>
+              </label>
+            </div>
+            <div className="signup__form__password">
+              <label className="signup__form__password__lbl">
+                Mot de passe:
+                <input
+                  className={signupPassword}
+                  onChange={(e) => setPassword(e.target.value)}
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                />
+                <span>
+                  8 charactères, 1 majuscule, pas de charactères spéciaux
+                </span>
+              </label>
+            </div>
+            <input
+              className="signup__form__validate"
+              name="login"
+              type="submit"
+              value="Valider"
+            />
+          </form>
+          <div className="signup__loginlink">
+            <span>
+              Si vous possedez déjà un compte <Link to="/login">Connexion</Link>
+            </span>
           </div>
-          <div className="signup__form__email">
-            <label className="signup__form__email__lbl">
-              E-mail:
-              <input
-                className={signupEmail}
-                onChange={(e) => setLogin(e.target.value)}
-                id="login"
-                name="email"
-                type="email"
-                required
-              />
-              <span>exemple@provider.com</span>
-            </label>
-          </div>
-          <div className="signup__form__password">
-            <label className="signup__form__password__lbl">
-              Mot de passe:
-              <input
-                className={signupPassword}
-                onChange={(e) => setPassword(e.target.value)}
-                id="password"
-                name="password"
-                type="password"
-                required
-              />
-              <span>
-                8 charactères, 1 majuscule, pas de charactères spéciaux
-              </span>
-            </label>
-          </div>
-          <input
-            className="signup__form__validate"
-            name="login"
-            type="submit"
-            value="Valider"
-          />
-        </form>
-        <div className="signup__loginlink">
-          <span>
-            Si vous possedez déjà un compte <Link to="/login">Connexion</Link>
-          </span>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 };
 

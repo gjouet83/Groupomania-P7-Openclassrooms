@@ -16,7 +16,7 @@ exports.getAllPosts = (req, res, next) => {
       include: [
         {
           model: db.user,
-          attributes: ['username'],
+          attributes: ['username', 'avatar'],
         },
         {
           model: db.like,
@@ -44,7 +44,7 @@ exports.getPostByUser = (req, res, next) => {
       include: [
         {
           model: db.user,
-          attributes: ['username'],
+          attributes: ['username', 'avatar'],
         },
       ],
       where: { userId: req.query.userId },

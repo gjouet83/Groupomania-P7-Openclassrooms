@@ -9,7 +9,6 @@ import axios from 'axios';
 const Comments = () => {
   const [isOpen, setOpen] = useState(false);
   const [comments, setComments] = useState([]);
-  const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [attachment, setAttachment] = useState();
   const currentUser = JSON.parse(localStorage.getItem('user'));

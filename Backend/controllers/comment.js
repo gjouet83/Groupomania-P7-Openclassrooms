@@ -16,7 +16,7 @@ exports.getComments = (req, res, next) => {
       include: [
         {
           model: db.user,
-          attributes: ['username'],
+          attributes: ['username', 'avatar'],
         },
       ],
       where: { postId: req.query.postId },
@@ -37,7 +37,7 @@ exports.getCommentByUser = (req, res, next) => {
       include: [
         {
           model: db.user,
-          attributes: ['username'],
+          attributes: ['username', 'avatar'],
         },
       ],
       where: { userId: req.query.userId },

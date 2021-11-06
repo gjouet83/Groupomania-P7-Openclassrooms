@@ -27,7 +27,11 @@ const Comment = ({ comment }) => {
     <div className="comments__comment">
       <div className="comments__comment__author">
         <div className="comments__comment__author__avatar">
-          <FontAwesomeIcon icon={faUser} />
+          <img
+            className="comments__comment__author__avatar__img"
+            src={comment.user.avatar}
+            alt="photo de profil"
+          />
         </div>
         <div className="comments__comment__author__info">
           <span>{comment.user.username}</span>

@@ -236,14 +236,14 @@ exports.updateUser = (req, res, next) => {
     ? {
         ...req.body,
         avatar: `${req.protocol}://${req.get('host')}/images/userId-${
-          req.body.userId
+          req.query.userId
         }/${req.file.filename}`,
       }
     : {
         ...req.body,
       };
   db.user
-    .update({ ...updatedProfil }, { where: { id: req.body.userId } })
+    .update({ ...updatedProfil }, { where: { id: req.query.userId } })
     .then(() => {
       res.status(200).json({ message: 'Profil modifié avec SUCCES !' });
     })
