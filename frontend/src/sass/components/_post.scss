@@ -44,7 +44,7 @@
     padding: 0 20px 20px 20px;
   }
   &__footer {
-    font-size: 2rem;
+    font-size: 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -52,7 +52,7 @@
     &__like {
       position: relative;
       width: 50px;
-      height: 59px;
+      height: 48px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -70,7 +70,7 @@
     &__dislike {
       position: relative;
       width: 100px;
-      height: 59px;
+      height: 48px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -87,6 +87,7 @@
     }
     &__comments {
       position: relative;
+      height: 48px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;

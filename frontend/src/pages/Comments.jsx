@@ -123,7 +123,10 @@ const Comments = () => {
             className="comments__addbutton__link clickable"
             onClick={toggleClass}
           ></Link>
-          <FontAwesomeIcon icon={faEdit} />
+          <FontAwesomeIcon
+            className="comments__addbutton__icon"
+            icon={faEdit}
+          />
         </div>
       </section>
     </main>
