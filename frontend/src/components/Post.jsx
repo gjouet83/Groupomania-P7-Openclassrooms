@@ -72,7 +72,7 @@ const Post = ({ post }) => {
         console.log(err);
       });
   };
-
+  console.log(colorLike);
   const sendLike = () => {
     axios
       .get('http://localhost:3000/api/likes/get/user', {
@@ -91,7 +91,7 @@ const Post = ({ post }) => {
               headers,
             })
             .then((ok) => {
-              window.location.reload();
+              setColorLike('green');
               console.log(ok);
             })
             .catch((err) => {
@@ -108,7 +108,7 @@ const Post = ({ post }) => {
               headers,
             })
             .then((ok) => {
-              window.location.reload();
+              setColorLike('');
               console.log(ok);
             })
             .catch((err) => {
@@ -140,7 +140,6 @@ const Post = ({ post }) => {
             })
             .then((ok) => {
               setColorDislike('red');
-              window.location.reload();
               console.log(ok);
             })
             .catch((err) => {
@@ -158,7 +157,6 @@ const Post = ({ post }) => {
             })
             .then((ok) => {
               setColorDislike('');
-              window.location.reload();
               console.log(ok);
             })
             .catch((err) => {
@@ -176,14 +174,17 @@ const Post = ({ post }) => {
         params: { id: post.id },
       })
       .then(() => {
-        window.location.reload();
+        getNbComment();
       })
       .catch(() => {});
   };
 
   useEffect(() => {
-    getLikeStatus();
     getNbLikes();
+  }, [colorLike, colorDislike]);
+
+  useEffect(() => {
+    getLikeStatus();
     getNbComment();
   }, []);
 
@@ -218,14 +219,21 @@ const Post = ({ post }) => {
           <Link
             to="#"
             className="posts__post__footer__like__link clickable"
-            type="submit"
-            onClick={sendLike}
+            type="button"
+            onClick={() => sendLike()}
           ></Link>
           <div className="posts__post__footer__like__view">
-            <FontAwesomeIcon
-              icon={faThumbsUp}
-              className={`posts__post__footer__like__view__icon ${colorLike}`}
-            />
+            {colorLike ? (
+              <FontAwesomeIcon
+                icon={faThumbsUp}
+                className="posts__post__footer__like__view__icon green "
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faThumbsUp}
+                className="posts__post__footer__like__view__icon "
+              />
+            )}
             <span className="posts__post__footer__like__view__nb">
               {nbLikes}
             </span>

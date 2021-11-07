@@ -37,16 +37,16 @@ const Posts = () => {
     console.log(content);
     let formData = new FormData();
     formData.append('image', image);
+    formData.append('userId', currentUser.userId);
+    formData.append('content', content);
 
-    formData.append('user', {
-      userId: currentUser.userId,
-      content: content,
-    });
-    axios.post('http://localhost:3000/api/posts/create', formData, {
+    axios.post('http://localhost:3000/api/posts/create', {
       headers: {
         Authorization: `Bearer ${currentUser.token}`,
         'Content-Type': 'multipart/form-data',
       },
+      boundary: 123456,
+      data: formData,
     });
   };
 
