@@ -174,7 +174,7 @@ const Post = ({ post }) => {
         params: { id: post.id },
       })
       .then(() => {
-        getNbComment();
+        window.location.reload();
       })
       .catch(() => {});
   };
@@ -220,20 +220,13 @@ const Post = ({ post }) => {
             to="#"
             className="posts__post__footer__like__link clickable"
             type="button"
-            onClick={() => sendLike()}
+            onClick={sendLike}
           ></Link>
           <div className="posts__post__footer__like__view">
-            {colorLike ? (
-              <FontAwesomeIcon
-                icon={faThumbsUp}
-                className="posts__post__footer__like__view__icon green "
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faThumbsUp}
-                className="posts__post__footer__like__view__icon "
-              />
-            )}
+            <FontAwesomeIcon
+              icon={faThumbsUp}
+              className={`posts__post__footer__like__view__icon ${colorLike}`}
+            />
             <span className="posts__post__footer__like__view__nb">
               {nbLikes}
             </span>
