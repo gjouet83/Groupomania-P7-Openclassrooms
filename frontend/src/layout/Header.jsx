@@ -6,7 +6,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import { faUserShield } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { ImageContext } from '../utils/context';
 
@@ -33,9 +33,11 @@ const Header = () => {
     window.location.assign('/login');
   };
 
-  if (currentUser) {
-    getUserImageProfile();
-  }
+  useEffect(() => {
+    if (currentUser) {
+      getUserImageProfile();
+    }
+  }, []);
 
   return (
     <header className="header">
@@ -63,7 +65,7 @@ const Header = () => {
         {isAdmin ? (
           <div className="header__navbar__admin">
             <Link
-              to="/Admin"
+              to="/admin"
               className="header__navbar__admin__link clickable"
               onClick={toggleClass}
             ></Link>
@@ -75,7 +77,7 @@ const Header = () => {
         ) : null}
         <div className="header__navbar__params">
           <Link
-            to="/Params"
+            to="/params"
             className="header__navbar__params__link clickable"
             onClick={toggleClass}
           ></Link>

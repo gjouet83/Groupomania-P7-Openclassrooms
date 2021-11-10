@@ -72,7 +72,6 @@ const Post = ({ post }) => {
         console.log(err);
       });
   };
-  console.log(colorLike);
   const sendLike = () => {
     axios
       .get('http://localhost:3000/api/likes/get/user', {
@@ -92,7 +91,6 @@ const Post = ({ post }) => {
             })
             .then((ok) => {
               setColorLike('green');
-              console.log(ok);
             })
             .catch((err) => {
               console.log(err);
@@ -109,7 +107,6 @@ const Post = ({ post }) => {
             })
             .then((ok) => {
               setColorLike('');
-              console.log(ok);
             })
             .catch((err) => {
               console.log(err);
@@ -140,7 +137,6 @@ const Post = ({ post }) => {
             })
             .then((ok) => {
               setColorDislike('red');
-              console.log(ok);
             })
             .catch((err) => {
               console.log(err);
@@ -157,7 +153,6 @@ const Post = ({ post }) => {
             })
             .then((ok) => {
               setColorDislike('');
-              console.log(ok);
             })
             .catch((err) => {
               console.log(err);
@@ -176,7 +171,9 @@ const Post = ({ post }) => {
       .then(() => {
         window.location.reload();
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {

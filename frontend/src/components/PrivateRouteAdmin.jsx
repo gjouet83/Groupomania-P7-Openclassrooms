@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-const PrivateRoute = ({ children, ...rest }) => {
+const PrivateRouteAdmin = ({ children, ...rest }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
   return (
     <Route
@@ -15,4 +15,4 @@ const PrivateRoute = ({ children, ...rest }) => {
     />
   );
 };
-export default PrivateRoute;
+export default PrivateRouteAdmin;

@@ -15,9 +15,16 @@ const UsersTable = ({ user }) => {
       userId: user.id,
       admin: checked,
     };
-    axios.put('http://localhost:3000/api/users/update/:id', updatedUser, {
-      headers: { Authorization: `Bearer ${currentUser.token}` },
-    });
+    axios
+      .put('http://localhost:3000/api/users/update/:id', updatedUser, {
+        headers: { Authorization: `Bearer ${currentUser.token}` },
+      })
+      .then((ok) => {
+        console.log(ok);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const deleteUser = () => {
@@ -29,7 +36,9 @@ const UsersTable = ({ user }) => {
       .then(() => {
         window.location.reload();
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {

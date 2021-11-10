@@ -48,6 +48,8 @@ exports.getPostByUser = (req, res, next) => {
         },
       ],
       where: { userId: req.query.userId },
+      // ordre par date de la plus recente a la plus ancienne
+      order: [['createdAt', 'DESC']],
     })
     .then((posts) => {
       if (!posts) {
@@ -64,7 +66,6 @@ exports.createPost = (req, res, next) => {
   if (!validFields(req.body.content)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
   }
-  console.log(req.body);
   // on test si la requête contient un fichier
   const newPost = req.file
     ? {

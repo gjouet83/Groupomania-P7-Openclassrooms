@@ -13,6 +13,9 @@ import axios from 'axios';
 
 const Profil = () => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
+  if (!currentUser) {
+    window.location.assign('/login');
+  }
   const { getUserImageProfile, imageProfile } = useContext(ImageContext);
   const [isOpenPosts, setOpenPosts] = useState(false);
   const [isOpenComments, setOpenComments] = useState(false);
@@ -20,7 +23,7 @@ const Profil = () => {
   const [userPosts, setUserPosts] = useState([]);
   const [user, setUser] = useState(0);
   const [pseudo, setPseudo] = useState();
-  const [profilImage, setProfilImage] = useState(null);
+  const [profilImage, setProfilImage] = useState();
   const [deleteImage, setDeleteImage] = useState([0]);
   const isAdminAccount = currentUser.admin == 0 ? true : false;
 
@@ -41,7 +44,9 @@ const Profil = () => {
       .then((user) => {
         setUser(user.data.user);
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const updateUser = () => {
@@ -49,38 +54,35 @@ const Profil = () => {
       userId: currentUser.userId,
       username: pseudo,
     };
-    axios.put('http://localhost:3000/api/users/update/:id', updatedUser, {
-      headers: { Authorization: `Bearer ${currentUser.token}` },
-    });
+    axios
+      .put('http://localhost:3000/api/users/update/:id', updatedUser, {
+        headers: { Authorization: `Bearer ${currentUser.token}` },
+      })
+      .then((ok) => {
+        console.log(ok);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const updateProfilImage = () => {
+  const updateProfilImage = (e) => {
     let formData = new FormData();
+    formData.append('userId', currentUser.userId);
     formData.append('image', profilImage);
     axios({
       headers: { Authorization: `Bearer ${currentUser.token}` },
-      'Content-Type': 'application/json; charset=utf-8',
+      'Content-Type': 'application/json',
       url: 'http://localhost:3000/api/users/update/:id',
       method: 'PUT',
-      params: { userId: currentUser.userId },
       data: formData,
-    });
-    window.location.reload();
-  };
-
-  const deleteProfilImage = () => {
-    let deleteData = new FormData();
-
-    deleteData.append('image', profilImage);
-    console.log(profilImage);
-    axios({
-      headers: { Authorization: `Bearer ${currentUser.token}` },
-      'Content-Type': 'application/json; charset=utf-8',
-      url: 'http://localhost:3000/api/users/update/:id',
-      method: 'PUT',
-      params: { userId: currentUser.userId },
-      data: deleteData,
-    });
+    })
+      .then((ok) => {
+        console.log(ok);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     window.location.reload();
   };
 
@@ -93,7 +95,9 @@ const Profil = () => {
       .then((userComments) => {
         setUserComments(userComments.data);
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const getPostByUser = () => {
@@ -105,7 +109,9 @@ const Profil = () => {
       .then((userPosts) => {
         setUserPosts(userPosts.data);
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const deleteAccount = () => {
@@ -117,7 +123,9 @@ const Profil = () => {
       .then(() => {
         window.location.assign('/login');
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -167,13 +175,6 @@ const Profil = () => {
               onClick={updateProfilImage}
             >
               Modifier
-            </button>
-            <button
-              className="profil__buttons__delete"
-              type="button"
-              onClick={deleteProfilImage}
-            >
-              Supprimer
             </button>
           </div>
           <div className="profil__username">

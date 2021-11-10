@@ -1,8 +1,10 @@
 const Error = () => {
   return (
-    <div>
-      <h1>Oups 🙈 Cette page n'existe pas</h1>
-    </div>
+    <main>
+      <h1 className="errorpage">
+        Oups.... Cette page n'existe pas ou vous n'êtes pas autorisé a y accéder
+      </h1>
+    </main>
   );
 };
 

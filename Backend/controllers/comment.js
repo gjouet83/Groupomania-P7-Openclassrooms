@@ -9,7 +9,6 @@ const validFields = (field) => {
 };
 
 exports.getComments = (req, res, next) => {
-  console.log(req.query);
   db.comment
     .findAndCountAll({
       //jointure table users (username)
@@ -41,6 +40,8 @@ exports.getCommentByUser = (req, res, next) => {
         },
       ],
       where: { userId: req.query.userId },
+      // ordre par date de la plus recente a la plus ancienne
+      order: [['createdAt', 'DESC']],
     })
     .then((comments) => {
       if (!comments) {

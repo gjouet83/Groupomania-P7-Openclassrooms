@@ -8,6 +8,9 @@ import axios from 'axios';
 
 const Posts = () => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
+  if (!currentUser) {
+    window.location.assign('/login');
+  }
 
   const headers = {
     Authorization: `Bearer ${currentUser.token}`,
@@ -16,13 +19,10 @@ const Posts = () => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
 
-  console.log(image);
-
   const getPosts = () => {
     axios
       .get('http://localhost:3000/api/posts/get', { headers })
       .then((datas) => {
-        console.log(datas);
         setPosts(datas.data);
       })
       .catch((err) => {
@@ -30,24 +30,24 @@ const Posts = () => {
       });
   };
 
-  const sendForm = (e) => {
-    e.preventDefault();
-    console.log(image);
-    console.log(currentUser.userId);
-    console.log(content);
+  const sendForm = () => {
     let formData = new FormData();
-    formData.append('image', image);
     formData.append('userId', currentUser.userId);
     formData.append('content', content);
-
-    axios.post('http://localhost:3000/api/posts/create', {
-      headers: {
-        Authorization: `Bearer ${currentUser.token}`,
-        'Content-Type': 'multipart/form-data',
-      },
-      boundary: 123456,
+    formData.append('image', image);
+    axios({
+      headers: { Authorization: `Bearer ${currentUser.token}` },
+      'Content-Type': 'application/json',
+      url: 'http://localhost:3000/api/posts/create',
+      method: 'POST',
       data: formData,
-    });
+    })
+      .then((ok) => {
+        console.log(ok);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const [isOpen, setOpen] = useState(false);
@@ -63,7 +63,7 @@ const Posts = () => {
   return (
     <main>
       <section className="posts">
-        <form encType="multipart/form" onSubmit={sendForm}>
+        <form onSubmit={sendForm}>
           <div
             className={
               isOpen ? 'posts__createone opencreatepost' : 'posts__createone'

@@ -208,7 +208,7 @@ exports.updatePassword = (req, res, next) => {
                   },
                   { where: { id: req.body.userId } }
                 )
-                .then((res) => {
+                .then(() => {
                   res
                     .status(200)
                     .json({ message: 'Password modifié avec succès' });
@@ -236,14 +236,14 @@ exports.updateUser = (req, res, next) => {
     ? {
         ...req.body,
         avatar: `${req.protocol}://${req.get('host')}/images/userId-${
-          req.query.userId
+          req.body.userId
         }/${req.file.filename}`,
       }
     : {
         ...req.body,
       };
   db.user
-    .update({ ...updatedProfil }, { where: { id: req.query.userId } })
+    .update({ ...updatedProfil }, { where: { id: req.body.userId } })
     .then(() => {
       res.status(200).json({ message: 'Profil modifié avec SUCCES !' });
     })

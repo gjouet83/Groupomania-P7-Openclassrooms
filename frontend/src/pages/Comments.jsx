@@ -10,16 +10,12 @@ const Comments = () => {
   const [isOpen, setOpen] = useState(false);
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
-  const [attachment, setAttachment] = useState();
+  const [image, setImage] = useState();
   const currentUser = JSON.parse(localStorage.getItem('user'));
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('postId');
 
-  const headers = {
-    Authorization: `Bearer ${currentUser.token}`,
-  };
-
-  useEffect(() => {
+  const getComments = () => {
     axios
       .get('http://localhost:3000/api/comments/get/', {
         headers: { Authorization: `Bearer ${currentUser.token}` },
@@ -31,23 +27,23 @@ const Comments = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
 
-  const sendForm = () => {
-    const comment = {
-      userId: currentUser.userId,
-      admin: currentUser.admin,
-      postId: id,
-      content: content,
-      attachment: attachment,
-    };
-
-    axios
-      .post('http://localhost:3000/api/comments/create', comment, { headers })
-      .then((res) => {
-        window.location.reload();
-        console.log(res);
-      })
+  const sendForm = (e) => {
+    e.preventDefault();
+    let formData = new FormData();
+    formData.append('userId', currentUser.userId);
+    formData.append('postId', id);
+    formData.append('content', content);
+    formData.append('image', image);
+    axios({
+      headers: { Authorization: `Bearer ${currentUser.token}` },
+      'Content-Type': 'application/json',
+      url: 'http://localhost:3000/api/comments/create',
+      method: 'POST',
+      data: formData,
+    })
+      .then(() => {})
       .catch((err) => {
         console.log(err);
       });
@@ -56,6 +52,10 @@ const Comments = () => {
   const toggleClass = () => {
     setOpen(!isOpen);
   };
+
+  useEffect(() => {
+    getComments();
+  }, []);
 
   return (
     <main>
@@ -92,8 +92,7 @@ const Comments = () => {
               <input
                 type="file"
                 accept="image/*"
-                id="contained-button-file"
-                onChange={(e) => setAttachment(e.target.value)}
+                onChange={(e) => setImage(e.target.files[0])}
               />
             </div>
             <div className="comments__createone__footer">

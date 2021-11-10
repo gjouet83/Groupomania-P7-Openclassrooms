@@ -1,12 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Header from '../layout/Header';
+import { validEmail, validPassword, validPseudo } from '../components/Regexp';
 
 const Signup = () => {
+  const [loginErr, setLoginErr] = useState(false);
+  const [passwordErr, setPasswordErr] = useState(false);
+  const [pseudoErr, setPseudoErr] = useState(false);
   const [login, setLogin] = useState();
   const [password, setPassword] = useState();
   const [pseudo, setPseudo] = useState();
+  const [backendMessagePseudo, setBackendMessagePseudo] = useState('');
+  const [backendMessageEmail, setBackendMessageEmail] = useState('');
+  const [backendMessagePwd, setBackendMessagePwd] = useState('');
   const [signupPseudo, setSignupPseudo] = useState(
     'signup__form__pseudo__input'
   );
@@ -14,26 +21,58 @@ const Signup = () => {
   const [signupPassword, setSignupPassword] = useState(
     'signup__form__email__input'
   );
-  const sendForm = (e) => {
+
+  useEffect(() => {
+    if (pseudo && !validPseudo.test(pseudo)) {
+      setSignupPseudo('signup__form__pseudo__input__wrong');
+      setPseudoErr(true);
+    } else {
+      setSignupPseudo('signup__form__pseudo__input');
+      setPseudoErr(false);
+    }
+    if (login && !validEmail.test(login)) {
+      setSignupEmail('signup__form__email__input__wrong');
+      setLoginErr(true);
+    } else {
+      setSignupEmail('signup__form__email__input');
+      setLoginErr(false);
+    }
+    if (password && !validPassword.test(password)) {
+      setSignupPassword('signup__form__password__input__wrong');
+      setPasswordErr(true);
+    } else {
+      setSignupPassword('signup__form__password__input');
+      setPasswordErr(false);
+    }
+  }, [pseudo, login, password]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
+    if (!pseudoErr || !loginErr || !passwordErr) {
+      sendForm();
+    }
+  };
+
+  const sendForm = () => {
     axios
       .post('http://localhost:3000/api/users/signup', {
         username: pseudo,
         email: login,
         password: password,
       })
-      .then((res) => {
+      .then(() => {
         window.location.assign('/login');
       })
       .catch((error) => {
-        console.log(error.response.data);
         if (error.response.data === 'username must be unique') {
           setSignupPseudo('signup__form__pseudo__input__wrong');
+          setBackendMessagePseudo('Pseudo déjà utilsé');
         } else {
           setSignupPseudo('signup__form__pseudo__input');
         }
         if (error.response.data === 'email must be unique') {
           setSignupEmail('signup__form__email__input__wrong');
+          setBackendMessageEmail('E-mail déjà utilsé');
         } else {
           setSignupEmail('signup__form__email__input');
         }
@@ -42,6 +81,7 @@ const Signup = () => {
           'Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux'
         ) {
           setSignupPassword('signup__form__password__input__wrong');
+          setBackendMessagePwd('Le mot de passe ne respect pas les critères');
         } else {
           setSignupPassword('signup__form__password__input');
         }
@@ -54,7 +94,7 @@ const Signup = () => {
       <main>
         <section className="signup">
           <h2 className="signup__title">Créer un compte</h2>
-          <form className="signup__form" onSubmit={sendForm}>
+          <form className="signup__form" onSubmit={handleSubmit}>
             <div className="signup__form__pseudo">
               <label className="signup__form__pseudo__lbl">
                 Pseudo:
@@ -67,6 +107,12 @@ const Signup = () => {
                   required
                 />
               </label>
+              {pseudoErr && (
+                <span className="alerte">Caractères invalides</span>
+              )}
+              {backendMessagePseudo && (
+                <span className="alerte">{backendMessagePseudo}</span>
+              )}
             </div>
             <div className="signup__form__email">
               <label className="signup__form__email__lbl">
@@ -80,6 +126,12 @@ const Signup = () => {
                   required
                 />
                 <span>exemple@provider.com</span>
+                {loginErr && (
+                  <span className="alerte">Adresse E-mail invalide</span>
+                )}
+                {backendMessageEmail && (
+                  <span className="alerte">{backendMessageEmail}</span>
+                )}
               </label>
             </div>
             <div className="signup__form__password">
@@ -94,8 +146,15 @@ const Signup = () => {
                   required
                 />
                 <span>
-                  8 charactères, 1 majuscule, pas de charactères spéciaux
+                  8 Caractères, 1 majuscule, 1 chiffre, pas de charactères
+                  spéciaux
                 </span>
+                {passwordErr && (
+                  <span className="alerte">Mot de passe invalides</span>
+                )}
+                {backendMessagePwd && (
+                  <span className="alerte">{backendMessagePwd}</span>
+                )}
               </label>
             </div>
             <input

@@ -3,6 +3,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 
 const Comment = ({ comment }) => {
+  const isFigure = comment.attachment ? 'appear' : 'disappear';
   const currentUser = JSON.parse(localStorage.getItem('user'));
   const isProfilePage = window.location.pathname;
   const ownerMenu =
@@ -20,7 +21,9 @@ const Comment = ({ comment }) => {
       .then(() => {
         window.location.reload();
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -41,6 +44,13 @@ const Comment = ({ comment }) => {
         Posté le {moment(`${comment.createdAt}`).locale('fr').format('llll')}
       </span>
       <div className="comments__comment__main">
+        <figure className={`comments__comment__main__figure ${isFigure}`}>
+          <img
+            className="comments__comment__main__figure__img"
+            src={comment.attachment}
+            alt="comment"
+          ></img>
+        </figure>
         <p className="comments__comment__main__content">{comment.content}</p>
       </div>
       {ownerMenu ? (

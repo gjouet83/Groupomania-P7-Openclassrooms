@@ -24,7 +24,7 @@ const Admin = () => {
   useEffect(() => {
     getUsers();
   }, []);
-  console.log(users);
+
   return (
     <main>
       <section className="admin">
