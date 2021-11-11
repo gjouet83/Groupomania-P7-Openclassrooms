@@ -11,6 +11,9 @@ const Admin = () => {
   const currentUserdecoded = currentUser
     ? jwt_decode(currentUser)
     : currentUser;
+  if (!currentUserdecoded.admin) {
+    window.location.assign('/error');
+  }
   const [users, setUsers] = useState([]);
 
   const getUsers = () => {

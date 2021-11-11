@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Posts = () => {
+  const [newPost, setNewPost] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem('user'));
 
   if (!currentUser) {
@@ -35,8 +36,8 @@ const Posts = () => {
       });
   };
 
-  const sendForm = (e) => {
-    e.preventDefault();
+  const sendForm = () => {
+    setNewPost(false);
     let formData = new FormData();
     formData.append('userId', currentUserdecoded.userId);
     formData.append('content', content);
@@ -49,8 +50,7 @@ const Posts = () => {
       data: formData,
     })
       .then((ok) => {
-        getPosts();
-        window.location.reload();
+        setNewPost(true);
         console.log(ok);
       })
       .catch((err) => {
@@ -66,7 +66,7 @@ const Posts = () => {
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [newPost]);
 
   return (
     <main>

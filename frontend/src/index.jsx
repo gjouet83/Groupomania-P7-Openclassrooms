@@ -8,7 +8,6 @@ import Comments from './pages/Comments';
 import Profil from './pages/Profil';
 import Params from './pages/Params';
 import Admin from './pages/Admin';
-import PrivateRouteAdmin from './components/PrivateRouteAdmin';
 import Error from './pages/Error';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './sass/style.scss';
@@ -41,9 +40,9 @@ ReactDOM.render(
           <Route path="/params">
             <Params />
           </Route>
-          <PrivateRouteAdmin path="/admin">
-            <Route component={Admin} />
-          </PrivateRouteAdmin>
+          <Route path="/admin">
+            <Admin />
+          </Route>
           <Route>
             <Error />
           </Route>

@@ -10,7 +10,6 @@ import 'moment/locale/fr';
 import axios from 'axios';
 
 const Post = ({ post }) => {
-  console.log(post);
   const currentUser = JSON.parse(localStorage.getItem('user'));
   const currentUserdecoded = currentUser
     ? jwt_decode(currentUser)
