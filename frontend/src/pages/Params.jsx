@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 import { useState, useEffect } from 'react';
 import { validEmail, validPassword } from '../components/Regexp';
 
@@ -10,6 +11,9 @@ const Params = () => {
   if (!currentUser) {
     window.location.assign('/login');
   }
+  const currentUserdecoded = currentUser
+    ? jwt_decode(currentUser)
+    : currentUser;
   const [login, setLogin] = useState();
   const [newLogin, setNewLogin] = useState();
   const [checkNewLogin, setCheckNewLogin] = useState();
@@ -89,13 +93,13 @@ const Params = () => {
 
   const sendNewLogin = (e) => {
     const updatedLogin = {
-      userId: currentUser.userId,
+      userId: currentUserdecoded.userId,
       email: login,
       newEmail: newLogin,
     };
     axios
       .put('http://localhost:3000/api/users/update/login/:id', updatedLogin, {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: { Authorization: `Bearer ${currentUser}` },
       })
       .then(() => {
         window.location.assign('/login');
@@ -111,7 +115,7 @@ const Params = () => {
 
   const sendNewPassword = () => {
     const updatedPassword = {
-      userId: currentUser.userId,
+      userId: currentUserdecoded.userId,
       password: password,
       newPassword: newPassword,
     };
@@ -120,7 +124,7 @@ const Params = () => {
         'http://localhost:3000/api/users/update/password/:id',
         updatedPassword,
         {
-          headers: { Authorization: `Bearer ${currentUser.token}` },
+          headers: { Authorization: `Bearer ${currentUser}` },
         }
       )
       .then((res) => {

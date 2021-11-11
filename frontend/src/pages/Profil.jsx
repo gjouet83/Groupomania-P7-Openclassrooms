@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Post from '../components/Post';
 import Comment from '../components/Comment';
 import Header from '../layout/Header';
+import jwt_decode from 'jwt-decode';
 import imageprofildefault from '../assets/images/user-solid.jpg';
 import { useContext } from 'react';
 import { ImageContext } from '../utils/context';
@@ -16,6 +17,9 @@ const Profil = () => {
   if (!currentUser) {
     window.location.assign('/login');
   }
+  const currentUserdecoded = currentUser
+    ? jwt_decode(currentUser)
+    : currentUser;
   const { getUserImageProfile, imageProfile } = useContext(ImageContext);
   const [isOpenPosts, setOpenPosts] = useState(false);
   const [isOpenComments, setOpenComments] = useState(false);
@@ -25,7 +29,7 @@ const Profil = () => {
   const [pseudo, setPseudo] = useState();
   const [profilImage, setProfilImage] = useState();
   const [deleteImage, setDeleteImage] = useState([0]);
-  const isAdminAccount = currentUser.admin == 0 ? true : false;
+  const isAdminAccount = currentUserdecoded.admin == 0 ? true : false;
 
   const toggleClassPosts = () => {
     setOpenPosts(!isOpenPosts);
@@ -38,8 +42,8 @@ const Profil = () => {
   const getUser = () => {
     axios
       .get('http://localhost:3000/api/users/get/:id', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
-        params: { id: currentUser.userId },
+        headers: { Authorization: `Bearer ${currentUser}` },
+        params: { id: currentUserdecoded.userId },
       })
       .then((user) => {
         setUser(user.data.user);
@@ -51,12 +55,12 @@ const Profil = () => {
 
   const updateUser = () => {
     const updatedUser = {
-      userId: currentUser.userId,
+      userId: currentUserdecoded.userId,
       username: pseudo,
     };
     axios
       .put('http://localhost:3000/api/users/update/:id', updatedUser, {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: { Authorization: `Bearer ${currentUser}` },
       })
       .then((ok) => {
         console.log(ok);
@@ -68,10 +72,10 @@ const Profil = () => {
 
   const updateProfilImage = (e) => {
     let formData = new FormData();
-    formData.append('userId', currentUser.userId);
+    formData.append('userId', currentUserdecoded.userId);
     formData.append('image', profilImage);
     axios({
-      headers: { Authorization: `Bearer ${currentUser.token}` },
+      headers: { Authorization: `Bearer ${currentUser}` },
       'Content-Type': 'application/json',
       url: 'http://localhost:3000/api/users/update/:id',
       method: 'PUT',
@@ -89,8 +93,8 @@ const Profil = () => {
   const getCommentByUser = () => {
     axios
       .get('http://localhost:3000/api/comments/get/byUserId', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
-        params: { userId: currentUser.userId },
+        headers: { Authorization: `Bearer ${currentUser}` },
+        params: { userId: currentUserdecoded.userId },
       })
       .then((userComments) => {
         setUserComments(userComments.data);
@@ -103,8 +107,8 @@ const Profil = () => {
   const getPostByUser = () => {
     axios
       .get('http://localhost:3000/api/posts/get/byUserId', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
-        params: { userId: currentUser.userId },
+        headers: { Authorization: `Bearer ${currentUser}` },
+        params: { userId: currentUserdecoded.userId },
       })
       .then((userPosts) => {
         setUserPosts(userPosts.data);
@@ -117,8 +121,8 @@ const Profil = () => {
   const deleteAccount = () => {
     axios
       .delete('http://localhost:3000/api/users/delete/:id', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
-        params: { userId: currentUser.userId },
+        headers: { Authorization: `Bearer ${currentUser}` },
+        params: { userId: currentUserdecoded.userId },
       })
       .then(() => {
         window.location.assign('/login');

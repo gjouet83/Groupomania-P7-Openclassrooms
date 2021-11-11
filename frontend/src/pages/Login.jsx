@@ -45,7 +45,7 @@ const Login = () => {
         password: password,
       })
       .then((res) => {
-        localStorage.setItem('user', JSON.stringify(res.data));
+        localStorage.setItem('user', JSON.stringify(res.data.token));
         window.location.assign('/posts');
       })
       .catch((error) => {

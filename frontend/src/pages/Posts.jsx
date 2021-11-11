@@ -2,18 +2,23 @@ import Post from '../components/Post';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import jwt_decode from 'jwt-decode';
 import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 
 const Posts = () => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
+
   if (!currentUser) {
     window.location.assign('/login');
   }
+  const currentUserdecoded = currentUser
+    ? jwt_decode(currentUser)
+    : currentUser;
 
   const headers = {
-    Authorization: `Bearer ${currentUser.token}`,
+    Authorization: `Bearer ${currentUser}`,
   };
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState('');
@@ -32,11 +37,11 @@ const Posts = () => {
 
   const sendForm = () => {
     let formData = new FormData();
-    formData.append('userId', currentUser.userId);
+    formData.append('userId', currentUserdecoded.userId);
     formData.append('content', content);
     formData.append('image', image);
     axios({
-      headers: { Authorization: `Bearer ${currentUser.token}` },
+      headers: { Authorization: `Bearer ${currentUser}` },
       'Content-Type': 'application/json',
       url: 'http://localhost:3000/api/posts/create',
       method: 'POST',

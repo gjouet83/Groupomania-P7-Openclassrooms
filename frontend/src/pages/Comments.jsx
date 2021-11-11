@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
 const Comments = () => {
@@ -12,13 +13,16 @@ const Comments = () => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState();
   const currentUser = JSON.parse(localStorage.getItem('user'));
+  const currentUserdecoded = currentUser
+    ? jwt_decode(currentUser)
+    : currentUser;
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('postId');
 
   const getComments = () => {
     axios
       .get('http://localhost:3000/api/comments/get/', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: { Authorization: `Bearer ${currentUser}` },
         params: { postId: id },
       })
       .then((comments) => {
@@ -32,12 +36,12 @@ const Comments = () => {
   const sendForm = (e) => {
     e.preventDefault();
     let formData = new FormData();
-    formData.append('userId', currentUser.userId);
+    formData.append('userId', currentUserdecoded.userId);
     formData.append('postId', id);
     formData.append('content', content);
     formData.append('image', image);
     axios({
-      headers: { Authorization: `Bearer ${currentUser.token}` },
+      headers: { Authorization: `Bearer ${currentUser}` },
       'Content-Type': 'application/json',
       url: 'http://localhost:3000/api/comments/create',
       method: 'POST',

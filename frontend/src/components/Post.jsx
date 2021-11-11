@@ -4,12 +4,16 @@ import { faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
 import moment from 'moment';
 import 'moment/locale/fr';
 import axios from 'axios';
 
 const Post = ({ post }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
+  const currentUserdecoded = currentUser
+    ? jwt_decode(currentUser)
+    : currentUser;
   const [nbLikes, setNbLikes] = useState();
   const [nbDislikes, setNbDislikes] = useState();
   const [nbComments, setNbComments] = useState();
@@ -18,18 +22,19 @@ const Post = ({ post }) => {
   const isProfilePage = window.location.pathname;
   const isFigure = post.attachment ? 'appear' : 'disappear';
   const ownerMenu =
-    (currentUser.userId == post.userId || currentUser.admin == 1) &&
-    (isProfilePage == '/profil' || currentUser.admin == 1)
+    (currentUserdecoded.userId == post.userId ||
+      currentUserdecoded.admin == 1) &&
+    (isProfilePage == '/profil' || currentUserdecoded.admin == 1)
       ? true
       : false;
 
   const headers = {
-    Authorization: `Bearer ${currentUser.token}`,
+    Authorization: `Bearer ${currentUser}`,
   };
   const getNbComment = () => {
     axios
       .get('http://localhost:3000/api/comments/get/', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: { Authorization: `Bearer ${currentUser}` },
         params: { postId: post.id },
       })
       .then((comments) => {
@@ -43,7 +48,7 @@ const Post = ({ post }) => {
   const getNbLikes = () => {
     axios
       .get('http://localhost:3000/api/likes/get/', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: { Authorization: `Bearer ${currentUser}` },
         params: { postId: post.id },
       })
       .then((likes) => {
@@ -58,8 +63,8 @@ const Post = ({ post }) => {
   const getLikeStatus = () => {
     axios
       .get('http://localhost:3000/api/likes/get/user', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
-        params: { postId: post.id, userId: currentUser.userId },
+        headers: { Authorization: `Bearer ${currentUser}` },
+        params: { postId: post.id, userId: currentUserdecoded.userId },
       })
       .then((likeStatus) => {
         if (likeStatus.data.like === 1) {
@@ -75,13 +80,13 @@ const Post = ({ post }) => {
   const sendLike = () => {
     axios
       .get('http://localhost:3000/api/likes/get/user', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
-        params: { postId: post.id, userId: currentUser.userId },
+        headers: { Authorization: `Bearer ${currentUser}` },
+        params: { postId: post.id, userId: currentUserdecoded.userId },
       })
       .then((likeByUser) => {
         if (likeByUser.data == null || likeByUser.data.like === 0) {
           const like = {
-            userId: currentUser.userId,
+            userId: currentUserdecoded.userId,
             postId: post.id,
             like: 1,
           };
@@ -97,7 +102,7 @@ const Post = ({ post }) => {
             });
         } else if (likeByUser.data.like === 1) {
           const unlike = {
-            userId: currentUser.userId,
+            userId: currentUserdecoded.userId,
             postId: post.id,
             like: 0,
           };
@@ -121,13 +126,13 @@ const Post = ({ post }) => {
   const sendDislike = () => {
     axios
       .get('http://localhost:3000/api/likes/get/user', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
-        params: { postId: post.id, userId: currentUser.userId },
+        headers: { Authorization: `Bearer ${currentUser}` },
+        params: { postId: post.id, userId: currentUserdecoded.userId },
       })
       .then((likeByUser) => {
         if (likeByUser.data == null || likeByUser.data.dislike === 0) {
           const dislike = {
-            userId: currentUser.userId,
+            userId: currentUserdecoded.userId,
             postId: post.id,
             like: -1,
           };
@@ -143,7 +148,7 @@ const Post = ({ post }) => {
             });
         } else if (likeByUser.data.dislike === 1) {
           const undislike = {
-            userId: currentUser.userId,
+            userId: currentUserdecoded.userId,
             postId: post.id,
             like: 0,
           };
@@ -165,7 +170,7 @@ const Post = ({ post }) => {
   const deletePost = () => {
     axios
       .delete('http://localhost:3000/api/posts/delete/:id', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: { Authorization: `Bearer ${currentUser}` },
         params: { id: post.id },
       })
       .then(() => {

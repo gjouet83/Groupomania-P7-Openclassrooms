@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
 
 const UsersTable = ({ user }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
+  const currentUserdecoded = currentUser
+    ? jwt_decode(currentUser)
+    : currentUser;
   const [checked, setChecked] = useState(false);
   const [isAdmin, setIsAdmin] = useState('');
 
@@ -17,7 +21,7 @@ const UsersTable = ({ user }) => {
     };
     axios
       .put('http://localhost:3000/api/users/update/:id', updatedUser, {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: { Authorization: `Bearer ${currentUser}` },
       })
       .then((ok) => {
         console.log(ok);
@@ -30,7 +34,7 @@ const UsersTable = ({ user }) => {
   const deleteUser = () => {
     axios
       .delete('http://localhost:3000/api/users/delete/:id', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: { Authorization: `Bearer ${currentUser}` },
         params: { userId: user.id },
       })
       .then(() => {

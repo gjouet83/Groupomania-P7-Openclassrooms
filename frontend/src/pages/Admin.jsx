@@ -3,16 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import UsersTable from '../components/UsersTable';
+import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
 const Admin = () => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
+  const currentUserdecoded = currentUser
+    ? jwt_decode(currentUser)
+    : currentUser;
   const [users, setUsers] = useState([]);
 
   const getUsers = () => {
     axios
       .get('http://localhost:3000/api/users/get/', {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: { Authorization: `Bearer ${currentUser}` },
       })
       .then((users) => {
         setUsers(users.data.users);

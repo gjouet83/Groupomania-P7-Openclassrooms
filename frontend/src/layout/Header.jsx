@@ -8,6 +8,7 @@ import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
 import { faUserShield } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
+import jwt_decode from 'jwt-decode';
 import { ImageContext } from '../utils/context';
 
 const Header = () => {
@@ -16,7 +17,10 @@ const Header = () => {
   const { getUserImageProfile, imageProfile } = useContext(ImageContext);
   const [isMoved, setMove] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const isAdmin = currentUser && currentUser.admin ? true : false;
+  const currentUserdecoded = currentUser
+    ? jwt_decode(currentUser)
+    : currentUser;
+  const isAdmin = currentUser && currentUserdecoded.admin ? true : false;
   const isNavbar =
     location.pathname === '/signup' ||
     location.pathname === '/login' ||
