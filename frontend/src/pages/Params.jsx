@@ -69,6 +69,7 @@ const Params = () => {
 
   const handleSubmitLogin = (e) => {
     e.preventDefault();
+    setBackendMessageEmail('');
     if (newLogin !== checkNewLogin) {
       setMatchLogins(true);
     } else {
@@ -81,6 +82,7 @@ const Params = () => {
 
   const handleSubmitPwd = (e) => {
     e.preventDefault();
+    setBackendMessagePwd('');
     if (newPassword !== checkNewPassword) {
       setMatchPwds(true);
     } else {
@@ -156,6 +158,10 @@ const Params = () => {
           </div>
           <h2 className="params__nav__title">Paramètres de connexion</h2>
         </div>
+        <p className="params__advert">
+          Vous serez automatiquement redirigé vers la page de connexion après la
+          soumission du nouvel e-mail ou du nouveau mot de passe
+        </p>
         <form className="params__email">
           <h3 className="params__email__title">email</h3>
           <input

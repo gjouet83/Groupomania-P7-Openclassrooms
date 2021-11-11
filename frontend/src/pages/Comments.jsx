@@ -33,8 +33,7 @@ const Comments = () => {
       });
   };
 
-  const sendForm = (e) => {
-    e.preventDefault();
+  const sendForm = () => {
     let formData = new FormData();
     formData.append('userId', currentUserdecoded.userId);
     formData.append('postId', id);
@@ -47,7 +46,9 @@ const Comments = () => {
       method: 'POST',
       data: formData,
     })
-      .then(() => {})
+      .then(() => {
+        window.location.reload();
+      })
       .catch((err) => {
         console.log(err);
       });

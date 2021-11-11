@@ -5,6 +5,11 @@
     height: 1.5rem;
     margin-bottom: 10px;
   }
+  &__advert {
+    text-align: center;
+    color: red;
+    font-style: italic;
+  }
   &__email {
     display: flex;
     flex-direction: column;

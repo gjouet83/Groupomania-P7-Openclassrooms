@@ -70,7 +70,7 @@ const Profil = () => {
       });
   };
 
-  const updateProfilImage = (e) => {
+  const updateProfilImage = () => {
     let formData = new FormData();
     formData.append('userId', currentUserdecoded.userId);
     formData.append('image', profilImage);
@@ -82,12 +82,12 @@ const Profil = () => {
       data: formData,
     })
       .then((ok) => {
-        console.log(ok);
+        getUser();
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
       });
-    window.location.reload();
   };
 
   const getCommentByUser = () => {
