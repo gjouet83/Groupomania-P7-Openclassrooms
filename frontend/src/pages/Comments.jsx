@@ -33,7 +33,8 @@ const Comments = () => {
       });
   };
 
-  const sendForm = () => {
+  const sendForm = (e) => {
+    e.preventDefault();
     let formData = new FormData();
     formData.append('userId', currentUserdecoded.userId);
     formData.append('postId', id);
@@ -47,6 +48,7 @@ const Comments = () => {
       data: formData,
     })
       .then(() => {
+        getComments();
         window.location.reload();
       })
       .catch((err) => {

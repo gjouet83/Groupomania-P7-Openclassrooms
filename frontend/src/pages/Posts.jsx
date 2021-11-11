@@ -35,7 +35,8 @@ const Posts = () => {
       });
   };
 
-  const sendForm = () => {
+  const sendForm = (e) => {
+    e.preventDefault();
     let formData = new FormData();
     formData.append('userId', currentUserdecoded.userId);
     formData.append('content', content);
@@ -48,6 +49,8 @@ const Posts = () => {
       data: formData,
     })
       .then((ok) => {
+        getPosts();
+        window.location.reload();
         console.log(ok);
       })
       .catch((err) => {
