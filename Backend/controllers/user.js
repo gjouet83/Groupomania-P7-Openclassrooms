@@ -252,6 +252,20 @@ exports.updateUser = (req, res, next) => {
     });
 };
 
+exports.deleteProfilImage = (req, res, next) => {
+  db.user
+    .update(
+      { avatar: `${req.protocol}://${req.get('host')}/images/user-solid.svg` },
+      { where: { id: req.body.userId } }
+    )
+    .then(() => {
+      res.status(200).json({ message: 'Profil modifié avec SUCCES !' });
+    })
+    .catch(() => {
+      res.status(400).json({ error: 'ECHEC de la modification du profil' });
+    });
+};
+
 exports.deleteUser = (req, res, next) => {
   db.user
     .findOne({ where: { id: req.query.userId } })

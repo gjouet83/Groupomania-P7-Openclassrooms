@@ -110,7 +110,7 @@ const Post = ({ post }) => {
             .post('http://localhost:3000/api/likes/create/', unlike, {
               headers,
             })
-            .then((ok) => {
+            .then(() => {
               setColorLike('');
             })
             .catch((err) => {
@@ -156,7 +156,7 @@ const Post = ({ post }) => {
             .post('http://localhost:3000/api/likes/create/', undislike, {
               headers,
             })
-            .then((ok) => {
+            .then(() => {
               setColorDislike('');
             })
             .catch((err) => {
@@ -164,7 +164,9 @@ const Post = ({ post }) => {
             });
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const deletePost = () => {
@@ -229,9 +231,11 @@ const Post = ({ post }) => {
               icon={faThumbsUp}
               className={`posts__post__footer__like__view__icon ${colorLike}`}
             />
-            <span className="posts__post__footer__like__view__nb">
-              {nbLikes}
-            </span>
+            {nbLikes != 0 && (
+              <span className="posts__post__footer__like__view__nb">
+                {nbLikes}
+              </span>
+            )}
           </div>
           <span className="posts__post__footer__like__describ">J'aime</span>
         </div>
@@ -246,9 +250,11 @@ const Post = ({ post }) => {
               icon={faThumbsDown}
               className={`posts__post__footer__dislike__view__icon ${colorDislike}`}
             />
-            <span className="posts__post__footer__dislike__view__nb">
-              {nbDislikes}
-            </span>
+            {nbDislikes != 0 && (
+              <span className="posts__post__footer__dislike__view__nb">
+                {nbDislikes}
+              </span>
+            )}
           </div>
           <span className="posts__post__footer__dislike__describ">
             Je n'aime pas

@@ -7,7 +7,6 @@ import Post from '../components/Post';
 import Comment from '../components/Comment';
 import Header from '../layout/Header';
 import jwt_decode from 'jwt-decode';
-import imageprofildefault from '../assets/images/user-solid.jpg';
 import { useContext } from 'react';
 import { ImageContext } from '../utils/context';
 import axios from 'axios';
@@ -81,6 +80,27 @@ const Profil = () => {
       method: 'PUT',
       data: formData,
     })
+      .then(() => {
+        getUser();
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const deleteProfilImage = () => {
+    const updatedUser = {
+      userId: currentUserdecoded.userId,
+    };
+    axios
+      .put(
+        'http://localhost:3000/api/users/delete/profilimage/:id',
+        updatedUser,
+        {
+          headers: { Authorization: `Bearer ${currentUser}` },
+        }
+      )
       .then((ok) => {
         getUser();
         window.location.reload();
@@ -179,6 +199,13 @@ const Profil = () => {
               onClick={updateProfilImage}
             >
               Modifier
+            </button>
+            <button
+              className="profil__buttons__modify"
+              type="button"
+              onClick={deleteProfilImage}
+            >
+              Supprimer
             </button>
           </div>
           <div className="profil__username">

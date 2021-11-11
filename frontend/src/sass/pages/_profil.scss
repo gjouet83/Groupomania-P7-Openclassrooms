@@ -1,4 +1,6 @@
 .profil {
+  background-color: white;
+  height: 100vh;
   @include navbar-page;
   &__avatar {
     background-image: url('../../assets/images/user-solid.jpg');

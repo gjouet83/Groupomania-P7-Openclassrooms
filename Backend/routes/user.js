@@ -12,6 +12,7 @@ router.post('/login', userCtrl.login);
 router.put('/update/login/:id', auth, multer, userCtrl.updateLogin);
 router.put('/update/password/:id', auth, multer, userCtrl.updatePassword);
 router.put('/update/:id', auth, multer, userCtrl.updateUser);
+router.put('/delete/profilimage/:id', auth, multer, userCtrl.deleteProfilImage);
 router.delete('/delete/:id', auth, userCtrl.deleteUser);
 
 module.exports = router;
