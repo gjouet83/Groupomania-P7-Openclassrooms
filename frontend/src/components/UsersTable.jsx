@@ -1,12 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import jwt_decode from 'jwt-decode';
 
 const UsersTable = ({ user }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
   const [checked, setChecked] = useState(false);
   const [isAdmin, setIsAdmin] = useState('');
 

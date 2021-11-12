@@ -16,9 +16,7 @@ const Profil = () => {
   if (!currentUser) {
     window.location.assign('/login');
   }
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
+  const currentUserdecoded = currentUser && jwt_decode(currentUser);
   const { getUserImageProfile, imageProfile } = useContext(ImageContext);
   const [isOpenPosts, setOpenPosts] = useState(false);
   const [isOpenComments, setOpenComments] = useState(false);

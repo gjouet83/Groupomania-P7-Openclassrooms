@@ -55,7 +55,7 @@ exports.getCommentByUser = (req, res, next) => {
 };
 
 exports.createComment = (req, res, next) => {
-  if (!validFields(req.body.content)) {
+  if (req.body.content && !validFields(req.body.content)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
   }
   // on test si la requête contient un fichier

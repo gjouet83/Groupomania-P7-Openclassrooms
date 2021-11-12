@@ -11,9 +11,7 @@ const Params = () => {
   if (!currentUser) {
     window.location.assign('/login');
   }
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
+  const currentUserdecoded = currentUser && jwt_decode(currentUser);
   const [login, setLogin] = useState();
   const [newLogin, setNewLogin] = useState();
   const [checkNewLogin, setCheckNewLogin] = useState();
@@ -93,7 +91,7 @@ const Params = () => {
     }
   };
 
-  const sendNewLogin = (e) => {
+  const sendNewLogin = () => {
     const updatedLogin = {
       userId: currentUserdecoded.userId,
       email: login,

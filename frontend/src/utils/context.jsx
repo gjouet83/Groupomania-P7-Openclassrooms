@@ -7,9 +7,7 @@ export const ImageContext = createContext();
 export const ImageProvider = ({ children }) => {
   const [imageProfile, setImageProfile] = useState('light');
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
+  const currentUserdecoded = currentUser && jwt_decode(currentUser);
   const getUserImageProfile = () => {
     axios
       .get('http://localhost:3000/api/users/get/:id', {

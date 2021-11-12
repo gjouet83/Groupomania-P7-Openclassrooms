@@ -17,9 +17,7 @@ const Header = () => {
   const { getUserImageProfile, imageProfile } = useContext(ImageContext);
   const [isMoved, setMove] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
+  const currentUserdecoded = currentUser && jwt_decode(currentUser);
   const isAdmin = currentUser && currentUserdecoded.admin ? true : false;
   const isNavbar =
     location.pathname === '/signup' ||

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import jwt_decode from 'jwt-decode';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import axios from 'axios';
 
@@ -13,9 +13,7 @@ const Posts = () => {
   if (!currentUser) {
     window.location.assign('/login');
   }
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
+  const currentUserdecoded = currentUser && jwt_decode(currentUser);
 
   const headers = {
     Authorization: `Bearer ${currentUser}`,
@@ -23,8 +21,12 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
+  const imageInputRef = useRef();
 
   const getPosts = () => {
+    setContent('');
+    imageInputRef.current.value = '';
+    setImage(null);
     axios
       .get('http://localhost:3000/api/posts/get', { headers })
       .then((datas) => {
@@ -48,10 +50,9 @@ const Posts = () => {
       method: 'POST',
       data: formData,
     })
-      .then((ok) => {
+      .then(() => {
         getPosts();
-        window.location.reload();
-        console.log(ok);
+        toggleClass();
       })
       .catch((err) => {
         console.log(err);
@@ -80,7 +81,7 @@ const Posts = () => {
             <textarea
               className="posts__createone__input"
               placeholder="Redigez votre post ici"
-              autoCapitalize="on"
+              value={content}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
             <div className="posts__createone__addfile">
@@ -88,6 +89,7 @@ const Posts = () => {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(e.target.files[0])}
+                ref={imageInputRef}
               />
             </div>
             <div className="posts__createone__footer">

@@ -11,9 +11,7 @@ import axios from 'axios';
 
 const Post = ({ post }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
+  const currentUserdecoded = currentUser && jwt_decode(currentUser);
   const [nbLikes, setNbLikes] = useState();
   const [nbDislikes, setNbDislikes] = useState();
   const [nbComments, setNbComments] = useState();

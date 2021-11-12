@@ -3,7 +3,7 @@ import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
@@ -12,14 +12,16 @@ const Comments = () => {
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
   const [image, setImage] = useState();
+  const imageInputRef = useRef();
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
+  const currentUserdecoded = currentUser && jwt_decode(currentUser);
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('postId');
 
   const getComments = () => {
+    setContent('');
+    imageInputRef.current.value = '';
+    setImage(null);
     axios
       .get('http://localhost:3000/api/comments/get/', {
         headers: { Authorization: `Bearer ${currentUser}` },
@@ -49,7 +51,6 @@ const Comments = () => {
     })
       .then(() => {
         getComments();
-        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -92,7 +93,7 @@ const Comments = () => {
             <textarea
               className="comments__createone__input"
               placeholder="Redigez votre post ici"
-              autoCapitalize="on"
+              value={content}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
             <div className="comments__createone__addfile">
@@ -100,18 +101,19 @@ const Comments = () => {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(e.target.files[0])}
+                ref={imageInputRef}
               />
             </div>
             <div className="comments__createone__footer">
               <button
-                className="comments_createone__footer__cancel"
+                className="comments__createone__footer__cancel"
                 type="reset"
                 onClick={toggleClass}
               >
                 Annuler
               </button>
               <button
-                className="comments_createone__footer__validate"
+                className="comments__createone__footer__validate"
                 type="submit"
                 onClick={toggleClass}
               >

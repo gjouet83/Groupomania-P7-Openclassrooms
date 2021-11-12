@@ -6,9 +6,7 @@ import 'moment/locale/fr';
 const Comment = ({ comment }) => {
   const isFigure = comment.attachment ? 'appear' : 'disappear';
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
+  const currentUserdecoded = currentUser && jwt_decode(currentUser);
   const isProfilePage = window.location.pathname;
   const ownerMenu =
     (currentUserdecoded.userId == comment.userId ||

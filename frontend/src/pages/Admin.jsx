@@ -8,9 +8,7 @@ import axios from 'axios';
 
 const Admin = () => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser
-    ? jwt_decode(currentUser)
-    : currentUser;
+  const currentUserdecoded = currentUser && jwt_decode(currentUser);
   if (!currentUserdecoded.admin) {
     window.location.assign('/error');
   }
