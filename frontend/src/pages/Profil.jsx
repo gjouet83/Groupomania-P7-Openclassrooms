@@ -27,7 +27,6 @@ const Profil = () => {
   const [user, setUser] = useState(0);
   const [pseudo, setPseudo] = useState();
   const [profilImage, setProfilImage] = useState();
-  const [deleteImage, setDeleteImage] = useState([0]);
   const isAdminAccount = currentUserdecoded.admin == 0 ? true : false;
 
   const toggleClassPosts = () => {
@@ -201,7 +200,7 @@ const Profil = () => {
               Modifier
             </button>
             <button
-              className="profil__buttons__modify"
+              className="profil__buttons__delete"
               type="button"
               onClick={deleteProfilImage}
             >

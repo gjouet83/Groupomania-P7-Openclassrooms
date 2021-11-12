@@ -14,34 +14,30 @@ const Signup = () => {
   const [backendMessagePseudo, setBackendMessagePseudo] = useState('');
   const [backendMessageEmail, setBackendMessageEmail] = useState('');
   const [backendMessagePwd, setBackendMessagePwd] = useState('');
-  const [signupPseudo, setSignupPseudo] = useState(
-    'signup__form__pseudo__input'
-  );
-  const [signupEmail, setSignupEmail] = useState('signup__form__email__input');
-  const [signupPassword, setSignupPassword] = useState(
-    'signup__form__email__input'
-  );
+  const [signupPseudo, setSignupPseudo] = useState('');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
 
   useEffect(() => {
     if (pseudo && !validPseudo.test(pseudo)) {
-      setSignupPseudo('signup__form__pseudo__input__wrong');
+      setSignupPseudo('wrong');
       setPseudoErr(true);
     } else {
-      setSignupPseudo('signup__form__pseudo__input');
+      setSignupPseudo('');
       setPseudoErr(false);
     }
     if (login && !validEmail.test(login)) {
-      setSignupEmail('signup__form__email__input__wrong');
+      setSignupEmail('wrong');
       setLoginErr(true);
     } else {
-      setSignupEmail('signup__form__email__input');
+      setSignupEmail('');
       setLoginErr(false);
     }
     if (password && !validPassword.test(password)) {
-      setSignupPassword('signup__form__password__input__wrong');
+      setSignupPassword('wrong');
       setPasswordErr(true);
     } else {
-      setSignupPassword('signup__form__password__input');
+      setSignupPassword('');
       setPasswordErr(false);
     }
   }, [pseudo, login, password]);
@@ -65,25 +61,25 @@ const Signup = () => {
       })
       .catch((error) => {
         if (error.response.data === 'username must be unique') {
-          setSignupPseudo('signup__form__pseudo__input__wrong');
+          setSignupPseudo('wrong');
           setBackendMessagePseudo('Pseudo déjà utilsé');
         } else {
-          setSignupPseudo('signup__form__pseudo__input');
+          setSignupPseudo('');
         }
         if (error.response.data === 'email must be unique') {
-          setSignupEmail('signup__form__email__input__wrong');
+          setSignupEmail('wrong');
           setBackendMessageEmail('E-mail déjà utilsé');
         } else {
-          setSignupEmail('signup__form__email__input');
+          setSignupEmail('');
         }
         if (
           error.response.data.message ===
           'Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux'
         ) {
-          setSignupPassword('signup__form__password__input__wrong');
+          setSignupPassword('wrong');
           setBackendMessagePwd('Le mot de passe ne respect pas les critères');
         } else {
-          setSignupPassword('signup__form__password__input');
+          setSignupPassword('');
         }
       });
   };
@@ -99,7 +95,7 @@ const Signup = () => {
               <label className="signup__form__pseudo__lbl">
                 Pseudo:
                 <input
-                  className={signupPseudo}
+                  className={`signup__form__pseudo__input ${signupPseudo}`}
                   onChange={(e) => setPseudo(e.target.value)}
                   id="pseudo"
                   name="pseudo"
@@ -118,7 +114,7 @@ const Signup = () => {
               <label className="signup__form__email__lbl">
                 E-mail:
                 <input
-                  className={signupEmail}
+                  className={`signup__form__email__input ${signupEmail}`}
                   onChange={(e) => setLogin(e.target.value)}
                   id="login"
                   name="email"
@@ -138,7 +134,7 @@ const Signup = () => {
               <label className="signup__form__password__lbl">
                 Mot de passe:
                 <input
-                  className={signupPassword}
+                  className={`signup__form__password__input ${signupPassword}`}
                   onChange={(e) => setPassword(e.target.value)}
                   id="password"
                   name="password"

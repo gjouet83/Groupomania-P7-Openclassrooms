@@ -1,12 +1,12 @@
 &__post {
   position: relative;
   top: 0px;
-  background-color: lighten($backgroundPost, 20%);
+  background-color: $backgroundPost;
   width: 100%;
   padding-bottom: 20px;
-  border-top: 1px solid;
-  border-bottom: 1px solid;
-  border-radius: 20px;
+  box-shadow: 0px 5px 15px grey;
+  margin-bottom: 25px;
+  margin-top: 10px;
   &__header {
     position: relative;
     display: flex;
@@ -115,5 +115,8 @@
     margin-top: 20px;
     border-top: 1px solid;
     padding: 20px 20px 0 20px;
+    &__delete {
+      @include button-red;
+    }
   }
 }

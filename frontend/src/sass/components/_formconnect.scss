@@ -1,0 +1,26 @@
+&__title {
+  text-align: center;
+  line-height: 50px;
+}
+&__form {
+  &__pseudo {
+    @include inputs-form;
+  }
+  &__email {
+    @include inputs-form;
+  }
+  &__password {
+    @include inputs-form;
+  }
+  &__validate {
+    width: 130px;
+    height: 2rem;
+    display: block;
+    margin: 30px auto 20px auto;
+    border-radius: 20px;
+    font-size: 1.5rem;
+    &:hover {
+      box-shadow: 0px 5px 10px grey;
+    }
+  }
+}

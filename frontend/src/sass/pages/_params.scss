@@ -1,9 +1,14 @@
 .params {
   @include navbar-page;
   input {
-    width: 70vw;
-    height: 1.5rem;
-    margin-bottom: 10px;
+    text-align: center;
+    width: 320px;
+    max-width: 80vw;
+    display: block;
+    margin: auto;
+    border-radius: 15px;
+    height: 2rem;
+    margin-bottom: 20px;
   }
   &__advert {
     text-align: center;
@@ -15,11 +20,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+    &__validate {
+      @include button-green;
+    }
   }
   &__password {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    &__validate {
+      @include button-green;
+    }
   }
 }

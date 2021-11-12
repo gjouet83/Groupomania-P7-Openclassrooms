@@ -92,14 +92,14 @@ const Posts = () => {
             </div>
             <div className="posts__createone__footer">
               <button
-                className="posts_createone__footer__cancel"
+                className="posts__createone__footer__cancel"
                 type="reset"
                 onClick={toggleClass}
               >
                 Annuler
               </button>
               <button
-                className="posts_createone__footer__validate"
+                className="posts__createone__footer__validate"
                 type="submit"
               >
                 Valider

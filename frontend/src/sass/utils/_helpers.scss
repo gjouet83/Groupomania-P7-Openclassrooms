@@ -6,7 +6,7 @@
 
 @mixin navbar-page {
   &__nav {
-    background-color: white;
+    background-color: $backgroundPost;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
     padding-left: 20px;
@@ -52,6 +52,45 @@
   }
 }
 
+@mixin inputs-form {
+  display: block;
+  text-align: center;
+  margin: 15px;
+  font-size: 1.5rem;
+  &__lbl {
+    display: block;
+  }
+  &__input {
+    text-align: center;
+    width: 320px;
+    max-width: 80vw;
+    display: block;
+    margin: auto;
+    border-radius: 15px;
+    height: 2rem;
+  }
+}
+
+@mixin button-green {
+  font-size: 16px;
+  background-color: green;
+  color: white;
+  height: 48px;
+  width: 100px;
+  border-radius: 25px;
+  box-shadow: 5px 5px 10px grey;
+}
+
+@mixin button-red {
+  font-size: 16px;
+  background-color: rgba($color: #df1818, $alpha: 1);
+  color: white;
+  height: 48px;
+  width: 100px;
+  border-radius: 25px;
+  box-shadow: 5px 5px 10px grey;
+}
+
 .appear {
   display: block !important;
 }
@@ -92,4 +131,8 @@
   display: block;
   font-style: italic;
   color: red;
+}
+
+.wrong {
+  border-color: red;
 }

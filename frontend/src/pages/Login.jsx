@@ -10,23 +10,21 @@ const Login = () => {
   const [password, setPassword] = useState();
   const [backendMessageEmail, setBackendMessageEmail] = useState('');
   const [backendMessagePwd, setBackendMessagePwd] = useState('');
-  const [loginEmail, setLoginEmail] = useState('login__form__email__input');
-  const [loginPassword, setLoginPassword] = useState(
-    'login__form__email__input'
-  );
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
   useEffect(() => {
     if (login && !validEmail.test(login)) {
-      setLoginEmail('login__form__email__input__wrong');
+      setLoginEmail('wrong');
       setLoginErr(true);
     } else {
-      setLoginEmail('login__form__email__input');
+      setLoginEmail('');
       setLoginErr(false);
     }
     if (password && !validPassword.test(password)) {
-      setLoginPassword('login__form__password__input__wrong');
+      setLoginPassword('wrong');
       setPasswordErr(true);
     } else {
-      setLoginPassword('login__form__password__input');
+      setLoginPassword('');
       setPasswordErr(false);
     }
   }, [login, password]);
@@ -50,16 +48,16 @@ const Login = () => {
       })
       .catch((error) => {
         if (error.response.data.error === 'Utilisateur non enregistré') {
-          setLoginEmail('login__form__email__input__wrong');
+          setLoginEmail('wrong');
           setBackendMessageEmail('Utilisateur non enregistré');
         } else {
-          setLoginEmail('login__form__email__input');
+          setLoginEmail('');
         }
         if (error.response.data.error === 'Mot de passe incorrect') {
-          setLoginPassword('login__form__password__input__wrong');
+          setLoginPassword('wrong');
           setBackendMessagePwd('Mot de passe incorrect');
         } else {
-          setLoginPassword('login__form__password__input');
+          setLoginPassword('');
         }
       });
   };
@@ -73,7 +71,7 @@ const Login = () => {
             <label className="login__form__email__lbl">
               E-mail:
               <input
-                className={loginEmail}
+                className={`login__form__email__input ${loginEmail}`}
                 onChange={(e) => setLogin(e.target.value)}
                 id="login"
                 name="email"
@@ -93,7 +91,7 @@ const Login = () => {
             <label className="login__form__password__lbl">
               Mot de passe:
               <input
-                className={loginPassword}
+                className={`login__form__password__input ${loginPassword}`}
                 onChange={(e) => setPassword(e.target.value)}
                 id="password"
                 name="password"

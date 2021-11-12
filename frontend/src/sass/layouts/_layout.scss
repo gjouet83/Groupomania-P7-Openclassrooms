@@ -3,7 +3,10 @@ html {
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
   body {
-    background-color: $backgroundColorHeader;
+    @media all and (min-width: 768px) {
+      background-color: $backgroundColorHeader;
+    }
+
     margin: 0;
     #root {
       @import './header';
