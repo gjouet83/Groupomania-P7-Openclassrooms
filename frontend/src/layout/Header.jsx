@@ -67,6 +67,7 @@ const Header = () => {
         {isAdmin ? (
           <div className="header__navbar__admin">
             <Link
+              aria-label="lien vers page admin"
               to="/admin"
               className="header__navbar__admin__link clickable"
               onClick={toggleClass}
@@ -79,6 +80,7 @@ const Header = () => {
         ) : null}
         <div className="header__navbar__params">
           <Link
+            aria-label="lien vers page paramètres de connexion"
             to="/params"
             className="header__navbar__params__link clickable"
             onClick={toggleClass}
@@ -90,6 +92,7 @@ const Header = () => {
         </div>
         <div className="header__navbar__profil">
           <Link
+            aria-label="lien vers page profil utilisateur"
             to="/profil"
             className="header__navbar__profil__link clickable"
             onClick={toggleClass}
@@ -100,11 +103,11 @@ const Header = () => {
           <span>Profil</span>
         </div>
         <div className="header__navbar__logout">
-          <Link
-            to="#"
+          <button
+            aria-label="boutton de déconnexion"
             className="header__navbar__logout__link clickable"
             onClick={logout}
-          ></Link>
+          ></button>
           <div className="header__navbar__logout__icon">
             <FontAwesomeIcon icon={faPowerOff} />
           </div>

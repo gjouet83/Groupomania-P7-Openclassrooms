@@ -145,6 +145,7 @@ const Params = () => {
         <div className="params__nav">
           <div className="params__nav__button">
             <Link
+              aria-label="retour vers les posts"
               to="/posts"
               className="params__nav__button__link clickable"
             ></Link>
@@ -162,32 +163,38 @@ const Params = () => {
         </p>
         <form className="params__email">
           <h3 className="params__email__title">email</h3>
-          <input
-            className="params__email__old__input"
-            name="email"
-            type="email"
-            placeholder="email actuel"
-            onChange={(e) => setLogin(e.target.value)}
-          />
+          <label>
+            E-mail actuel
+            <input
+              className="params__email__old__input"
+              name="email"
+              type="email"
+              onChange={(e) => setLogin(e.target.value)}
+            />
+          </label>
           {verifLoginErr && <span className="alerte">Email incorrect</span>}
           {backendMessageEmail && (
             <span className="alerte">{backendMessageEmail}</span>
           )}
-          <input
-            className="params__email__new__input"
-            name="email"
-            type="email"
-            placeholder="nouveau email"
-            onChange={(e) => setNewLogin(e.target.value)}
-          />
+          <label>
+            Nouvel E-mail
+            <input
+              className="params__email__new__input"
+              name="email"
+              type="email"
+              onChange={(e) => setNewLogin(e.target.value)}
+            />
+          </label>
           {verifNewLoginErr && <span className="alerte">Email incorrect</span>}
-          <input
-            className="params__email__renew__input"
-            name="email"
-            type="email"
-            placeholder="retapez email"
-            onChange={(e) => setCheckNewLogin(e.target.value)}
-          />
+          <label>
+            Resaisissez le nouvel E-mail
+            <input
+              className="params__email__renew__input"
+              name="email"
+              type="email"
+              onChange={(e) => setCheckNewLogin(e.target.value)}
+            />
+          </label>
           {verifCheckNewLoginErr && (
             <span className="alerte">Email incorrect</span>
           )}
@@ -206,13 +213,15 @@ const Params = () => {
         </form>
         <form className="params__password">
           <h3 className="params__password__title">Password</h3>
-          <input
-            className="params__password__old__input"
-            name="password"
-            type="password"
-            placeholder="password actuel"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <label>
+            Mot de passe actuel
+            <input
+              className="params__password__old__input"
+              name="password"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </label>
           {verifPwdErr && (
             <span className="alerte">
               le mot de passe ne respect pas les critères
@@ -221,25 +230,29 @@ const Params = () => {
           {backendMessagePwd && (
             <span className="alerte">{backendMessagePwd}</span>
           )}
-          <input
-            className="params__password__new__input"
-            name="password"
-            type="password"
-            placeholder="nouveau password"
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
+          <label>
+            Nouveau mot de passe
+            <input
+              className="params__password__new__input"
+              name="password"
+              type="password"
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </label>
           {verifNewPwdErr && (
             <span className="alerte">
               le mot de passe ne respect pas les critères
             </span>
           )}
-          <input
-            className="params__password__renew__input"
-            name="password"
-            type="password"
-            placeholder="retapez password"
-            onChange={(e) => setCheckNewPassword(e.target.value)}
-          />
+          <label>
+            Resaisissez le nouveau mot de passe
+            <input
+              className="params__password__renew__input"
+              name="password"
+              type="password"
+              onChange={(e) => setCheckNewPassword(e.target.value)}
+            />
+          </label>
           {verifCheckNewPwdErr && (
             <span className="alerte">
               le mot de passe ne respect pas les critères

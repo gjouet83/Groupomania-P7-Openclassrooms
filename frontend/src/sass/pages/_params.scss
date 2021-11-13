@@ -11,8 +11,9 @@
     margin-bottom: 20px;
   }
   &__advert {
+    font-weight: 700;
     text-align: center;
-    color: red;
+    color: $colorAlerte;
     font-style: italic;
   }
   &__email {

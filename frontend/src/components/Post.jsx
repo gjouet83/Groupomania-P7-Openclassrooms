@@ -193,7 +193,6 @@ const Post = ({ post }) => {
   return (
     <div className="posts__post">
       <div className="posts__post__header">
-        <h2 className="posts__post__header__title">{post.title}</h2>
         <span className="posts__post__header__date">
           Posté le {moment(`${post.createdAt}`).locale('fr').format('llll')}
         </span>
@@ -201,80 +200,66 @@ const Post = ({ post }) => {
           <img
             className="posts__post__header__avatar__img"
             src={post.user.avatar}
-            alt="photo de profil"
+            alt={`avatar de profil de ${post.user.username}`}
           />
         </figure>
-        <span className="posts__post__header__author">
-          {post.user.username}
-        </span>
+        <h2 className="posts__post__header__author">{post.user.username}</h2>
       </div>
       <figure className={`posts__post__figure ${isFigure}`}>
         <img
           className="posts__post__figure__img"
           src={post.attachment}
-          alt="post"
+          alt={`média de la publication de ${post.user.username} en date du ${post.createdAt}`}
         ></img>
       </figure>
       <p className="posts__post__content">{post.content}</p>
       <div className="posts__post__footer">
         <div className="posts__post__footer__like">
-          <Link
-            to="#"
-            className="posts__post__footer__like__link clickable"
-            type="button"
+          <button
+            className="posts__post__footer__like__link"
             onClick={sendLike}
-          ></Link>
-          <div className="posts__post__footer__like__view">
+          >
             <FontAwesomeIcon
               icon={faThumbsUp}
-              className={`posts__post__footer__like__view__icon ${colorLike}`}
+              className={`posts__post__footer__like__icon ${colorLike}`}
             />
             {nbLikes != 0 && (
-              <span className="posts__post__footer__like__view__nb">
-                {nbLikes}
-              </span>
+              <span className="posts__post__footer__like__nb">{nbLikes}</span>
             )}
-          </div>
-          <span className="posts__post__footer__like__describ">J'aime</span>
+            J'aime
+          </button>
         </div>
         <div className="posts__post__footer__dislike">
-          <Link
-            to="#"
-            className="posts__post__footer__dislike__link clickable"
+          <button
+            className="posts__post__footer__dislike__link"
             onClick={sendDislike}
-          ></Link>
-          <div className="posts__post__footer__dislike__view">
+          >
             <FontAwesomeIcon
               icon={faThumbsDown}
-              className={`posts__post__footer__dislike__view__icon ${colorDislike}`}
+              className={`posts__post__footer__dislike__icon ${colorDislike}`}
             />
             {nbDislikes != 0 && (
-              <span className="posts__post__footer__dislike__view__nb">
+              <span className="posts__post__footer__dislike__nb">
                 {nbDislikes}
               </span>
             )}
-          </div>
-          <span className="posts__post__footer__dislike__describ">
             Je n'aime pas
-          </span>
+          </button>
         </div>
         <div className="posts__post__footer__comments ">
           <Link
+            className="posts__post__footer__comments__link"
             to={`/comments?postId=${post.id}`}
-            className="posts__post__footer__comments__link clickable"
-          ></Link>
-          <div className="posts__post__footer__comments__view ">
+          >
             <FontAwesomeIcon
               icon={faComment}
-              className="posts__post__footer__comments__view__icon "
+              className="posts__post__footer__comments__icon "
             />
-            <span className="posts__post__footer__comments__view__nb">
+            <span className="posts__post__footer__comments__nb">
               {nbComments}
             </span>
-          </div>
-          <span className="posts__post__footer__comments__describ">
             Commentaires
-          </span>
+          </Link>
         </div>
       </div>
       {ownerMenu ? (

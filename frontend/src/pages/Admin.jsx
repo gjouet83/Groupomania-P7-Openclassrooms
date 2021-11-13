@@ -36,6 +36,7 @@ const Admin = () => {
         <div className="admin__nav">
           <div className="admin__nav__button">
             <Link
+              aria-label="retour vers les posts"
               to="/posts"
               className="admin__nav__button__link clickable"
             ></Link>

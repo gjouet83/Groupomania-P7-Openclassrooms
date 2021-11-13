@@ -79,6 +79,7 @@ const Posts = () => {
             }
           >
             <textarea
+              aria-label="zone de saisie de texte"
               className="posts__createone__input"
               placeholder="Redigez votre post ici"
               value={content}
@@ -86,6 +87,7 @@ const Posts = () => {
             ></textarea>
             <div className="posts__createone__addfile">
               <input
+                aria-label="sélection du fichier"
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(e.target.files[0])}
@@ -113,11 +115,11 @@ const Posts = () => {
           <Post key={post.id} post={post} />
         ))}
         <div className="posts__addbutton">
-          <Link
-            to="#"
+          <button
+            aria-label="créer un post"
             className="posts__addbutton__link clickable"
             onClick={toggleClass}
-          ></Link>
+          ></button>
           <FontAwesomeIcon className="posts__addbutton__icon" icon={faEdit} />
         </div>
       </section>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
 import { validEmail, validPassword } from '../components/Regexp';
 
 const Login = () => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
+  if (currentUser) {
+    window.location.assign('/posts');
+  }
   const [loginErr, setLoginErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
   const [login, setLogin] = useState();

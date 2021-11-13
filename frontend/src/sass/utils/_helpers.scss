@@ -43,6 +43,10 @@
   position: relative;
   display: flex;
   align-items: center;
+  &__link {
+    background-color: transparent;
+    border: none;
+  }
   &__icon {
     text-align: center;
     width: 48px;
@@ -76,7 +80,7 @@
   background-color: green;
   color: white;
   height: 48px;
-  width: 100px;
+  width: 150px;
   border-radius: 25px;
   box-shadow: 5px 5px 10px grey;
 }
@@ -86,7 +90,7 @@
   background-color: rgba($color: #df1818, $alpha: 1);
   color: white;
   height: 48px;
-  width: 100px;
+  width: 150px;
   border-radius: 25px;
   box-shadow: 5px 5px 10px grey;
 }
@@ -124,15 +128,16 @@
 }
 
 .red {
-  color: red;
+  color: $colorAlerte;
 }
 
 .alerte {
   display: block;
   font-style: italic;
-  color: red;
+  font-weight: 900;
+  color: $colorAlerte;
 }
 
 .wrong {
-  border-color: red;
+  border-color: $colorAlerte;
 }

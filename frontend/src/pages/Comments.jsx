@@ -71,6 +71,7 @@ const Comments = () => {
         <div className="comments__nav">
           <div className="comments__nav__button">
             <Link
+              aria-label="retour vers les posts"
               to="/posts"
               className="comments__nav__button__link clickable"
             ></Link>
@@ -91,13 +92,15 @@ const Comments = () => {
             }
           >
             <textarea
+              aria-label="zone de rédaction du commentaire"
               className="comments__createone__input"
-              placeholder="Redigez votre post ici"
+              placeholder="Redigez votre commentaire ici"
               value={content}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
             <div className="comments__createone__addfile">
               <input
+                aria-label="zone de sélection du fichier"
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(e.target.files[0])}
@@ -126,11 +129,11 @@ const Comments = () => {
           <Comment key={comment.id} comment={comment} />
         ))}
         <div className="comments__addbutton">
-          <Link
-            to={`/comments?postId=${id}`}
+          <button
+            aria-label="créer un commentaire"
             className="comments__addbutton__link clickable"
             onClick={toggleClass}
-          ></Link>
+          ></button>
           <FontAwesomeIcon
             className="comments__addbutton__icon"
             icon={faEdit}

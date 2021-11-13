@@ -51,23 +51,22 @@ const UsersTable = ({ user }) => {
   }, []);
   return (
     <div className="admin__userarray">
-      <span className={`admin__userarray__name ${isAdmin}`}>
-        {user.username}
-      </span>
+      <h3 className={`admin__userarray__name ${isAdmin}`}>{user.username}</h3>
       <button
         className={`admin__userarray__userdelete ${isAdmin}`}
         type="button"
         onClick={deleteUser}
       >
-        Supprimer
+        Supprimer l'utilisateur
       </button>
       <form
         className={`admin__userarray__element ${isAdmin}`}
         onSubmit={sendForm}
       >
-        <label>
+        <label className="admin__userarray__element__lbl">
           isAdmin ?
           <input
+            className="admin__userarray__element__input"
             type="checkbox"
             id="admin"
             name="admin"

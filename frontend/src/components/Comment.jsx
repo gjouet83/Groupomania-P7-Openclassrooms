@@ -36,11 +36,11 @@ const Comment = ({ comment }) => {
           <img
             className="comments__comment__author__avatar__img"
             src={comment.user.avatar}
-            alt="photo de profil"
+            alt={`avatar de profil de ${comment.user.username}`}
           />
         </div>
         <div className="comments__comment__author__info">
-          <span>{comment.user.username}</span>
+          <h3>{comment.user.username}</h3>
         </div>
       </div>
       <span className="comments__comment__date">
@@ -51,7 +51,7 @@ const Comment = ({ comment }) => {
           <img
             className="comments__comment__main__figure__img"
             src={comment.attachment}
-            alt="comment"
+            alt={`média de la publication de ${comment.user.username} en date du ${comment.createdAt}`}
           ></img>
         </figure>
         <p className="comments__comment__main__content">{comment.content}</p>

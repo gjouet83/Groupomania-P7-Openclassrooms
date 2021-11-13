@@ -33,40 +33,51 @@
     }
   }
   &__figure {
+    margin: 0px;
+    @media all and (min-width: 768px) {
+      margin: auto;
+    }
     &__img {
       display: block;
-      width: 50vw;
-      margin-left: auto;
-      margin-right: auto;
+      width: 100%;
+      @media all and (min-width: 768px) {
+        margin-left: auto;
+        margin-right: auto;
+      }
     }
   }
   &__content {
     padding: 0 20px 20px 20px;
   }
   &__footer {
-    font-size: 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px 0 20px;
+    padding: 0 10px 0 10px;
+    @media all and (min-width: 768px) {
+      padding: 0 40px 0 40px;
+    }
     &__like {
-      position: relative;
       width: 50px;
       height: 48px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      &__view {
-        font-weight: 700;
-        align-items: baseline;
-        &__icon {
-          padding: 3px;
-        }
-        &__describ {
-          display: block;
-          padding-right: 10px;
-        }
+      &__link {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+      }
+      &__nb {
+        padding: 12px 0px 0px 5px;
+      }
+      &__icon {
+        font-size: 24px;
+        padding: 5px;
       }
     }
     &__dislike {
@@ -77,35 +88,55 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      &__view {
-        font-weight: 700;
-        align-items: baseline;
-        &__icon {
-          padding: 3px;
-        }
-        &__describ {
-          display: block;
-          padding-right: 10px;
-        }
+      &__link {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+      }
+      &__nb {
+        padding: 12px 0px 0px 5px;
+      }
+      &__icon {
+        font-size: 24px;
+        padding: 5px;
       }
     }
     &__comments {
       position: relative;
+      width: 100px;
       height: 48px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      &__view {
-        font-weight: 700;
-        align-items: baseline;
-        &__icon {
-          padding: 3px;
-        }
-        &__describ {
-          display: block;
-          padding-right: 10px;
-        }
+      &__link {
+        text-decoration: none;
+        color: black;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+      }
+      &__nb {
+        padding: 12px 0px 0px 5px;
+      }
+      &__icon {
+        font-size: 24px;
+        padding: 5px;
       }
     }
   }

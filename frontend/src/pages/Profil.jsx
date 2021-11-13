@@ -164,6 +164,7 @@ const Profil = () => {
           <div className="profil__nav">
             <div className="profil__nav__button">
               <Link
+                aria-label="retour vers les posts"
                 to="/posts"
                 className="profil__nav__button__link clickable"
               ></Link>
@@ -179,11 +180,12 @@ const Profil = () => {
             <img
               src={imageProfile}
               className="profil__avatar__icon"
-              alt="photo de profil"
+              alt={`avatar de profil de ${user.username}`}
             />
           </figure>
           <div className="profil__input">
             <input
+              aria-label="sélection de l'image pour l'avatar"
               type="file"
               accept="image/*"
               onChange={(e) => setProfilImage(e.target.files[0])}
