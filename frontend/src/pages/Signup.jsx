@@ -121,7 +121,9 @@ const Signup = () => {
                   type="email"
                   required
                 />
-                <span>exemple@provider.com</span>
+                <span className="signup__form__email__info">
+                  exemple@provider.com
+                </span>
                 {loginErr && (
                   <span className="alerte">Adresse E-mail invalide</span>
                 )}
@@ -141,7 +143,7 @@ const Signup = () => {
                   type="password"
                   required
                 />
-                <span>
+                <span className="signup__form__password__info">
                   8 Caractères, 1 majuscule, 1 chiffre, pas de charactères
                   spéciaux
                 </span>

@@ -8,9 +8,15 @@
   }
   &__email {
     @include inputs-form;
+    &__info {
+      font-size: 16px;
+    }
   }
   &__password {
     @include inputs-form;
+    &__info {
+      font-size: 16px;
+    }
   }
   &__validate {
     width: 130px;
