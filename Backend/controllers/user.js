@@ -105,7 +105,7 @@ exports.login = (req, res, next) => {
               token: jwt.sign(
                 { userId: user.id, admin: user.admin },
                 process.env.USER_TOKEN,
-                { expiresIn: '24h' }
+                { expiresIn: '12h' }
               ),
             });
           });
@@ -119,6 +119,7 @@ exports.login = (req, res, next) => {
     });
 };
 
+//on récupère un utilisateur
 exports.getOneUser = (req, res, next) => {
   db.user
     .findOne({ where: { id: req.query.id } })
@@ -133,6 +134,7 @@ exports.getOneUser = (req, res, next) => {
     });
 };
 
+//on récupère tous les utilisateurs
 exports.getAllUsers = (req, res, next) => {
   db.user
     .findAll()
@@ -144,7 +146,9 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
+//mise a jour du login
 exports.updateLogin = (req, res, next) => {
+  //on test le champ mail
   if (!validEmail(req.body.email)) {
     return res.status(401).json({ message: 'Email non valide' });
   }
@@ -174,10 +178,14 @@ exports.updateLogin = (req, res, next) => {
           res.status(400).json({ error: 'ECHEC de la modification du profil' });
         });
     })
-    .catch(() => {});
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
 };
 
+// mise a jour du password
 exports.updatePassword = (req, res, next) => {
+  //on test le champ password
   if (!validPassword(req.body.password)) {
     return res.status(401).json({
       error:
@@ -224,13 +232,13 @@ exports.updatePassword = (req, res, next) => {
     });
 };
 
+//mise a jour des info user
 exports.updateUser = (req, res, next) => {
-  if (!validFields(req.body.name)) {
+  //on test les champs
+  if (!validFields(req.body.username)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
   }
-  if (!validFields(req.body.givenname)) {
-    return res.status(406).json({ message: 'Caractères non autorisés' });
-  }
+
   //on teste si la requête possède un fichier ou non
   const updatedProfil = req.file
     ? {
@@ -266,6 +274,7 @@ exports.deleteProfilImage = (req, res, next) => {
     });
 };
 
+//on supprime un utilisateur
 exports.deleteUser = (req, res, next) => {
   db.user
     .findOne({ where: { id: req.query.userId } })

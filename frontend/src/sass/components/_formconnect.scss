@@ -10,12 +10,14 @@
     @include inputs-form;
     &__info {
       font-size: 16px;
+      font-style: italic;
     }
   }
   &__password {
     @include inputs-form;
     &__info {
       font-size: 16px;
+      font-style: italic;
     }
   }
   &__validate {

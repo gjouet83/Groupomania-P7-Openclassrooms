@@ -7,11 +7,12 @@ import { useState, useEffect } from 'react';
 import { validEmail, validPassword } from '../components/Regexp';
 
 const Params = () => {
-  const currentUser = JSON.parse(localStorage.getItem('user'));
+  const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
+  // si pas de token => redirection vers la page login
   if (!currentUser) {
     window.location.assign('/login');
   }
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
+  const currentUserdecoded = currentUser && jwt_decode(currentUser); //on décode le token
   const [login, setLogin] = useState();
   const [newLogin, setNewLogin] = useState();
   const [checkNewLogin, setCheckNewLogin] = useState();
@@ -29,6 +30,7 @@ const Params = () => {
   const [backendMessageEmail, setBackendMessageEmail] = useState('');
   const [backendMessagePwd, setBackendMessagePwd] = useState('');
 
+  // changement des statuts pour affichage des alertes en fonction des regexp
   useEffect(() => {
     if (login && !validEmail.test(login)) {
       setVerifLoginErr(true);
@@ -47,6 +49,7 @@ const Params = () => {
     }
   }, [newLogin, login, checkNewLogin]);
 
+  // changement des statuts pour affichage des alertes en fonction des regexp
   useEffect(() => {
     if (password && !validPassword.test(password)) {
       setVerifPwdErr(true);
@@ -212,7 +215,7 @@ const Params = () => {
           </button>
         </form>
         <form className="params__password">
-          <h3 className="params__password__title">Password</h3>
+          <h3 className="params__password__title">Mot de passe</h3>
           <label>
             Mot de passe actuel
             <input

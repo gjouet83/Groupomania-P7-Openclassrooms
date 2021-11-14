@@ -4,10 +4,16 @@ import jwt_decode from 'jwt-decode';
 import 'moment/locale/fr';
 
 const Comment = ({ comment }) => {
-  const isFigure = comment.attachment ? 'appear' : 'disappear';
-  const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
-  const isProfilePage = window.location.pathname;
+  const isFigure = comment.attachment ? 'appear' : 'disappear'; //on vérifie si le commentaire a une image pour afficher l'élément figure
+  const currentUser = JSON.parse(localStorage.getItem('user')); // on vérifie si le token est présent dans le localstorage
+  const currentUserdecoded = currentUser && jwt_decode(currentUser); // on décode le token
+  //si pas de token stocké alors retour page login
+  if (!currentUser) {
+    window.location.assign('/login');
+  }
+  const isProfilePage = window.location.pathname; //on stocke le pathname
+  //si le commentaire appartient au user et que l'on se trouve sur la page profil ou si admin:
+  //on affiche les commentaires sur la page profil avec le bouton supprimé
   const ownerMenu =
     (currentUserdecoded.userId == comment.userId ||
       currentUserdecoded.admin == 1) &&
@@ -15,6 +21,7 @@ const Comment = ({ comment }) => {
       ? true
       : false;
 
+  //suppression d'un commentaire
   const deleteComment = () => {
     axios
       .delete('http://localhost:3000/api/comments/delete/:id', {

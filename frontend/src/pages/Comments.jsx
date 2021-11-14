@@ -1,7 +1,9 @@
 import Comment from '../components/Comment';
-import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEdit,
+  faArrowAltCircleLeft,
+} from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import jwt_decode from 'jwt-decode';
@@ -13,15 +15,15 @@ const Comments = () => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState();
   const imageInputRef = useRef();
-  const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
+  const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
+  const currentUserdecoded = currentUser && jwt_decode(currentUser); //on décode le token
+
+  //on récupère le params pour commenter le bon post
   const search = useLocation().search;
   const id = new URLSearchParams(search).get('postId');
 
+  // on récupère les commentaires du post avec le params précédemment récupéré
   const getComments = () => {
-    setContent('');
-    imageInputRef.current.value = '';
-    setImage(null);
     axios
       .get('http://localhost:3000/api/comments/get/', {
         headers: { Authorization: `Bearer ${currentUser}` },
@@ -50,7 +52,10 @@ const Comments = () => {
       data: formData,
     })
       .then(() => {
-        getComments();
+        //on reset le statut de content image
+        setContent('');
+        imageInputRef.current.value = '';
+        setImage(null);
       })
       .catch((err) => {
         console.log(err);
@@ -63,7 +68,7 @@ const Comments = () => {
 
   useEffect(() => {
     getComments();
-  }, []);
+  }, [image]);
 
   return (
     <main>

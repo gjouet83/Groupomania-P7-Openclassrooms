@@ -44,6 +44,7 @@
   display: flex;
   align-items: center;
   &__link {
+    cursor: pointer;
     background-color: transparent;
     border: none;
   }
@@ -80,7 +81,7 @@
   background-color: green;
   color: white;
   height: 48px;
-  width: 150px;
+  width: 130px;
   border-radius: 25px;
   box-shadow: 5px 5px 10px grey;
 }
@@ -90,7 +91,7 @@
   background-color: rgba($color: #df1818, $alpha: 1);
   color: white;
   height: 48px;
-  width: 150px;
+  width: 130px;
   border-radius: 25px;
   box-shadow: 5px 5px 10px grey;
 }
@@ -132,6 +133,7 @@
 }
 
 .alerte {
+  font-size: 16px;
   display: block;
   font-style: italic;
   font-weight: 900;

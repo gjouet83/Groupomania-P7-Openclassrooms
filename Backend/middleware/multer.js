@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
   filename: (req, file, callback) => {
     //on crée l'extension grace au mimetypes
     const extension = MIME_TYPES[file.mimetype];
-    //on crée un nom de fichier constitué de la date et de l'extention
+    //on crée un nom de fichier constitué du userId, de la date et de l'extention
     callback(null, 'userId-' + req.body.userId + 'avatar' + '.' + extension);
   },
 });

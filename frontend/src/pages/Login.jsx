@@ -4,10 +4,13 @@ import { Link } from 'react-router-dom';
 import { validEmail, validPassword } from '../components/Regexp';
 
 const Login = () => {
-  const currentUser = JSON.parse(localStorage.getItem('user'));
+  const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
+
+  //si un token est déjà présent => redirection vers la page posts
   if (currentUser) {
     window.location.assign('/posts');
   }
+
   const [loginErr, setLoginErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
   const [login, setLogin] = useState();
@@ -16,6 +19,8 @@ const Login = () => {
   const [backendMessagePwd, setBackendMessagePwd] = useState('');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+
+  // changement des statuts pour affichage des alertes en fonction des regexp
   useEffect(() => {
     if (login && !validEmail.test(login)) {
       setLoginEmail('wrong');
@@ -47,6 +52,7 @@ const Login = () => {
         password: password,
       })
       .then((res) => {
+        //on stocke le token dans le localstorage
         localStorage.setItem('user', JSON.stringify(res.data.token));
         window.location.assign('/posts');
       })
@@ -73,7 +79,7 @@ const Login = () => {
         <form className="login__form" onSubmit={handleSubmit}>
           <div className="login__form__email">
             <label className="login__form__email__lbl">
-              E-mail:
+              E-mail:*
               <input
                 className={`login__form__email__input ${loginEmail}`}
                 onChange={(e) => setLogin(e.target.value)}
@@ -83,7 +89,7 @@ const Login = () => {
                 required
               />
               <span className="login__form__email__info">
-                exemple@provider.com
+                *exemple@provider.com
               </span>
               {loginErr && (
                 <span className="alerte">Adresse E-mail invalide</span>
@@ -95,7 +101,7 @@ const Login = () => {
           </div>
           <div className="login__form__password">
             <label className="login__form__password__lbl">
-              Mot de passe:
+              Mot de passe:*
               <input
                 className={`login__form__password__input ${loginPassword}`}
                 onChange={(e) => setPassword(e.target.value)}
@@ -105,11 +111,11 @@ const Login = () => {
                 required
               />
               <span className="login__form__password__info">
-                8 caractères, 1 majuscule, 1 chiffre, pas de charactères
-                spéciaux
+                *Au moins 8 caractères, 1 majuscule, 1 chiffre, pas de
+                caractères spéciaux
               </span>
               {passwordErr && (
-                <span className="alerte">Mot de passe invalides</span>
+                <span className="alerte">Mot de passe invalide</span>
               )}
               {backendMessagePwd && (
                 <span className="alerte">{backendMessagePwd}</span>

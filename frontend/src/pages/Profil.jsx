@@ -1,23 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronRight,
+  faArrowAltCircleLeft,
+} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import Post from '../components/Post';
 import Comment from '../components/Comment';
-import Header from '../layout/Header';
 import jwt_decode from 'jwt-decode';
-import { useContext } from 'react';
 import { ImageContext } from '../utils/context';
 import axios from 'axios';
 
 const Profil = () => {
-  const currentUser = JSON.parse(localStorage.getItem('user'));
+  const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
+  //si pas de token redirection vers la page login
   if (!currentUser) {
     window.location.assign('/login');
   }
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
-  const { getUserImageProfile, imageProfile } = useContext(ImageContext);
+  const currentUserdecoded = currentUser && jwt_decode(currentUser); //on decode le token
+  const { getUserImageProfile, imageProfile } = useContext(ImageContext); //utilisation de useContext pour simplifier le passage de la props
   const [isOpenPosts, setOpenPosts] = useState(false);
   const [isOpenComments, setOpenComments] = useState(false);
   const [userComments, setUserComments] = useState([]);
@@ -86,6 +87,7 @@ const Profil = () => {
       });
   };
 
+  //suppression de l'image du profil avec un update dans le back avec l'image par defaut
   const deleteProfilImage = () => {
     const updatedUser = {
       userId: currentUserdecoded.userId,
@@ -98,7 +100,7 @@ const Profil = () => {
           headers: { Authorization: `Bearer ${currentUser}` },
         }
       )
-      .then((ok) => {
+      .then(() => {
         getUser();
         window.location.reload();
       })
@@ -154,136 +156,136 @@ const Profil = () => {
     getPostByUser();
     getCommentByUser();
     getUserImageProfile();
-  }, []);
+  }, [imageProfile]);
 
   return (
-    <>
-      <Header user={user} />
-      <main>
-        <section className="profil">
-          <div className="profil__nav">
-            <div className="profil__nav__button">
-              <Link
-                aria-label="retour vers les posts"
-                to="/posts"
-                className="profil__nav__button__link clickable"
-              ></Link>
-              <FontAwesomeIcon
-                icon={faArrowAltCircleLeft}
-                className="profil__nav__button__icon"
-              />
-              <span className="profil__nav__button__describ">Posts</span>
-            </div>
-            <h2 className="profil__nav__title">Profil</h2>
-          </div>
-          <figure className="profil__avatar">
-            <img
-              src={imageProfile}
-              className="profil__avatar__icon"
-              alt={`avatar de profil de ${user.username}`}
+    <main>
+      <section className="profil">
+        <div className="profil__nav">
+          <div className="profil__nav__button">
+            <Link
+              aria-label="retour vers les posts"
+              to="/posts"
+              className="profil__nav__button__link clickable"
+            ></Link>
+            <FontAwesomeIcon
+              icon={faArrowAltCircleLeft}
+              className="profil__nav__button__icon"
             />
-          </figure>
-          <div className="profil__input">
+            <span className="profil__nav__button__describ">Posts</span>
+          </div>
+          <h2 className="profil__nav__title">Profil</h2>
+        </div>
+        <figure className="profil__avatar">
+          <img
+            src={imageProfile}
+            className="profil__avatar__icon"
+            alt={`avatar de profil de ${user.username}`}
+          />
+        </figure>
+        <div className="profil__input">
+          <label>
+            Choisir une photo de profil
             <input
               aria-label="sélection de l'image pour l'avatar"
               type="file"
               accept="image/*"
               onChange={(e) => setProfilImage(e.target.files[0])}
             />
-          </div>
-          <div className="profil__buttons">
-            <button
-              className="profil__buttons__modify"
-              type="button"
-              onClick={updateProfilImage}
-            >
-              Modifier
-            </button>
-            <button
-              className="profil__buttons__delete"
-              type="button"
-              onClick={deleteProfilImage}
-            >
-              Supprimer
-            </button>
-          </div>
-          <div className="profil__username">
-            <label className="profil__username__lbl">
-              Pseudo:
-              <input
-                className="profil__username__input"
-                name="pseudo"
-                type="text"
-                placeholder={user.username}
-                onChange={(e) => setPseudo(e.target.value)}
-              />
-            </label>
-            <button
-              className="profil__username__validate"
-              type="button"
-              onClick={updateUser}
-            >
-              Modifier
-            </button>
-          </div>
-          <h2 className="profil__userposts__title">Mes posts</h2>
+          </label>
+        </div>
+        <div className="profil__buttons">
           <button
-            className="profil__userposts__toggledisplay"
+            className="profil__buttons__modify"
             type="button"
-            onClick={toggleClassPosts}
+            onClick={updateProfilImage}
           >
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              className="profil__userposts__toggledisplay__icon"
-            />
-            Afficher
+            Modifier
           </button>
-          <div
-            className={
-              isOpenPosts
-                ? 'profil__userposts__list open'
-                : 'profil__userposts__list'
-            }
-          >
-            {userPosts.map((post) => (
-              <Post key={`post-${post.id}`} post={post} />
-            ))}
-          </div>
-          <h2 className="profil__usercomments__title">Mes commentaires</h2>
           <button
-            className="profil__usercomments__toggledisplay"
+            className="profil__buttons__delete"
             type="button"
-            onClick={toggleClassComments}
+            onClick={deleteProfilImage}
           >
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              className="profil__usercomments__toggledisplay__icon"
-            />
-            Afficher
+            Supprimer
           </button>
-          <div
-            className={
-              isOpenComments
-                ? 'profil__usercomments__list open'
-                : 'profil__usercomments__list'
-            }
+        </div>
+        <div className="profil__username">
+          <label className="profil__username__lbl">
+            Pseudo:
+            <input
+              className="profil__username__input"
+              name="pseudo"
+              type="text"
+              placeholder={user.username}
+              onChange={(e) => setPseudo(e.target.value)}
+            />
+          </label>
+          <button
+            className="profil__username__validate"
+            type="button"
+            onClick={updateUser}
           >
-            {userComments.map((comment) => (
-              <Comment key={`comment-${comment.id}`} comment={comment} />
-            ))}
-          </div>
-          {isAdminAccount ? (
-            <button
-              className="profil__deleteaccount"
-              type="button"
-              onClick={deleteAccount}
-            >
-              Supprimer mon compte
-            </button>
-          ) : null}
-        </section>
-      </main>
-    </>
+            Modifier
+          </button>
+        </div>
+        <h2 className="profil__userposts__title">Mes posts</h2>
+        <button
+          className="profil__userposts__toggledisplay"
+          type="button"
+          onClick={toggleClassPosts}
+        >
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            className="profil__userposts__toggledisplay__icon"
+          />
+          Afficher
+        </button>
+        <div
+          className={
+            isOpenPosts
+              ? 'profil__userposts__list open'
+              : 'profil__userposts__list'
+          }
+        >
+          {userPosts.map((post) => (
+            <Post key={`post-${post.id}`} post={post} />
+          ))}
+        </div>
+        <h2 className="profil__usercomments__title">Mes commentaires</h2>
+        <button
+          className="profil__usercomments__toggledisplay"
+          type="button"
+          onClick={toggleClassComments}
+        >
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            className="profil__usercomments__toggledisplay__icon"
+          />
+          Afficher
+        </button>
+        <div
+          className={
+            isOpenComments
+              ? 'profil__usercomments__list open'
+              : 'profil__usercomments__list'
+          }
+        >
+          {userComments.map((comment) => (
+            <Comment key={`comment-${comment.id}`} comment={comment} />
+          ))}
+        </div>
+        {isAdminAccount ? (
+          <button
+            className="profil__deleteaccount"
+            type="button"
+            onClick={deleteAccount}
+          >
+            Supprimer mon compte
+          </button>
+        ) : null}
+      </section>
+    </main>
   );
 };
 

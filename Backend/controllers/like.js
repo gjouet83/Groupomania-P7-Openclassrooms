@@ -1,10 +1,12 @@
 const db = require('../models/index');
 const Sequelize = require('sequelize');
 
+//on récupère les likes et dislikes
 exports.getLikes = (req, res, next) => {
   db.like
     .findAll({
       attributes: [
+        //on fait la somme des likes et des dislikes
         [Sequelize.fn('sum', Sequelize.col('like')), 'totalLikes'],
         [Sequelize.fn('sum', Sequelize.col('dislike')), 'totaldislikes'],
       ],
@@ -18,6 +20,7 @@ exports.getLikes = (req, res, next) => {
     });
 };
 
+//on recupère les likes et dislike d'un utilisateur
 exports.getLikesByUser = (req, res, next) => {
   db.like
     .findOne({
@@ -31,6 +34,7 @@ exports.getLikesByUser = (req, res, next) => {
     });
 };
 
+//on crée un like ou dislike
 exports.createLike = (req, res, next) => {
   //on cherche si un like existe avec le postId et le userId
   db.like

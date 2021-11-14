@@ -8,6 +8,7 @@ const validFields = (field) => {
   );
 };
 
+//on recupère tous les commentaires
 exports.getComments = (req, res, next) => {
   db.comment
     .findAndCountAll({
@@ -30,9 +31,11 @@ exports.getComments = (req, res, next) => {
     });
 };
 
+//on récupère les commentaires d'un user
 exports.getCommentByUser = (req, res, next) => {
   db.comment
     .findAll({
+      //jointure table users (username)
       include: [
         {
           model: db.user,
@@ -54,6 +57,7 @@ exports.getCommentByUser = (req, res, next) => {
     });
 };
 
+//on crée un commentaire
 exports.createComment = (req, res, next) => {
   if (req.body.content && !validFields(req.body.content)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
@@ -79,46 +83,7 @@ exports.createComment = (req, res, next) => {
     });
 };
 
-exports.updateComment = (req, res, next) => {
-  if (!validFields(req.body.title)) {
-    return res.status(406).json({ message: 'Caractères non autorisés' });
-  }
-  if (!validFields(req.body.content)) {
-    return res.status(406).json({ message: 'Caractères non autorisés' });
-  }
-  //on test si la requête contient un fichier
-  const updatedComment = req.file
-    ? {
-        ...req.body,
-        attachment: `${req.protocol}://${req.get('host')}/images/userId-${
-          req.body.userId
-        }/${req.file.filename}`,
-      }
-    : { ...req.body };
-  db.comment
-    .findOne({ where: { id: req.params.id } })
-    .then((comment) => {
-      if (!comment) {
-        return res.status(404).json({ error: 'Commentaire non trouvé' });
-      }
-      comment
-        .update({ ...updatedComment })
-        .then(() => {
-          res.status(200).json({
-            message: 'Commentaire modifié avec SUCCES !',
-          });
-        })
-        .catch(() => {
-          res.status(400).json({
-            error: 'ECHEC de la modification du post',
-          });
-        });
-    })
-    .catch((error) => {
-      res.status(500).json({ error });
-    });
-};
-
+//on supprime le commentaire
 exports.deleteComment = (req, res, next) => {
   db.comment
     .findOne({

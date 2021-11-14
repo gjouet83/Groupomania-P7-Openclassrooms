@@ -2,22 +2,23 @@ import logo from '../assets/images/icon.svg';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
-import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
-import { faUserShield } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
-import { useContext } from 'react';
+import {
+  faUser,
+  faPowerOff,
+  faSlidersH,
+  faUserShield,
+} from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState, useContext } from 'react';
 import jwt_decode from 'jwt-decode';
 import { ImageContext } from '../utils/context';
 
 const Header = () => {
   const title = 'Groupomania';
   const location = useLocation();
-  const { getUserImageProfile, imageProfile } = useContext(ImageContext);
+  const { getUserImageProfile, imageProfile } = useContext(ImageContext); // utilisation de useContext pour simplifier le passage de la props
   const [isMoved, setMove] = useState(false);
-  const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
+  const currentUser = JSON.parse(localStorage.getItem('user')); //on recupère le token du localstorage
+  const currentUserdecoded = currentUser && jwt_decode(currentUser); //on decode le token
   const isAdmin = currentUser && currentUserdecoded.admin ? true : false;
   const isNavbar =
     location.pathname === '/signup' ||
@@ -26,6 +27,7 @@ const Header = () => {
       ? false
       : true;
 
+  //fonction pour faire apparaitre ou disparaitre le menu
   const toggleClass = () => {
     setMove(!isMoved);
   };
@@ -57,7 +59,7 @@ const Header = () => {
             <img
               src={imageProfile}
               className="header__menu__area__icon"
-              alt="photo de profil"
+              alt="avatar de l'utilisateur"
               onClick={toggleClass}
             />
           </figure>

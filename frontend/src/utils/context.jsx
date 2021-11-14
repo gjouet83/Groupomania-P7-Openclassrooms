@@ -5,9 +5,10 @@ import axios from 'axios';
 export const ImageContext = createContext();
 
 export const ImageProvider = ({ children }) => {
-  const [imageProfile, setImageProfile] = useState('light');
-  const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
+  const [imageProfile, setImageProfile] = useState('');
+  const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
+  const currentUserdecoded = currentUser && jwt_decode(currentUser); //on décode le token
+
   const getUserImageProfile = () => {
     axios
       .get('http://localhost:3000/api/users/get/:id', {
@@ -15,9 +16,12 @@ export const ImageProvider = ({ children }) => {
         params: { id: currentUserdecoded.userId },
       })
       .then((user) => {
+        //on stocke l'image du profil
         setImageProfile(user.data.user.avatar);
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Header from '../layout/Header';
 import { validEmail, validPassword, validPseudo } from '../components/Regexp';
 
 const Signup = () => {
@@ -18,6 +17,7 @@ const Signup = () => {
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
 
+  //on change le statut en fonction des regexp
   useEffect(() => {
     if (pseudo && !validPseudo.test(pseudo)) {
       setSignupPseudo('wrong');
@@ -57,6 +57,7 @@ const Signup = () => {
         password: password,
       })
       .then(() => {
+        //si signup ok => redirection page login
         window.location.assign('/login');
       })
       .catch((error) => {
@@ -85,91 +86,86 @@ const Signup = () => {
   };
 
   return (
-    <>
-      <Header />
-      <main>
-        <section className="signup">
-          <h2 className="signup__title">Créer un compte</h2>
-          <form className="signup__form" onSubmit={handleSubmit}>
-            <div className="signup__form__pseudo">
-              <label className="signup__form__pseudo__lbl">
-                Pseudo:
-                <input
-                  className={`signup__form__pseudo__input ${signupPseudo}`}
-                  onChange={(e) => setPseudo(e.target.value)}
-                  id="pseudo"
-                  name="pseudo"
-                  type="text"
-                  required
-                />
-              </label>
-              {pseudoErr && (
-                <span className="alerte">Caractères invalides</span>
-              )}
-              {backendMessagePseudo && (
-                <span className="alerte">{backendMessagePseudo}</span>
-              )}
-            </div>
-            <div className="signup__form__email">
-              <label className="signup__form__email__lbl">
-                E-mail:
-                <input
-                  className={`signup__form__email__input ${signupEmail}`}
-                  onChange={(e) => setLogin(e.target.value)}
-                  id="login"
-                  name="email"
-                  type="email"
-                  required
-                />
-                <span className="signup__form__email__info">
-                  exemple@provider.com
-                </span>
-                {loginErr && (
-                  <span className="alerte">Adresse E-mail invalide</span>
-                )}
-                {backendMessageEmail && (
-                  <span className="alerte">{backendMessageEmail}</span>
-                )}
-              </label>
-            </div>
-            <div className="signup__form__password">
-              <label className="signup__form__password__lbl">
-                Mot de passe:
-                <input
-                  className={`signup__form__password__input ${signupPassword}`}
-                  onChange={(e) => setPassword(e.target.value)}
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                />
-                <span className="signup__form__password__info">
-                  8 Caractères, 1 majuscule, 1 chiffre, pas de charactères
-                  spéciaux
-                </span>
-                {passwordErr && (
-                  <span className="alerte">Mot de passe invalides</span>
-                )}
-                {backendMessagePwd && (
-                  <span className="alerte">{backendMessagePwd}</span>
-                )}
-              </label>
-            </div>
-            <input
-              className="signup__form__validate"
-              name="login"
-              type="submit"
-              value="Valider"
-            />
-          </form>
-          <div className="signup__loginlink">
-            <span>
-              Si vous possedez déjà un compte <Link to="/login">Connexion</Link>
-            </span>
+    <main>
+      <section className="signup">
+        <h2 className="signup__title">Créer un compte</h2>
+        <form className="signup__form" onSubmit={handleSubmit}>
+          <div className="signup__form__pseudo">
+            <label className="signup__form__pseudo__lbl">
+              Pseudo:
+              <input
+                className={`signup__form__pseudo__input ${signupPseudo}`}
+                onChange={(e) => setPseudo(e.target.value)}
+                id="pseudo"
+                name="pseudo"
+                type="text"
+                required
+              />
+            </label>
+            {pseudoErr && <span className="alerte">Caractères invalides</span>}
+            {backendMessagePseudo && (
+              <span className="alerte">{backendMessagePseudo}</span>
+            )}
           </div>
-        </section>
-      </main>
-    </>
+          <div className="signup__form__email">
+            <label className="signup__form__email__lbl">
+              E-mail:*
+              <input
+                className={`signup__form__email__input ${signupEmail}`}
+                onChange={(e) => setLogin(e.target.value)}
+                id="login"
+                name="email"
+                type="email"
+                required
+              />
+              <span className="signup__form__email__info">
+                *exemple@provider.com
+              </span>
+              {loginErr && (
+                <span className="alerte">Adresse E-mail invalide</span>
+              )}
+              {backendMessageEmail && (
+                <span className="alerte">{backendMessageEmail}</span>
+              )}
+            </label>
+          </div>
+          <div className="signup__form__password">
+            <label className="signup__form__password__lbl">
+              Mot de passe:*
+              <input
+                className={`signup__form__password__input ${signupPassword}`}
+                onChange={(e) => setPassword(e.target.value)}
+                id="password"
+                name="password"
+                type="password"
+                required
+              />
+              <span className="signup__form__password__info">
+                *Au moins 8 Caractères, 1 majuscule, 1 chiffre, pas de
+                caractères spéciaux
+              </span>
+              {passwordErr && (
+                <span className="alerte">Mot de passe invalide</span>
+              )}
+              {backendMessagePwd && (
+                <span className="alerte">{backendMessagePwd}</span>
+              )}
+            </label>
+          </div>
+          <input
+            className="signup__form__validate"
+            name="login"
+            type="submit"
+            value="Valider"
+          />
+        </form>
+        <div className="signup__loginlink">
+          <span>
+            Si vous possedez déjà un compte <Link to="/login">Connexion</Link>
+          </span>
+        </div>
+      </section>
+    </main>
   );
 };
 

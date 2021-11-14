@@ -9,6 +9,7 @@ const validFields = (field) => {
   );
 };
 
+//on récupère tous les posts
 exports.getAllPosts = (req, res, next) => {
   db.post
     .findAll({
@@ -38,6 +39,7 @@ exports.getAllPosts = (req, res, next) => {
     });
 };
 
+//on récupère les posts d'un user
 exports.getPostByUser = (req, res, next) => {
   db.post
     .findAll({
@@ -62,6 +64,7 @@ exports.getPostByUser = (req, res, next) => {
     });
 };
 
+//on crée un post
 exports.createPost = (req, res, next) => {
   if (req.body.content && !validFields(req.body.content)) {
     return res.status(406).json({ message: 'Caractères non autorisés' });
@@ -89,42 +92,7 @@ exports.createPost = (req, res, next) => {
     });
 };
 
-exports.updatePost = (req, res, next) => {
-  if (!validFields(req.body.title)) {
-    return res.status(406).json({ message: 'Caractères non autorisés' });
-  }
-  if (!validFields(req.body.content)) {
-    return res.status(406).json({ message: 'Caractères non autorisés' });
-  }
-  // on test si la requête contient un fichier
-  const updatedPost = req.file
-    ? {
-        ...req.body,
-        attachment: `${req.protocol}://${req.get('host')}/images/userId-${
-          req.body.userId
-        }/${req.file.filename}`,
-      }
-    : { ...req.body };
-  db.post
-    .findOne({ where: { id: req.params.id } })
-    .then((post) => {
-      if (!post) {
-        return res.status(404).json({ error: 'Post non trouvé' });
-      }
-      post
-        .update({ ...updatedPost })
-        .then(() => {
-          res.status(200).json({ message: 'Post modifié avec SUCCES !' });
-        })
-        .catch(() => {
-          res.status(400).json({ error: 'ECHEC de la modification du post' });
-        });
-    })
-    .catch((error) => {
-      res.status(500).json({ error });
-    });
-};
-
+//on supprime le post d'un user
 exports.deletePost = (req, res, next) => {
   db.post
     .findOne({ where: { id: req.query.id } })

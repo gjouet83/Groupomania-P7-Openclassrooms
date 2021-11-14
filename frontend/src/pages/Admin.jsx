@@ -7,11 +7,13 @@ import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
 const Admin = () => {
-  const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
+  const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
+  const currentUserdecoded = currentUser && jwt_decode(currentUser); //on décode le token
+  //on check si Admin sinon redirection vers la page error
   if (!currentUserdecoded.admin) {
     window.location.assign('/error');
   }
+
   const [users, setUsers] = useState([]);
 
   const getUsers = () => {
@@ -26,6 +28,7 @@ const Admin = () => {
         console.log(err);
       });
   };
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -48,6 +51,7 @@ const Admin = () => {
           </div>
           <h2 className="admin__nav__title">Administrateur</h2>
         </div>
+        {/* boucle dans tableau users pour récupérer chaque user que l'on passe en props */}
         {users.map((user) => (
           <UsersTable key={user.id} user={user} />
         ))}

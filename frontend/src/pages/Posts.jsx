@@ -1,5 +1,4 @@
 import Post from '../components/Post';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import jwt_decode from 'jwt-decode';
@@ -8,27 +7,26 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 
 const Posts = () => {
-  const currentUser = JSON.parse(localStorage.getItem('user'));
+  const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
 
+  //si pas de token => redirection vers la page login
   if (!currentUser) {
     window.location.assign('/login');
   }
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
 
-  const headers = {
-    Authorization: `Bearer ${currentUser}`,
-  };
+  const currentUserdecoded = currentUser && jwt_decode(currentUser); //on décode le token
+
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState('');
+  const [isOpen, setOpen] = useState(false);
   const [image, setImage] = useState(null);
   const imageInputRef = useRef();
 
   const getPosts = () => {
-    setContent('');
-    imageInputRef.current.value = '';
-    setImage(null);
     axios
-      .get('http://localhost:3000/api/posts/get', { headers })
+      .get('http://localhost:3000/api/posts/get', {
+        headers: { Authorization: `Bearer ${currentUser}` },
+      })
       .then((datas) => {
         setPosts(datas.data);
       })
@@ -51,7 +49,10 @@ const Posts = () => {
       data: formData,
     })
       .then(() => {
-        getPosts();
+        // on reset les status et on referme la zone de saisie
+        setContent('');
+        imageInputRef.current.value = '';
+        setImage(null);
         toggleClass();
       })
       .catch((err) => {
@@ -59,15 +60,13 @@ const Posts = () => {
       });
   };
 
-  const [isOpen, setOpen] = useState(false);
-
   const toggleClass = () => {
     setOpen(!isOpen);
   };
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [image]);
 
   return (
     <main>
@@ -111,6 +110,7 @@ const Posts = () => {
             </div>
           </div>
         </form>
+        {/* boucle dans tableau posts pour récupérer chaque post que l'on passe en props */}
         {posts.map((post) => (
           <Post key={post.id} post={post} />
         ))}

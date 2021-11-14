@@ -1,7 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-import { faThumbsDown } from '@fortawesome/free-solid-svg-icons';
-import { faComment } from '@fortawesome/free-solid-svg-icons';
+import {
+  faThumbsUp,
+  faThumbsDown,
+  faComment,
+} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
@@ -10,15 +12,17 @@ import 'moment/locale/fr';
 import axios from 'axios';
 
 const Post = ({ post }) => {
-  const currentUser = JSON.parse(localStorage.getItem('user'));
-  const currentUserdecoded = currentUser && jwt_decode(currentUser);
+  const currentUser = JSON.parse(localStorage.getItem('user')); // on vérifie si le token est présent dans le localstorage
+  const currentUserdecoded = currentUser && jwt_decode(currentUser); //on decode le token
   const [nbLikes, setNbLikes] = useState();
   const [nbDislikes, setNbDislikes] = useState();
   const [nbComments, setNbComments] = useState();
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
-  const isProfilePage = window.location.pathname;
+  const isProfilePage = window.location.pathname; // on stocke le pathname
   const isFigure = post.attachment ? 'appear' : 'disappear';
+  //si le post appartient au user et que l'on se trouve sur la page profil ou si admin:
+  //on affiche les posts sur la page profil avec le bouton supprimé
   const ownerMenu =
     (currentUserdecoded.userId == post.userId ||
       currentUserdecoded.admin == 1) &&
@@ -26,9 +30,7 @@ const Post = ({ post }) => {
       ? true
       : false;
 
-  const headers = {
-    Authorization: `Bearer ${currentUser}`,
-  };
+  //on recupère le nombre de commentaire
   const getNbComment = () => {
     axios
       .get('http://localhost:3000/api/comments/get/', {
@@ -43,6 +45,7 @@ const Post = ({ post }) => {
       });
   };
 
+  //on recupère le nombre de likes et dislikes
   const getNbLikes = () => {
     axios
       .get('http://localhost:3000/api/likes/get/', {
@@ -58,6 +61,7 @@ const Post = ({ post }) => {
       });
   };
 
+  //on met a jour le status du like ou dislike en verifiant si le user a un like ou un dislike a 1
   const getLikeStatus = () => {
     axios
       .get('http://localhost:3000/api/likes/get/user', {
@@ -75,13 +79,17 @@ const Post = ({ post }) => {
         console.log(err);
       });
   };
+
+  //fonction envoie du like ou dislike
   const sendLike = () => {
+    // on récupère le like du user pour un post
     axios
       .get('http://localhost:3000/api/likes/get/user', {
         headers: { Authorization: `Bearer ${currentUser}` },
         params: { postId: post.id, userId: currentUserdecoded.userId },
       })
       .then((likeByUser) => {
+        // si pas de like ou si like = 0 alors c'est un like
         if (likeByUser.data == null || likeByUser.data.like === 0) {
           const like = {
             userId: currentUserdecoded.userId,
@@ -90,14 +98,16 @@ const Post = ({ post }) => {
           };
           axios
             .post('http://localhost:3000/api/likes/create/', like, {
-              headers,
+              headers: { Authorization: `Bearer ${currentUser}` },
             })
-            .then((ok) => {
+            .then(() => {
+              //on passe le status du like en vert
               setColorLike('green');
             })
             .catch((err) => {
               console.log(err);
             });
+          // si like= 1 alors c'est un retrait du like
         } else if (likeByUser.data.like === 1) {
           const unlike = {
             userId: currentUserdecoded.userId,
@@ -106,9 +116,10 @@ const Post = ({ post }) => {
           };
           axios
             .post('http://localhost:3000/api/likes/create/', unlike, {
-              headers,
+              headers: { Authorization: `Bearer ${currentUser}` },
             })
             .then(() => {
+              //on retire le status vert du like
               setColorLike('');
             })
             .catch((err) => {
@@ -121,13 +132,16 @@ const Post = ({ post }) => {
       });
   };
 
+  //fonction envoie du dislike
   const sendDislike = () => {
+    //on récupère le dislike du user pour un post
     axios
       .get('http://localhost:3000/api/likes/get/user', {
         headers: { Authorization: `Bearer ${currentUser}` },
         params: { postId: post.id, userId: currentUserdecoded.userId },
       })
       .then((likeByUser) => {
+        //si pas de dislike ou si dislike=0 alors c'est un dislike
         if (likeByUser.data == null || likeByUser.data.dislike === 0) {
           const dislike = {
             userId: currentUserdecoded.userId,
@@ -136,14 +150,16 @@ const Post = ({ post }) => {
           };
           axios
             .post('http://localhost:3000/api/likes/create/', dislike, {
-              headers,
+              headers: { Authorization: `Bearer ${currentUser}` },
             })
-            .then((ok) => {
+            .then(() => {
+              //on passe le status du dislike a rouge
               setColorDislike('red');
             })
             .catch((err) => {
               console.log(err);
             });
+          //si dislike = 1 alors c'est un retrait du dislike
         } else if (likeByUser.data.dislike === 1) {
           const undislike = {
             userId: currentUserdecoded.userId,
@@ -152,9 +168,10 @@ const Post = ({ post }) => {
           };
           axios
             .post('http://localhost:3000/api/likes/create/', undislike, {
-              headers,
+              headers: { Authorization: `Bearer ${currentUser}` },
             })
             .then(() => {
+              //on retire le status rouge du dislike
               setColorDislike('');
             })
             .catch((err) => {
@@ -167,6 +184,7 @@ const Post = ({ post }) => {
       });
   };
 
+  //fonction suppression d'un post
   const deletePost = () => {
     axios
       .delete('http://localhost:3000/api/posts/delete/:id', {
@@ -181,10 +199,12 @@ const Post = ({ post }) => {
       });
   };
 
+  // on déclenche la récupération du nombre de like quand le statut colorLike ou colorDislike change
   useEffect(() => {
     getNbLikes();
   }, [colorLike, colorDislike]);
 
+  //on déclenche la récupération du statut du like et le nombre de commentaire après le premier render
   useEffect(() => {
     getLikeStatus();
     getNbComment();
