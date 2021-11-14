@@ -56,6 +56,7 @@ const Comments = () => {
         setContent('');
         imageInputRef.current.value = '';
         setImage(null);
+        toggleClass();
       })
       .catch((err) => {
         console.log(err);
@@ -63,10 +64,12 @@ const Comments = () => {
   };
 
   const toggleClass = () => {
+    setImage();
     setOpen(!isOpen);
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0 });
     getComments();
   }, [image]);
 
@@ -104,13 +107,19 @@ const Comments = () => {
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
             <div className="comments__createone__addfile">
-              <input
-                aria-label="zone de sélection du fichier"
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImage(e.target.files[0])}
-                ref={imageInputRef}
-              />
+              <label className="posts__createone__addfile__lbl">
+                Choisir une image
+                <input
+                  className="posts__createone__addfile__input"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImage(e.target.files[0])}
+                  ref={imageInputRef}
+                />
+              </label>
+              <span className="posts__createone__addfile__name">
+                {image && image.name}
+              </span>
             </div>
             <div className="comments__createone__footer">
               <button
@@ -123,7 +132,6 @@ const Comments = () => {
               <button
                 className="comments__createone__footer__validate"
                 type="submit"
-                onClick={toggleClass}
               >
                 Valider
               </button>

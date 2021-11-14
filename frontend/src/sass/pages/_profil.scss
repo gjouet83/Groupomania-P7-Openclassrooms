@@ -19,10 +19,31 @@
   }
   &__input {
     text-align: center;
+    &__label {
+      padding-left: 10px;
+      padding-right: 10px;
+      font-weight: 900;
+      font-style: italic;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      color: $backgroundColorHeader;
+      background-color: white;
+      line-height: 48px;
+      width: fit-content;
+      height: 48px;
+      border: 2px solid $backgroundColorHeader;
+      border-radius: 15px;
+      box-shadow: 5px 5px 10px grey;
+    }
+    &__button {
+      display: none;
+    }
   }
   &__buttons {
     display: flex;
     justify-content: center;
+    flex-direction: row-reverse;
     margin: 10px 0 10px 0;
     &__modify {
       @include button-green;

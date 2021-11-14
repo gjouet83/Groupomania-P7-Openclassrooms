@@ -20,7 +20,6 @@ const Posts = () => {
   const [content, setContent] = useState('');
   const [isOpen, setOpen] = useState(false);
   const [image, setImage] = useState(null);
-  const imageInputRef = useRef();
 
   const getPosts = () => {
     axios
@@ -51,7 +50,6 @@ const Posts = () => {
       .then(() => {
         // on reset les status et on referme la zone de saisie
         setContent('');
-        imageInputRef.current.value = '';
         setImage(null);
         toggleClass();
       })
@@ -61,6 +59,7 @@ const Posts = () => {
   };
 
   const toggleClass = () => {
+    setImage();
     setOpen(!isOpen);
   };
 
@@ -85,13 +84,18 @@ const Posts = () => {
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
             <div className="posts__createone__addfile">
-              <input
-                aria-label="sélection du fichier"
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImage(e.target.files[0])}
-                ref={imageInputRef}
-              />
+              <label className="posts__createone__addfile__lbl">
+                Choisir une image
+                <input
+                  className="posts__createone__addfile__input"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+              </label>
+              <span className="posts__createone__addfile__name">
+                {image && image.name}
+              </span>
             </div>
             <div className="posts__createone__footer">
               <button

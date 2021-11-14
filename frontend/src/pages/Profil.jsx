@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronRight,
@@ -26,6 +26,7 @@ const Profil = () => {
   const [user, setUser] = useState(0);
   const [pseudo, setPseudo] = useState();
   const [profilImage, setProfilImage] = useState();
+
   const isAdminAccount = currentUserdecoded.admin == 0 ? true : false;
 
   const toggleClassPosts = () => {
@@ -79,7 +80,6 @@ const Profil = () => {
       data: formData,
     })
       .then(() => {
-        getUser();
         window.location.reload();
       })
       .catch((err) => {
@@ -156,7 +156,7 @@ const Profil = () => {
     getPostByUser();
     getCommentByUser();
     getUserImageProfile();
-  }, [imageProfile]);
+  }, []);
 
   return (
     <main>
@@ -178,15 +178,16 @@ const Profil = () => {
         </div>
         <figure className="profil__avatar">
           <img
-            src={imageProfile}
+            src={!profilImage ? imageProfile : URL.createObjectURL(profilImage)}
             className="profil__avatar__icon"
             alt={`avatar de profil de ${user.username}`}
           />
         </figure>
         <div className="profil__input">
-          <label>
+          <label className="profil__input__label">
             Choisir une photo de profil
             <input
+              className="profil__input__button"
               aria-label="sélection de l'image pour l'avatar"
               type="file"
               accept="image/*"
@@ -200,7 +201,7 @@ const Profil = () => {
             type="button"
             onClick={updateProfilImage}
           >
-            Modifier
+            Enregistrer
           </button>
           <button
             className="profil__buttons__delete"
@@ -226,7 +227,7 @@ const Profil = () => {
             type="button"
             onClick={updateUser}
           >
-            Modifier
+            Enregistrer
           </button>
         </div>
         <h2 className="profil__userposts__title">Mes posts</h2>

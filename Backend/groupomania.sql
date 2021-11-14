@@ -162,7 +162,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','jW/fnEeQX38gT1I9NMYnYj0MZn9GQ9vikCIQOMM1Rqw=','$2b$10$Vy4OKHVKp6MWAnL4bm/uY.XIhl/QfkWvIfo3RWkbIJ8TStjKgiadu','http://localhost:3000/images/userId-1/userId-1avatar.png','2021-11-14','2021-11-14',0);
+INSERT INTO `users` VALUES (1,'Admin','jW/fnEeQX38gT1I9NMYnYj0MZn9GQ9vikCIQOMM1Rqw=','$2b$10$Vy4OKHVKp6MWAnL4bm/uY.XIhl/QfkWvIfo3RWkbIJ8TStjKgiadu','http://localhost:3000/images/userId-1/userId-1avatar.png','2021-11-14','2021-11-14',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
