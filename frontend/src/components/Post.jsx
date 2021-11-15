@@ -218,6 +218,8 @@ const Post = ({ post }) => {
         </span>
         <figure className="posts__post__header__avatar">
           <img
+            width="60"
+            height="60"
             className="posts__post__header__avatar__img"
             src={post.user.avatar}
             alt={`avatar de profil de ${post.user.username}`}
@@ -227,6 +229,8 @@ const Post = ({ post }) => {
       </div>
       <figure className={`posts__post__figure ${isFigure}`}>
         <img
+          width="100%"
+          height="100%"
           className="posts__post__figure__img"
           src={post.attachment}
           alt={`média de la publication de ${post.user.username} en date du ${post.createdAt}`}

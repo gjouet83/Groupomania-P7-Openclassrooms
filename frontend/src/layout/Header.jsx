@@ -47,6 +47,8 @@ const Header = () => {
     <header className="header">
       <div className="header__name">
         <img
+          width="50"
+          height="50"
           src={logo}
           alt="logo du site groupomania"
           className="header__name__logo"
@@ -57,6 +59,8 @@ const Header = () => {
         <div className="header__menu">
           <figure className="header__menu__area">
             <img
+              width="50"
+              height="50"
               src={imageProfile}
               className="header__menu__area__icon"
               alt="avatar de l'utilisateur"
