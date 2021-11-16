@@ -1,12 +1,22 @@
 & > main {
+  .login,
+  .signup {
+    margin-top: 20vh;
+  }
+  .params,
+  .posts,
+  .comments,
+  .profil,
+  .admin {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+  }
   background-image: url('../../assets/images/icon.png');
-  border: 15px;
   @media all and (min-width: 768px) {
     margin-left: 13vw;
     margin-right: 13vw;
     margin-bottom: 0;
     min-height: 0;
-    border-radius: 25px;
   }
   min-height: 100vh;
   background-color: white;
