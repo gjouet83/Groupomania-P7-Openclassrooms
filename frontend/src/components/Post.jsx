@@ -11,7 +11,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import axios from 'axios';
 
-const Post = ({ post }) => {
+const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   const currentUser = JSON.parse(localStorage.getItem('user')); // on vérifie si le token est présent dans le localstorage
   const currentUserdecoded = currentUser && jwt_decode(currentUser); //on decode le token
   const [nbLikes, setNbLikes] = useState();
@@ -19,6 +19,7 @@ const Post = ({ post }) => {
   const [nbComments, setNbComments] = useState();
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
+
   const isProfilePage = window.location.pathname; // on stocke le pathname
   const isFigure = post.attachment ? 'appear' : 'disappear';
   //si le post appartient au user et que l'on se trouve sur la page profil ou si admin:
@@ -192,7 +193,7 @@ const Post = ({ post }) => {
         params: { id: post.id },
       })
       .then(() => {
-        window.location.reload();
+        setPostsUpdate(!postsUpdate);
       })
       .catch((err) => {
         console.log(err);

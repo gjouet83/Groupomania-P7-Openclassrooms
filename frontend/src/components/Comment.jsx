@@ -3,7 +3,7 @@ import moment from 'moment';
 import jwt_decode from 'jwt-decode';
 import 'moment/locale/fr';
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
   const isFigure = comment.attachment ? 'appear' : 'disappear'; //on vérifie si le commentaire a une image pour afficher l'élément figure
   const currentUser = JSON.parse(localStorage.getItem('user')); // on vérifie si le token est présent dans le localstorage
   const currentUserdecoded = currentUser && jwt_decode(currentUser); // on décode le token
@@ -29,7 +29,7 @@ const Comment = ({ comment }) => {
         params: { id: comment.id },
       })
       .then(() => {
-        window.location.reload();
+        setCommentsUpdate(!commentsUpdate);
       })
       .catch((err) => {
         console.log(err);

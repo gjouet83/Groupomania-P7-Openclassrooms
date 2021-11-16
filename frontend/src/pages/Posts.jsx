@@ -2,11 +2,12 @@ import Post from '../components/Post';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import jwt_decode from 'jwt-decode';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 
 const Posts = () => {
+  const [postsUpdate, setPostsUpdate] = useState(true);
   const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
 
   //si pas de token => redirection vers la page login
@@ -65,7 +66,7 @@ const Posts = () => {
 
   useEffect(() => {
     getPosts();
-  }, [image]);
+  }, [image, postsUpdate]);
 
   return (
     <main>
@@ -116,7 +117,12 @@ const Posts = () => {
         </form>
         {/* boucle dans tableau posts pour récupérer chaque post que l'on passe en props */}
         {posts.map((post) => (
-          <Post key={post.id} post={post} />
+          <Post
+            key={post.id}
+            post={post}
+            postsUpdate={postsUpdate}
+            setPostsUpdate={setPostsUpdate}
+          />
         ))}
         <div className="posts__addbutton">
           <button

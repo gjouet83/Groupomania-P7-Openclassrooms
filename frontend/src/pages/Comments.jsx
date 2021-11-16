@@ -10,6 +10,7 @@ import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
 const Comments = () => {
+  const [commentsUpdate, setCommentsUpdate] = useState(true);
   const [isOpen, setOpen] = useState(false);
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
@@ -71,7 +72,7 @@ const Comments = () => {
   useEffect(() => {
     window.scrollTo({ top: 0 });
     getComments();
-  }, [image]);
+  }, [image, commentsUpdate]);
 
   return (
     <main>
@@ -139,7 +140,12 @@ const Comments = () => {
           </div>
         </form>
         {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
+          <Comment
+            key={comment.id}
+            comment={comment}
+            commentsUpdate={commentsUpdate}
+            setCommentsUpdate={setCommentsUpdate}
+          />
         ))}
         <div className="comments__addbutton">
           <button
