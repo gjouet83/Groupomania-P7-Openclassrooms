@@ -111,7 +111,7 @@ const Login = () => {
                 required
               />
               <span className="login__form__password__info">
-                *Au moins 8 caractères, 1 majuscule, 1 chiffre, pas de
+                *Au moins 9 Caractères dont 1 majuscule, 1 chiffre et pas de
                 caractères spéciaux
               </span>
               {passwordErr && (

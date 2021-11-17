@@ -15,18 +15,22 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
   //si le commentaire appartient au user et que l'on se trouve sur la page profil ou si admin:
   //on affiche les commentaires sur la page profil avec le bouton supprimé
   const ownerMenu =
-    (currentUserdecoded.userId == comment.userId ||
-      currentUserdecoded.admin == 1) &&
-    (isProfilePage == '/profil' || currentUserdecoded.admin == 1)
+    (currentUserdecoded.userId === comment.userId ||
+      currentUserdecoded.admin) &&
+    (isProfilePage === '/profil' || currentUserdecoded.admin)
       ? true
       : false;
 
   //suppression d'un commentaire
   const deleteComment = () => {
+    const userComment = currentUserdecoded.admin
+      ? comment.userId
+      : currentUserdecoded.userId;
     axios
       .delete('http://localhost:3000/api/comments/delete/:id', {
         headers: { Authorization: `Bearer ${currentUser}` },
         params: { id: comment.id },
+        data: { userId: userComment },
       })
       .then(() => {
         setCommentsUpdate(!commentsUpdate);

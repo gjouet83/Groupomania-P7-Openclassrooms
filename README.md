@@ -6,6 +6,14 @@
 
 ## INSTRUCTIONS
 
+## POUR LE REPOSITORY
+
+- Cloner le repository avec la commande
+
+```bash
+git clone https://github.com/gjouet83/guillaumejouet_7_28092021.git
+```
+
 ## MySQL
 
 - Ouvrez un deuxième terminal.
@@ -22,31 +30,25 @@ mysql -u username -p groupomania < groupomania.sql
 
 Ceci va créer une base de données nommée "groupomania"
 
-## POUR LE REPOSITORY
-
-- Cloner le repository avec la commande
-
-```bash
-git clone https://github.com/gjouet83/guillaumejouet_7_28092021.git
-```
-
 ## POUR LE BACKEND
 
 - Ouvrez le fichier " .env-sample " : vous devez assigner des valeurs aux variables suivantes:
 
 ```bash
-USERNAME=
-PASSWORD=
+DB_PORT=
+DB_USERNAME=
+DB_PASSWORD=
 USER_TOKEN=
 ```
 
-- USERNAME: votre nom d'utilisiteur pour votre base de données.
-- PASSWORD: votre mot de passe pour votre base de données.
+- DB_PORT: pour personnaliser le port de la bdd (laisser vide pour le port par defaut)
+- DB_USERNAME: votre nom d'utilisiteur pour votre base de données.
+- DB_PASSWORD: votre mot de passe pour votre base de données.
 - USER_TOKEN = variable de votre choix.
 
 - Renommer ce dossier en " .env "
 
-- Dans un terminal, a partir du dossier précédemment téléchargé, on accède au dossier Backend
+- Dans un nouveau terminal, a partir du dossier précédemment téléchargé, on accède au dossier Backend
 
 ```bash
 cd Backend
@@ -72,7 +74,7 @@ Connexion à la base de données: SUCCES !
 
 ## POUR LE FRONTEND
 
-- Dans un terminal, on accède au dossier frontend
+- Dans un nouveau terminal, on accède au dossier frontend
 
 ```bash
 cd frontend

@@ -1,6 +1,5 @@
 &__addbutton {
   @media all and (min-width: 768px) {
-    background-color: white;
     margin-right: 40px;
   }
   @include object-center;
@@ -18,9 +17,6 @@
     border: none;
   }
   &__icon {
-    @media all and (min-width: 768px) {
-      color: $backgroundColorHeader;
-    }
     color: white;
     font-size: 1.5rem;
   }

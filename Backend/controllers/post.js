@@ -101,7 +101,7 @@ exports.deletePost = (req, res, next) => {
         return res.status(404).json({ error: 'Post non trouvé' });
       }
       //on supprime le fichier
-      if (post.attachement) {
+      if (post.attachment) {
         const filename = post.attachment.split(
           `images/userId-${req.body.userId}`
         )[1];

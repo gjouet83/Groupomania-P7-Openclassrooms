@@ -14,11 +14,12 @@ const app = express();
 // on connecte la bdd
 const sequelize = new Sequelize(
   'groupomania',
-  process.env.USERNAME,
-  process.env.PASSWORD,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
   {
     dialect: 'mysql',
-    host: process.env.HOST,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
   }
 );
 sequelize

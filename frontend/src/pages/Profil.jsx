@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useRef } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronRight,
@@ -19,6 +19,8 @@ const Profil = () => {
   }
   const currentUserdecoded = currentUser && jwt_decode(currentUser); //on decode le token
   const { getUserImageProfile, imageProfile } = useContext(ImageContext); //utilisation de useContext pour simplifier le passage de la props
+  const [profileUpdate, setProfileUpdate] = useState(true);
+  const [commentsUpdate, setCommentsUpdate] = useState(true);
   const [isOpenPosts, setOpenPosts] = useState(false);
   const [isOpenComments, setOpenComments] = useState(false);
   const [userComments, setUserComments] = useState([]);
@@ -27,7 +29,8 @@ const Profil = () => {
   const [pseudo, setPseudo] = useState();
   const [profilImage, setProfilImage] = useState();
 
-  const isAdminAccount = currentUserdecoded.admin == 0 ? true : false;
+  const isAdminAccount =
+    parseInt(currentUserdecoded.admin) === 0 ? true : false;
 
   const toggleClassPosts = () => {
     setOpenPosts(!isOpenPosts);
@@ -80,7 +83,7 @@ const Profil = () => {
       data: formData,
     })
       .then(() => {
-        window.location.reload();
+        getUserImageProfile(profilImage);
       })
       .catch((err) => {
         console.log(err);
@@ -101,8 +104,7 @@ const Profil = () => {
         }
       )
       .then(() => {
-        getUser();
-        window.location.reload();
+        setProfileUpdate(!profileUpdate);
       })
       .catch((err) => {
         console.log(err);
@@ -156,7 +158,7 @@ const Profil = () => {
     getPostByUser();
     getCommentByUser();
     getUserImageProfile();
-  }, []);
+  }, [profileUpdate]);
 
   return (
     <main>
@@ -273,7 +275,12 @@ const Profil = () => {
           }
         >
           {userComments.map((comment) => (
-            <Comment key={`comment-${comment.id}`} comment={comment} />
+            <Comment
+              key={`comment-${comment.id}`}
+              comment={comment}
+              commentsUpdate={commentsUpdate}
+              setCommentsUpdate={setCommentsUpdate}
+            />
           ))}
         </div>
         {isAdminAccount ? (

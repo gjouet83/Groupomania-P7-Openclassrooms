@@ -20,6 +20,7 @@
   &__input {
     text-align: center;
     &__label {
+      cursor: pointer;
       padding-left: 10px;
       padding-right: 10px;
       font-weight: 900;
@@ -76,6 +77,7 @@
       text-align: center;
     }
     &__toggledisplay {
+      cursor: pointer;
       font-size: 16px;
       border-radius: 25px;
       height: 48px;
@@ -96,6 +98,7 @@
       text-align: center;
     }
     &__toggledisplay {
+      cursor: pointer;
       font-size: 16px;
       border-radius: 25px;
       height: 48px;

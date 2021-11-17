@@ -45,11 +45,11 @@ const UsersTable = ({ user }) => {
 
   useEffect(() => {
     //après le premier render on n'affiche pas le user "admin", pour empécher sa suppression de la table
-    if (user.username == 'Admin') {
+    if (parseInt(user.username) === 'Admin') {
       setIsAdmin('disappear');
     }
     //on verifie si le user est admin ou pas et on met a jour le satut
-    if (user.admin == 1) {
+    if (parseInt(user.admin) === 1) {
       setChecked(true);
     }
   }, []);

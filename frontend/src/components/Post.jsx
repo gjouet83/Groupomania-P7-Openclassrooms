@@ -14,9 +14,9 @@ import axios from 'axios';
 const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   const currentUser = JSON.parse(localStorage.getItem('user')); // on vérifie si le token est présent dans le localstorage
   const currentUserdecoded = currentUser && jwt_decode(currentUser); //on decode le token
-  const [nbLikes, setNbLikes] = useState();
-  const [nbDislikes, setNbDislikes] = useState();
-  const [nbComments, setNbComments] = useState();
+  const [nbLikes, setNbLikes] = useState(0);
+  const [nbDislikes, setNbDislikes] = useState(0);
+  const [nbComments, setNbComments] = useState(0);
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
 
@@ -25,9 +25,8 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   //si le post appartient au user et que l'on se trouve sur la page profil ou si admin:
   //on affiche les posts sur la page profil avec le bouton supprimé
   const ownerMenu =
-    (currentUserdecoded.userId == post.userId ||
-      currentUserdecoded.admin == 1) &&
-    (isProfilePage == '/profil' || currentUserdecoded.admin == 1)
+    (currentUserdecoded.userId === post.userId || currentUserdecoded.admin) &&
+    (isProfilePage === '/profil' || currentUserdecoded.admin)
       ? true
       : false;
 
@@ -70,7 +69,9 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
         params: { postId: post.id, userId: currentUserdecoded.userId },
       })
       .then((likeStatus) => {
-        if (likeStatus.data.like === 1) {
+        if (likeStatus.data === null) {
+          console.log('pas de like pour le post');
+        } else if (likeStatus.data.like === 1) {
           setColorLike('green');
         } else if (likeStatus.data.dislike === 1) {
           setColorDislike('red');
@@ -187,10 +188,14 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
 
   //fonction suppression d'un post
   const deletePost = () => {
+    const userPost = currentUserdecoded.admin
+      ? post.userId
+      : currentUserdecoded.userId;
     axios
       .delete('http://localhost:3000/api/posts/delete/:id', {
         headers: { Authorization: `Bearer ${currentUser}` },
         params: { id: post.id },
+        data: { userId: userPost },
       })
       .then(() => {
         setPostsUpdate(!postsUpdate);
@@ -248,7 +253,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
               icon={faThumbsUp}
               className={`posts__post__footer__like__icon ${colorLike}`}
             />
-            {nbLikes != 0 && (
+            {nbLikes !== 0 && (
               <span className="posts__post__footer__like__nb">{nbLikes}</span>
             )}
             J'aime
@@ -263,7 +268,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
               icon={faThumbsDown}
               className={`posts__post__footer__dislike__icon ${colorDislike}`}
             />
-            {nbDislikes != 0 && (
+            {nbDislikes !== 0 && (
               <span className="posts__post__footer__dislike__nb">
                 {nbDislikes}
               </span>
@@ -283,7 +288,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             <span className="posts__post__footer__comments__nb">
               {nbComments}
             </span>
-            Commentaires
+            Commenter
           </Link>
         </div>
       </div>

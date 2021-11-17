@@ -10,9 +10,7 @@ const iv = CryptoJS.enc.Hex.parse(process.env.IV);
 
 // regex pour la protection d'injection de code
 const validFields = (field) => {
-  return /^[\sa-zA-Z0-9ÀÂÇÈÉÊËÎÔÙÛàâçèéêëîôöùû\.\(\)\[\]\"\'\-,;:\/!\?]+$/g.test(
-    field
-  );
+  return /^(?=.*[a-zA-Z]{1,})(?=.*[\d]{0,})[a-zA-Z0-9]{1,15}$/.test(field);
 };
 
 // regex pour la protection d'injection de code
