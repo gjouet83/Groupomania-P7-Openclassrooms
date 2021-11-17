@@ -12,7 +12,6 @@ const Signup = () => {
   const [pseudo, setPseudo] = useState();
   const [backendMessagePseudo, setBackendMessagePseudo] = useState('');
   const [backendMessageEmail, setBackendMessageEmail] = useState('');
-  const [backendMessagePwd, setBackendMessagePwd] = useState('');
   const [signupPseudo, setSignupPseudo] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
@@ -50,6 +49,11 @@ const Signup = () => {
   };
 
   const sendForm = () => {
+    setSignupPseudo('');
+    setBackendMessagePseudo('');
+    setSignupEmail('');
+    setBackendMessageEmail('');
+    setSignupPassword('');
     axios
       .post('http://localhost:3000/api/users/signup', {
         username: pseudo,
@@ -61,26 +65,19 @@ const Signup = () => {
         window.location.assign('/login');
       })
       .catch((error) => {
-        if (error.response.data === 'username must be unique') {
+        if (
+          error.response.data.errno === 1062 &&
+          error.response.data.errField.username
+        ) {
           setSignupPseudo('wrong');
           setBackendMessagePseudo('Pseudo déjà utilsé');
-        } else {
-          setSignupPseudo('');
-        }
-        if (error.response.data === 'email must be unique') {
-          setSignupEmail('wrong');
-          setBackendMessageEmail('E-mail déjà utilsé');
-        } else {
-          setSignupEmail('');
         }
         if (
-          error.response.data.message ===
-          'Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux'
+          error.response.data.errno === 1062 &&
+          error.response.data.errField.email
         ) {
-          setSignupPassword('wrong');
-          setBackendMessagePwd('Le mot de passe ne respect pas les critères');
-        } else {
-          setSignupPassword('');
+          setSignupEmail('wrong');
+          setBackendMessageEmail('E-mail déjà utilsé');
         }
       });
   };
@@ -113,6 +110,7 @@ const Signup = () => {
               <input
                 className={`signup__form__email__input ${signupEmail}`}
                 onChange={(e) => setLogin(e.target.value)}
+                autoComplete="username"
                 id="login"
                 name="email"
                 type="email"
@@ -135,6 +133,7 @@ const Signup = () => {
               <input
                 className={`signup__form__password__input ${signupPassword}`}
                 onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
                 id="password"
                 name="password"
                 type="password"
@@ -146,9 +145,6 @@ const Signup = () => {
               </span>
               {passwordErr && (
                 <span className="alerte">Mot de passe invalide</span>
-              )}
-              {backendMessagePwd && (
-                <span className="alerte">{backendMessagePwd}</span>
               )}
             </label>
           </div>

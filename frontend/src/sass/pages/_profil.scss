@@ -1,5 +1,5 @@
 .profil {
-  height: 100vh;
+  min-height: 100vh;
   @include navbar-page;
   &__avatar {
     display: flex;

@@ -34,8 +34,7 @@ exports.signup = (req, res, next) => {
   }
   if (!validPassword(req.body.password)) {
     return res.status(401).json({
-      error:
-        'Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
+      error: 'password',
     });
   }
   bcrypt
@@ -56,7 +55,9 @@ exports.signup = (req, res, next) => {
           res.status(201).json({ message: 'Utilisateur créé avec succès' });
         })
         .catch((error) => {
-          res.status(400).json(error.errors[0].message);
+          res
+            .status(400)
+            .json({ errno: error.parent.errno, errField: error.fields });
         });
     })
     .catch((error) => {
@@ -71,8 +72,8 @@ exports.login = (req, res, next) => {
   }
   if (!validPassword(req.body.password)) {
     return res.status(401).json({
-      message:
-        'Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
+      error:
+        'Le mot de passe doit contenir au moins 9 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
     });
   }
   //on cherche le user avec le même email crypté
@@ -109,7 +110,9 @@ exports.login = (req, res, next) => {
           });
         })
         .catch((error) => {
-          res.status(500).json({ error });
+          res
+            .status(400)
+            .json({ errno: error.parent.errno, errField: error.fields });
         });
     })
     .catch((error) => {
@@ -172,8 +175,10 @@ exports.updateLogin = (req, res, next) => {
         .then(() => {
           res.status(200).json({ message: 'Email modifié avec SUCCES !' });
         })
-        .catch(() => {
-          res.status(400).json({ error: 'ECHEC de la modification du profil' });
+        .catch((error) => {
+          res
+            .status(400)
+            .json({ errno: error.parent.errno, errField: error.fields });
         });
     })
     .catch((error) => {
@@ -187,7 +192,7 @@ exports.updatePassword = (req, res, next) => {
   if (!validPassword(req.body.password)) {
     return res.status(401).json({
       error:
-        'Le mot de passe doit contenir au moins 8 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
+        'Le mot de passe doit contenir au moins 9 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
     });
   }
   db.user

@@ -16,7 +16,6 @@ const Login = () => {
   const [login, setLogin] = useState();
   const [password, setPassword] = useState();
   const [backendMessageEmail, setBackendMessageEmail] = useState('');
-  const [backendMessagePwd, setBackendMessagePwd] = useState('');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
@@ -46,6 +45,8 @@ const Login = () => {
   };
 
   const sendForm = () => {
+    setLoginEmail('');
+    setLoginPassword('');
     axios
       .post('http://localhost:3000/api/users/login', {
         email: login,
@@ -57,17 +58,9 @@ const Login = () => {
         window.location.assign('/posts');
       })
       .catch((error) => {
-        if (error.response.data.error === 'Utilisateur non enregistré') {
+        if (error.response.status === 401) {
           setLoginEmail('wrong');
-          setBackendMessageEmail('Utilisateur non enregistré');
-        } else {
-          setLoginEmail('');
-        }
-        if (error.response.data.error === 'Mot de passe incorrect') {
-          setLoginPassword('wrong');
-          setBackendMessagePwd('Mot de passe incorrect');
-        } else {
-          setLoginPassword('');
+          setBackendMessageEmail(error.response.data.error);
         }
       });
   };
@@ -83,6 +76,7 @@ const Login = () => {
               <input
                 className={`login__form__email__input ${loginEmail}`}
                 onChange={(e) => setLogin(e.target.value)}
+                autoComplete="username"
                 id="login"
                 name="email"
                 type="email"
@@ -105,6 +99,7 @@ const Login = () => {
               <input
                 className={`login__form__password__input ${loginPassword}`}
                 onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
                 id="password"
                 name="password"
                 type="password"
@@ -116,9 +111,6 @@ const Login = () => {
               </span>
               {passwordErr && (
                 <span className="alerte">Mot de passe invalide</span>
-              )}
-              {backendMessagePwd && (
-                <span className="alerte">{backendMessagePwd}</span>
               )}
             </label>
           </div>

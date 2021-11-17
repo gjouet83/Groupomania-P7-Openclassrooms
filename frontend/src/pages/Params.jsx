@@ -29,6 +29,7 @@ const Params = () => {
   const [MatchPwds, setMatchPwds] = useState(false);
   const [backendMessageEmail, setBackendMessageEmail] = useState('');
   const [backendMessagePwd, setBackendMessagePwd] = useState('');
+  const [backendMessageReEmail, setBackendMessageReEmail] = useState('');
 
   // changement des statuts pour affichage des alertes en fonction des regexp
   useEffect(() => {
@@ -110,8 +111,12 @@ const Params = () => {
       .catch((error) => {
         if (error.response.data.error) {
           setBackendMessageEmail('Utilisateur non enregistré');
-        } else {
-          setBackendMessageEmail('');
+        }
+        if (
+          error.response.data.errno === 1062 &&
+          error.response.data.errField.email
+        ) {
+          setBackendMessageReEmail('E-mail déjà utilsé');
         }
       });
   };
@@ -189,6 +194,9 @@ const Params = () => {
             />
           </label>
           {verifNewLoginErr && <span className="alerte">Email incorrect</span>}
+          {backendMessageReEmail && (
+            <span className="alerte">{backendMessageReEmail}</span>
+          )}
           <label>
             Resaisissez le nouvel E-mail
             <input
