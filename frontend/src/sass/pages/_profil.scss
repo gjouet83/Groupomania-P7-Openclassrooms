@@ -136,15 +136,18 @@
     justify-content: center;
     width: 100vw;
     height: 100vh;
+    z-index: 4;
     &__panel {
       @media all and (min-width: 768px) {
         width: 40vw;
       }
+      border-radius: 15px;
       background-color: white;
       text-align: center;
       margin-top: 150px;
       height: fit-content;
       width: 80vw;
+      box-shadow: 5px 5px 10px grey;
       &__message {
         color: $colorAlerte;
         font-weight: 500;
@@ -153,6 +156,8 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
         &__cancel {
           @include button-green;
         }

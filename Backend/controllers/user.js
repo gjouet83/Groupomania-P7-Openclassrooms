@@ -68,11 +68,11 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
   //on teste les champs
   if (!validEmail(req.body.email)) {
-    return res.status(401).json({ message: 'Email non valide' });
+    return res.status(406).json({ message: 'Email non valide' });
   }
   if (!validPassword(req.body.password)) {
-    return res.status(401).json({
-      error:
+    return res.status(406).json({
+      errorPassword:
         'Le mot de passe doit contenir au moins 9 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
     });
   }
@@ -85,14 +85,18 @@ exports.login = (req, res, next) => {
     })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({ error: 'Utilisateur non enregistré' });
+        return res
+          .status(401)
+          .json({ errorMail: 'Utilisateur non enregistré' });
       }
       bcrypt
         //on compare le hash du password
         .compare(req.body.password, user.password)
         .then((passwordOk) => {
           if (!passwordOk) {
-            return res.status(401).json({ error: 'Mot de passe incorrect' });
+            return res
+              .status(401)
+              .json({ errorPassword: 'Mot de passe incorrect' });
           }
           // creation d'un dossier user contenant touts ses photos
           const filename = 'userId-' + user.id;

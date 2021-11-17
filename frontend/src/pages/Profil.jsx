@@ -163,6 +163,7 @@ const Profil = () => {
     getPostByUser();
     getCommentByUser();
     getUserImageProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileUpdate, postsProfilUpdate, commentsProfilUpdate]);
 
   return (
@@ -187,9 +188,9 @@ const Profil = () => {
           <div className="profil__advert">
             <div className="profil__advert__panel">
               <span className="profil__advert__panel__message">
-                Voulez-vous vraiment supprimer votre compte de manière
-                définitive ? (Ceci supprimera également vos commentaires, vos
-                posts et les commentaires associés)
+                Voulez-vous vraiment supprimer votre compte ? (Cette action
+                supprimera définitivement vos commentaires, vos posts et leurs
+                commentaires )
               </span>
               <div className="profil__advert__panel__buttons">
                 <button

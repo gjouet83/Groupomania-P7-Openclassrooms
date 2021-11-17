@@ -72,6 +72,7 @@ const Comments = () => {
   useEffect(() => {
     window.scrollTo({ top: 0 });
     getComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image, commentsUpdate]);
 
   return (

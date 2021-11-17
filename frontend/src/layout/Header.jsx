@@ -41,6 +41,7 @@ const Header = () => {
     if (currentUser) {
       getUserImageProfile();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

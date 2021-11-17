@@ -208,12 +208,14 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   // on déclenche la récupération du nombre de like quand le statut colorLike ou colorDislike change
   useEffect(() => {
     getNbLikes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colorLike, colorDislike]);
 
   //on déclenche la récupération du statut du like et le nombre de commentaire après le premier render
   useEffect(() => {
     getLikeStatus();
     getNbComment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

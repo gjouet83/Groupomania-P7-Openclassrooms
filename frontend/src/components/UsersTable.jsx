@@ -45,13 +45,14 @@ const UsersTable = ({ user }) => {
 
   useEffect(() => {
     //après le premier render on n'affiche pas le user "admin", pour empécher sa suppression de la table
-    if (parseInt(user.username) === 'Admin') {
+    if (user.username === 'Admin') {
       setIsAdmin('disappear');
     }
     //on verifie si le user est admin ou pas et on met a jour le satut
-    if (parseInt(user.admin) === 1) {
+    if (user.admin === 1) {
       setChecked(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

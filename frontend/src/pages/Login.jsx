@@ -18,6 +18,7 @@ const Login = () => {
   const [backendMessageEmail, setBackendMessageEmail] = useState('');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [backendMessagePwd, setBackendMessagePwd] = useState('');
 
   // changement des statuts pour affichage des alertes en fonction des regexp
   useEffect(() => {
@@ -58,9 +59,17 @@ const Login = () => {
         window.location.assign('/posts');
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        console.log(error.response);
+        if (error.response.status === 401 && error.response.data.errorMail) {
           setLoginEmail('wrong');
-          setBackendMessageEmail(error.response.data.error);
+          setBackendMessageEmail(error.response.data.errorMail);
+        }
+        if (
+          error.response.status === 401 &&
+          error.response.data.errorPassword
+        ) {
+          setLoginPassword('wrong');
+          setBackendMessagePwd(error.response.data.errorPassword);
         }
       });
   };
@@ -111,6 +120,9 @@ const Login = () => {
               </span>
               {passwordErr && (
                 <span className="alerte">Mot de passe invalide</span>
+              )}
+              {backendMessagePwd && (
+                <span className="alerte">{backendMessagePwd}</span>
               )}
             </label>
           </div>
