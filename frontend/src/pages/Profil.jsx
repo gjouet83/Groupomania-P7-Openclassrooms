@@ -18,9 +18,10 @@ const Profil = () => {
     window.location.assign('/login');
   }
   const currentUserdecoded = currentUser && jwt_decode(currentUser); //on decode le token
+  const [postsProfilUpdate, setPostsProfilUpdate] = useState(true);
+  const [commentsProfilUpdate, setCommentsProfilUpdate] = useState(true);
   const { getUserImageProfile, imageProfile } = useContext(ImageContext); //utilisation de useContext pour simplifier le passage de la props
   const [profileUpdate, setProfileUpdate] = useState(true);
-  const [commentsUpdate, setCommentsUpdate] = useState(true);
   const [isOpenPosts, setOpenPosts] = useState(false);
   const [isOpenComments, setOpenComments] = useState(false);
   const [userComments, setUserComments] = useState([]);
@@ -28,9 +29,9 @@ const Profil = () => {
   const [user, setUser] = useState(0);
   const [pseudo, setPseudo] = useState();
   const [profilImage, setProfilImage] = useState();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const isAdminAccount =
-    parseInt(currentUserdecoded.admin) === 0 ? true : false;
+  const isAdminAccount = !currentUserdecoded.admin ? true : false;
 
   const toggleClassPosts = () => {
     setOpenPosts(!isOpenPosts);
@@ -38,6 +39,10 @@ const Profil = () => {
 
   const toggleClassComments = () => {
     setOpenComments(!isOpenComments);
+  };
+
+  const advertDelete = () => {
+    setConfirmDelete(!confirmDelete);
   };
 
   const getUser = () => {
@@ -158,7 +163,7 @@ const Profil = () => {
     getPostByUser();
     getCommentByUser();
     getUserImageProfile();
-  }, [profileUpdate]);
+  }, [profileUpdate, postsProfilUpdate, commentsProfilUpdate]);
 
   return (
     <main>
@@ -178,6 +183,33 @@ const Profil = () => {
           </div>
           <h2 className="profil__nav__title">Profil</h2>
         </div>
+        {confirmDelete && (
+          <div className="profil__advert">
+            <div className="profil__advert__panel">
+              <span className="profil__advert__panel__message">
+                Voulez-vous vraiment supprimer votre compte de manière
+                définitive ? (Ceci supprimera également vos commentaires, vos
+                posts et les commentaires associés)
+              </span>
+              <div className="profil__advert__panel__buttons">
+                <button
+                  className="profil__advert__panel__buttons__cancel"
+                  type="button"
+                  onClick={advertDelete}
+                >
+                  Annuler
+                </button>
+                <button
+                  className="profil__advert__panel__buttons__delete"
+                  type="button"
+                  onClick={deleteAccount}
+                >
+                  Supprimer mon compte
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <figure className="profil__avatar">
           <img
             src={!profilImage ? imageProfile : URL.createObjectURL(profilImage)}
@@ -252,7 +284,12 @@ const Profil = () => {
           }
         >
           {userPosts.map((post) => (
-            <Post key={`post-${post.id}`} post={post} />
+            <Post
+              key={post.id}
+              post={post}
+              postsUpdate={postsProfilUpdate}
+              setPostsUpdate={setPostsProfilUpdate}
+            />
           ))}
         </div>
         <h2 className="profil__usercomments__title">Mes commentaires</h2>
@@ -276,22 +313,22 @@ const Profil = () => {
         >
           {userComments.map((comment) => (
             <Comment
-              key={`comment-${comment.id}`}
+              key={comment.id}
               comment={comment}
-              commentsUpdate={commentsUpdate}
-              setCommentsUpdate={setCommentsUpdate}
+              commentsUpdate={commentsProfilUpdate}
+              setCommentsUpdate={setCommentsProfilUpdate}
             />
           ))}
         </div>
-        {isAdminAccount ? (
+        {isAdminAccount && (
           <button
             className="profil__deleteaccount"
             type="button"
-            onClick={deleteAccount}
+            onClick={advertDelete}
           >
             Supprimer mon compte
           </button>
-        ) : null}
+        )}
       </section>
     </main>
   );

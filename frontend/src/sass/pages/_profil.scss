@@ -126,4 +126,40 @@
     margin-right: auto;
     margin-left: auto;
   }
+  &__advert {
+    @media all and (min-width: 768px) {
+      width: 74vw;
+    }
+    background-color: rgba(255, 215, 215, 0.8);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    &__panel {
+      @media all and (min-width: 768px) {
+        width: 40vw;
+      }
+      background-color: white;
+      text-align: center;
+      margin-top: 150px;
+      height: fit-content;
+      width: 80vw;
+      &__message {
+        color: $colorAlerte;
+        font-weight: 500;
+      }
+      &__buttons {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        &__cancel {
+          @include button-green;
+        }
+        &__delete {
+          @include button-red;
+        }
+      }
+    }
+  }
 }

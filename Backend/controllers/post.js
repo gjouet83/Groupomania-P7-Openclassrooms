@@ -2,13 +2,6 @@ const db = require('../models/index');
 const fs = require('fs');
 const Sequelize = require('sequelize');
 
-// regex pour la protection d'injection de code
-const validFields = (field) => {
-  return /^[\sa-zA-Z0-9ÀÂÇÈÉÊËÎÔÙÛàâçèéêëîôöùû\.\(\)\[\]\"\'\-,;:\/!\?]+$/g.test(
-    field
-  );
-};
-
 //on récupère tous les posts
 exports.getAllPosts = (req, res, next) => {
   db.post
@@ -66,9 +59,6 @@ exports.getPostByUser = (req, res, next) => {
 
 //on crée un post
 exports.createPost = (req, res, next) => {
-  if (req.body.content && !validFields(req.body.content)) {
-    return res.status(406).json({ message: 'Caractères non autorisés' });
-  }
   // on test si la requête contient un fichier
   const newPost = req.file
     ? {
