@@ -105,7 +105,6 @@ const Comments = () => {
               aria-label="zone de rédaction du commentaire"
               className="comments__createone__input"
               placeholder="Redigez votre commentaire ici"
-              value={content}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
             <div className="comments__createone__addfile">

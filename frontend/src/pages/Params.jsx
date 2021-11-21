@@ -106,6 +106,7 @@ const Params = () => {
         headers: { Authorization: `Bearer ${currentUser}` },
       })
       .then(() => {
+        localStorage.removeItem('user');
         window.location.assign('/login');
       })
       .catch((error) => {
@@ -136,6 +137,7 @@ const Params = () => {
         }
       )
       .then((res) => {
+        localStorage.removeItem('user');
         window.location.assign('/login');
       })
       .catch((error) => {

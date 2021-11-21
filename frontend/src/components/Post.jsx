@@ -19,11 +19,9 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   const [nbComments, setNbComments] = useState(0);
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
-  const [content, setContent] = useState('');
   const [isOpen, setOpen] = useState(false);
   const [image, setImage] = useState(null);
-  const imageRef = useRef(post.attachment);
-  const contentRef = useRef(post.content);
+  const contentRef = useRef();
 
   const isProfilePage = window.location.pathname; // on stocke le pathname
   const isFigure = post.attachment ? 'appear' : 'disappear';
@@ -191,12 +189,31 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
       });
   };
 
+  const deleteImagePost = () => {
+    axios({
+      headers: { Authorization: `Bearer ${currentUser}` },
+      'Content-Type': 'application/json',
+      url: 'http://localhost:3000/api/posts/update/:id',
+      method: 'PUT',
+      params: { id: post.id },
+      data: { attachment: '' },
+    })
+      .then(() => {
+        // on reset les status et on referme la zone de saisie
+        setPostsUpdate(!postsUpdate);
+        toggleClass();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   //fonction mofifier un post
   const sendForm = (e) => {
     e.preventDefault();
     let formData = new FormData();
     formData.append('userId', currentUserdecoded.userId);
-    formData.append('content', content);
+    formData.append('content', contentRef.current.value);
     formData.append('image', image);
     console.log(formData);
     axios({
@@ -209,7 +226,6 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
     })
       .then(() => {
         // on reset les status et on referme la zone de saisie
-        setContent('');
         setImage(null);
         toggleClass();
         setPostsUpdate(!postsUpdate);
@@ -253,10 +269,9 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   useEffect(() => {
     getLikeStatus();
     getNbComment();
+    contentRef.current.value = post.content;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  console.log(contentRef.current);
+  }, [isOpen]);
 
   return (
     <div className="posts__post">
@@ -298,7 +313,6 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             className="posts__createone__input"
             placeholder="Redigez votre post ici"
             ref={contentRef}
-            onChange={(e) => setContent(e.target.value)}
           ></textarea>
           <div className="posts__createone__addfile">
             <label className="posts__createone__addfile__lbl">
@@ -312,13 +326,14 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             </label>
             <button
               className="posts__post__ownerMenu__delete"
-              type="button"
-              onClick={() => setImage(null)}
+              type="reset"
+              onClick={deleteImagePost}
             >
               supprimer
             </button>
             <span className="posts__createone__addfile__name">
               {image && image.name}
+              {!image && post.attachment.split('posts')[1]}
             </span>
           </div>
           <div className="posts__createone__footer">
