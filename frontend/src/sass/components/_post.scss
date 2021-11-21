@@ -13,24 +13,35 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 20px 0 20px;
+    &__author {
+      font-size: 16px;
+    }
     &__date {
       font-style: italic;
       font-weight: 900;
+      font-size: 14px;
       bottom: 0px;
     }
-    &__avatar {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
+    &__linkavatar {
       margin-left: auto;
-      margin-right: 10px;
-      &__img {
-        border-radius: 50px;
-        width: 92%;
-        height: 100%;
-        object-fit: cover;
+      &__avatar {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: 10px;
+        &__img {
+          border-radius: 50px;
+          width: 92%;
+          height: 100%;
+          object-fit: cover;
+        }
       }
+    }
+    &__linkauthor {
+      text-decoration: none;
+      color: black;
     }
   }
   &__figure {
@@ -147,6 +158,9 @@
     margin-top: 20px;
     border-top: 1px solid;
     padding: 20px 20px 0 20px;
+    &__modify {
+      @include button-green;
+    }
     &__delete {
       @include button-red;
     }

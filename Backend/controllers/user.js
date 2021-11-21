@@ -50,6 +50,7 @@ exports.signup = (req, res, next) => {
           }).toString(),
           password: hash,
           avatar: `${req.protocol}://${req.get('host')}/images/user-solid.svg`,
+          job: 'Non communiqué',
         })
         .then(() => {
           res.status(201).json({ message: 'Utilisateur créé avec succès' });

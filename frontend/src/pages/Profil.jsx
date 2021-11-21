@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronRight,
@@ -9,6 +9,7 @@ import Post from '../components/Post';
 import Comment from '../components/Comment';
 import jwt_decode from 'jwt-decode';
 import { ImageContext } from '../utils/context';
+import { validPseudo } from '../components/Regexp';
 import axios from 'axios';
 
 const Profil = () => {
@@ -19,6 +20,7 @@ const Profil = () => {
   }
   const currentUserdecoded = currentUser && jwt_decode(currentUser); //on decode le token
   const [postsProfilUpdate, setPostsProfilUpdate] = useState(true);
+  const [modifyProfilPost, setModifyProfilPost] = useState(false);
   const [commentsProfilUpdate, setCommentsProfilUpdate] = useState(true);
   const { getUserImageProfile, imageProfile } = useContext(ImageContext); //utilisation de useContext pour simplifier le passage de la props
   const [profileUpdate, setProfileUpdate] = useState(true);
@@ -28,6 +30,9 @@ const Profil = () => {
   const [userPosts, setUserPosts] = useState([]);
   const [user, setUser] = useState(0);
   const [pseudo, setPseudo] = useState();
+  const [pseudoErr, setPseudoErr] = useState(false);
+  const [job, setJob] = useState();
+  const jobInputRef = useRef();
   const [profilImage, setProfilImage] = useState();
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -59,16 +64,25 @@ const Profil = () => {
       });
   };
 
+  const deleteJob = () => {
+    setJob('Non communiqué');
+    jobInputRef.current.value = 'Non communiqué';
+    updateUser(setJob('Non communiqué'));
+  };
+
   const updateUser = () => {
     const updatedUser = {
       userId: currentUserdecoded.userId,
       username: pseudo,
+      job: job,
     };
     axios
       .put('http://localhost:3000/api/users/update/:id', updatedUser, {
         headers: { Authorization: `Bearer ${currentUser}` },
       })
       .then((ok) => {
+        setProfileUpdate(!profileUpdate);
+
         console.log(ok);
       })
       .catch((err) => {
@@ -89,6 +103,7 @@ const Profil = () => {
     })
       .then(() => {
         getUserImageProfile(profilImage);
+        setProfilImage(!profilImage);
       })
       .catch((err) => {
         console.log(err);
@@ -151,6 +166,7 @@ const Profil = () => {
         params: { userId: currentUserdecoded.userId },
       })
       .then(() => {
+        localStorage.removeItem('user');
         window.location.assign('/login');
       })
       .catch((err) => {
@@ -159,12 +175,20 @@ const Profil = () => {
   };
 
   useEffect(() => {
+    if (pseudo && !validPseudo.test(pseudo)) {
+      setPseudoErr(true);
+    } else {
+      setPseudoErr(false);
+    }
+  }, [pseudo, job]);
+
+  useEffect(() => {
     getUser();
     getPostByUser();
     getCommentByUser();
     getUserImageProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileUpdate, postsProfilUpdate, commentsProfilUpdate]);
+  }, [profileUpdate, postsProfilUpdate, commentsProfilUpdate, job]);
 
   return (
     <main>
@@ -213,7 +237,11 @@ const Profil = () => {
         )}
         <figure className="profil__avatar">
           <img
-            src={!profilImage ? imageProfile : URL.createObjectURL(profilImage)}
+            src={
+              !profilImage || profilImage === 0
+                ? imageProfile
+                : URL.createObjectURL(profilImage)
+            }
             className="profil__avatar__icon"
             alt={`avatar de profil de ${user.username}`}
           />
@@ -231,13 +259,15 @@ const Profil = () => {
           </label>
         </div>
         <div className="profil__buttons">
-          <button
-            className="profil__buttons__modify"
-            type="button"
-            onClick={updateProfilImage}
-          >
-            Enregistrer
-          </button>
+          {profilImage && (
+            <button
+              className="profil__buttons__modify"
+              type="button"
+              onClick={updateProfilImage}
+            >
+              Enregistrer
+            </button>
+          )}
           <button
             className="profil__buttons__delete"
             type="button"
@@ -246,25 +276,44 @@ const Profil = () => {
             Supprimer
           </button>
         </div>
-        <div className="profil__username">
-          <label className="profil__username__lbl">
+        <form className="profil__form" onSubmit={updateUser}>
+          <label className="profil__form__username__lbl">
             Pseudo:
             <input
-              className="profil__username__input"
+              className="profil__form__username__input"
               name="pseudo"
               type="text"
               placeholder={user.username}
               onChange={(e) => setPseudo(e.target.value)}
             />
           </label>
-          <button
-            className="profil__username__validate"
-            type="button"
-            onClick={updateUser}
-          >
+          {pseudoErr && <span className="alerte">Caractères invalides</span>}
+          <button className="profil__form__username__validate" type="submit">
             Enregistrer
           </button>
-        </div>
+          <label className="profil__form__job__lbl">
+            Poste dans l'entreprise:
+            <input
+              className="profil__form__job__input"
+              name="job"
+              type="text"
+              placeholder={user.job}
+              onChange={(e) => setJob(e.target.value)}
+              ref={jobInputRef}
+            />
+          </label>
+          {pseudoErr && <span className="alerte">Caractères invalides</span>}
+          <button
+            className="profil__form__job__delete"
+            type="submit"
+            onClick={deleteJob}
+          >
+            Supprimer
+          </button>
+          <button className="profil__form__job__validate" type="submit">
+            Enregistrer
+          </button>
+        </form>
         <h2 className="profil__userposts__title">Mes posts</h2>
         <button
           className="profil__userposts__toggledisplay"
@@ -290,6 +339,8 @@ const Profil = () => {
               post={post}
               postsUpdate={postsProfilUpdate}
               setPostsUpdate={setPostsProfilUpdate}
+              modifyPost={modifyProfilPost}
+              setModifyPost={setModifyProfilPost}
             />
           ))}
         </div>

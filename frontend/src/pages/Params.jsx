@@ -174,6 +174,7 @@ const Params = () => {
           <label>
             E-mail actuel
             <input
+              autoComplete="username"
               className="params__email__old__input"
               name="email"
               type="email"
@@ -187,6 +188,7 @@ const Params = () => {
           <label>
             Nouvel E-mail
             <input
+              autoComplete="new-username"
               className="params__email__new__input"
               name="email"
               type="email"
@@ -200,6 +202,7 @@ const Params = () => {
           <label>
             Resaisissez le nouvel E-mail
             <input
+              autoComplete="new-username"
               className="params__email__renew__input"
               name="email"
               type="email"
@@ -226,7 +229,9 @@ const Params = () => {
           <h3 className="params__password__title">Mot de passe</h3>
           <label>
             Mot de passe actuel
+            <input className="disappear" type="text" autoComplete="username" />
             <input
+              autoComplete="current-password"
               className="params__password__old__input"
               name="password"
               type="password"
@@ -244,6 +249,7 @@ const Params = () => {
           <label>
             Nouveau mot de passe
             <input
+              autoComplete="new-password"
               className="params__password__new__input"
               name="password"
               type="password"
@@ -258,6 +264,7 @@ const Params = () => {
           <label>
             Resaisissez le nouveau mot de passe
             <input
+              autoComplete="new-password"
               className="params__password__renew__input"
               name="password"
               type="password"

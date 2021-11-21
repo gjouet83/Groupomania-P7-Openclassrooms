@@ -5,7 +5,7 @@ import {
   faComment,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import jwt_decode from 'jwt-decode';
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -19,6 +19,11 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   const [nbComments, setNbComments] = useState(0);
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
+  const [content, setContent] = useState('');
+  const [isOpen, setOpen] = useState(false);
+  const [image, setImage] = useState(null);
+  const imageRef = useRef(post.attachment);
+  const contentRef = useRef(post.content);
 
   const isProfilePage = window.location.pathname; // on stocke le pathname
   const isFigure = post.attachment ? 'appear' : 'disappear';
@@ -186,6 +191,34 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
       });
   };
 
+  //fonction mofifier un post
+  const sendForm = (e) => {
+    e.preventDefault();
+    let formData = new FormData();
+    formData.append('userId', currentUserdecoded.userId);
+    formData.append('content', content);
+    formData.append('image', image);
+    console.log(formData);
+    axios({
+      headers: { Authorization: `Bearer ${currentUser}` },
+      'Content-Type': 'application/json',
+      url: 'http://localhost:3000/api/posts/update/:id',
+      method: 'PUT',
+      params: { id: post.id },
+      data: formData,
+    })
+      .then(() => {
+        // on reset les status et on referme la zone de saisie
+        setContent('');
+        setImage(null);
+        toggleClass();
+        setPostsUpdate(!postsUpdate);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   //fonction suppression d'un post
   const deletePost = () => {
     const userPost = currentUserdecoded.admin
@@ -205,6 +238,11 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
       });
   };
 
+  const toggleClass = () => {
+    setImage();
+    setOpen(!isOpen);
+  };
+
   // on déclenche la récupération du nombre de like quand le statut colorLike ou colorDislike change
   useEffect(() => {
     getNbLikes();
@@ -218,23 +256,88 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log(contentRef.current);
+
   return (
     <div className="posts__post">
       <div className="posts__post__header">
         <span className="posts__post__header__date">
           Posté le {moment(`${post.createdAt}`).locale('fr').format('llll')}
         </span>
-        <figure className="posts__post__header__avatar">
-          <img
-            width="60"
-            height="60"
-            className="posts__post__header__avatar__img"
-            src={post.user.avatar}
-            alt={`avatar de profil de ${post.user.username}`}
-          />
-        </figure>
-        <h2 className="posts__post__header__author">{post.user.username}</h2>
+        <Link
+          className="posts__post__header__linkavatar"
+          to={`/viewuserprofil?user=${post.userId}`}
+        >
+          <figure className="posts__post__header__linkavatar__avatar">
+            <img
+              width="60"
+              height="60"
+              className="posts__post__header__linkavatar__avatar__img"
+              src={post.user.avatar}
+              alt={`avatar de profil de ${post.user.username}`}
+            />
+          </figure>
+        </Link>
+        <Link
+          className="posts__post__header__linkauthor"
+          to={`/viewuserprofil?user=${post.userId}`}
+        >
+          <h2 className="posts__post__header__linkauthor__author">
+            {post.user.username}
+          </h2>
+        </Link>
       </div>
+      <form onSubmit={sendForm}>
+        <div
+          className={
+            isOpen ? 'posts__createone opencreatepost' : 'posts__createone'
+          }
+        >
+          <textarea
+            aria-label="zone de saisie de texte"
+            className="posts__createone__input"
+            placeholder="Redigez votre post ici"
+            ref={contentRef}
+            onChange={(e) => setContent(e.target.value)}
+          ></textarea>
+          <div className="posts__createone__addfile">
+            <label className="posts__createone__addfile__lbl">
+              Choisir une image
+              <input
+                className="posts__createone__addfile__input"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
+            </label>
+            <button
+              className="posts__post__ownerMenu__delete"
+              type="button"
+              onClick={() => setImage(null)}
+            >
+              supprimer
+            </button>
+            <span className="posts__createone__addfile__name">
+              {image && image.name}
+            </span>
+          </div>
+          <div className="posts__createone__footer">
+            <button
+              className="posts__createone__footer__cancel"
+              type="reset"
+              onClick={toggleClass}
+            >
+              Annuler
+            </button>
+            <button
+              className="posts__createone__footer__validate"
+              type="submit"
+            >
+              Valider
+            </button>
+          </div>
+        </div>
+      </form>
       <figure className={`posts__post__figure ${isFigure}`}>
         <img
           width="100%"
@@ -255,7 +358,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
               icon={faThumbsUp}
               className={`posts__post__footer__like__icon ${colorLike}`}
             />
-            {nbLikes !== 0 && (
+            {parseInt(nbLikes) !== 0 && (
               <span className="posts__post__footer__like__nb">{nbLikes}</span>
             )}
             J'aime
@@ -270,7 +373,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
               icon={faThumbsDown}
               className={`posts__post__footer__dislike__icon ${colorDislike}`}
             />
-            {nbDislikes !== 0 && (
+            {parseInt(nbDislikes) !== 0 && (
               <span className="posts__post__footer__dislike__nb">
                 {nbDislikes}
               </span>
@@ -294,8 +397,15 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
           </Link>
         </div>
       </div>
-      {ownerMenu ? (
+      {ownerMenu && (
         <div className="posts__post__ownerMenu">
+          <button
+            className="posts__post__ownerMenu__modify"
+            type="button"
+            onClick={() => setOpen(!isOpen)}
+          >
+            modifier
+          </button>
           <button
             className="posts__post__ownerMenu__delete"
             type="button"
@@ -304,7 +414,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             supprimer
           </button>
         </div>
-      ) : null}
+      )}
     </div>
   );
 };

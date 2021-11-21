@@ -60,6 +60,7 @@ exports.getPostByUser = (req, res, next) => {
 //on crée un post
 exports.createPost = (req, res, next) => {
   // on test si la requête contient un fichier
+  console.log(req.body);
   const newPost = req.file
     ? {
         ...req.body,
@@ -79,6 +80,25 @@ exports.createPost = (req, res, next) => {
     })
     .catch(() => {
       res.status(400).json({ error: 'ECHEC de la creation du post' });
+    });
+};
+
+exports.updatePost = (req, res, next) => {
+  const updatedPost = req.file
+    ? {
+        ...req.body,
+        attachment: `${req.protocol}://${req.get('host')}/images/userId-${
+          req.body.userId
+        }/${req.file.filename}`,
+      }
+    : { ...req.body };
+  db.post
+    .update({ ...updatedPost }, { where: { id: req.query.id } })
+    .then(() => {
+      res.status(200).json({ message: 'Post modifié avec SUCCES !' });
+    })
+    .catch(() => {
+      res.status(400).json({ error: 'ECHEC de la modification du post' });
     });
 };
 

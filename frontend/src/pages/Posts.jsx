@@ -41,6 +41,7 @@ const Posts = () => {
     formData.append('userId', currentUserdecoded.userId);
     formData.append('content', content);
     formData.append('image', image);
+    console.log(formData);
     axios({
       headers: { Authorization: `Bearer ${currentUser}` },
       'Content-Type': 'application/json',
@@ -129,7 +130,7 @@ const Posts = () => {
           <button
             aria-label="créer un post"
             className="posts__addbutton__link clickable"
-            onClick={toggleClass}
+            onClick={() => setOpen(!isOpen)}
           ></button>
           <FontAwesomeIcon className="posts__addbutton__icon" icon={faEdit} />
         </div>

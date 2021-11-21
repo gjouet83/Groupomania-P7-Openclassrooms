@@ -22,6 +22,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      job: {
+        type: Sequelize.STRING,
+      },
       avatar: {
         type: Sequelize.STRING,
       },

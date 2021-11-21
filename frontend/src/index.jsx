@@ -8,6 +8,7 @@ import Comments from './pages/Comments';
 import Profil from './pages/Profil';
 import Params from './pages/Params';
 import Admin from './pages/Admin';
+import ViewUserProfil from './pages/ViewUserProfil';
 import Error from './pages/Error';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './sass/style.scss';
@@ -39,6 +40,9 @@ ReactDOM.render(
           </Route>
           <Route path="/params">
             <Params />
+          </Route>
+          <Route path="/viewuserprofil">
+            <ViewUserProfil />
           </Route>
           <Route path="/admin">
             <Admin />
