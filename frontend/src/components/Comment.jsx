@@ -162,7 +162,9 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
             </button>
             <span className="comments__comment__createone__addfile__name">
               {image && image.name}
-              {!image && comment.attachment.split('posts')[1]}
+              {!image &&
+                comment.attachment &&
+                comment.attachment.split('posts')[1]}
             </span>
           </div>
           <div className="comments__comment__createone__footer">

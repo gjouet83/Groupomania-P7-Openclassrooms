@@ -330,7 +330,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             </button>
             <span className="posts__post__createone__addfile__name">
               {image && image.name}
-              {!image && post.attachment.split('posts')[1]}
+              {!image && post.attachment && post.attachment.split('posts')[1]}
             </span>
           </div>
           <div className="posts__post__createone__footer">
