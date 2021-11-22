@@ -67,7 +67,7 @@ CREATE TABLE `comments` (
   KEY `postId` (`postId`),
   CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`postId`) REFERENCES `posts` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +108,7 @@ CREATE TABLE `likes` (
 
 LOCK TABLES `likes` WRITE;
 /*!40000 ALTER TABLE `likes` DISABLE KEYS */;
-INSERT INTO `likes` VALUES (1,1,1,0,0,'2021-11-14','2021-11-14');
+INSERT INTO `likes` VALUES (1,1,1,1,0,'2021-11-21','2021-11-21');
 /*!40000 ALTER TABLE `likes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +138,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,1,'bienvenue à tous sur groupomania !!!','http://localhost:3000/images/userId-1/userId-1posts1636910806497.png','2021-11-14 17:26:46','2021-11-14 17:26:46');
+INSERT INTO `posts` VALUES (1,1,'Bienvenue à tous sur Groupomania !!!!!!!','http://localhost:3000/images/userId-1/userId-1posts1637531842137.png','2021-11-21 21:57:22','2021-11-22 04:51:09');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,6 +154,7 @@ CREATE TABLE `users` (
   `username` varchar(40) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `job` varchar(255) DEFAULT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   `createdAt` date NOT NULL,
   `updatedAt` date NOT NULL,
@@ -170,7 +171,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','jW/fnEeQX38gT1I9NMYnYj0MZn9GQ9vikCIQOMM1Rqw=','$2b$10$Vy4OKHVKp6MWAnL4bm/uY.XIhl/QfkWvIfo3RWkbIJ8TStjKgiadu','http://localhost:3000/images/userId-1/userId-1avatar.png','2021-11-14','2021-11-14',1);
+INSERT INTO `users` VALUES (1,'Admin','jW/fnEeQX38gT1I9NMYnYj0MZn9GQ9vikCIQOMM1Rqw=','$2b$10$7GQf25qO7kSYEQCClkTSc.Oa6h6LA3t6D6f/6c2h0N8blhX0L4PP.','Administrateur','http://localhost:3000/images/userId-1/userId-1avatar1637531798380.png','2021-11-21','2021-11-21',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -183,4 +184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-15  8:52:37
+-- Dump completed on 2021-11-22  6:01:44

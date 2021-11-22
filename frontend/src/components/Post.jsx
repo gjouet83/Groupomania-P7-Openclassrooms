@@ -215,7 +215,6 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
     formData.append('userId', currentUserdecoded.userId);
     formData.append('content', contentRef.current.value);
     formData.append('image', image);
-    console.log(formData);
     axios({
       headers: { Authorization: `Bearer ${currentUser}` },
       'Content-Type': 'application/json',
@@ -305,20 +304,22 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
       <form onSubmit={sendForm}>
         <div
           className={
-            isOpen ? 'posts__createone opencreatepost' : 'posts__createone'
+            isOpen
+              ? 'posts__post__createone opencreatepost'
+              : 'posts__post__createone'
           }
         >
           <textarea
             aria-label="zone de saisie de texte"
-            className="posts__createone__input"
+            className="posts__post__createone__input"
             placeholder="Redigez votre post ici"
             ref={contentRef}
           ></textarea>
-          <div className="posts__createone__addfile">
-            <label className="posts__createone__addfile__lbl">
+          <div className="posts__post__createone__addfile">
+            <label className="posts__post__createone__addfile__lbl">
               Choisir une image
               <input
-                className="posts__createone__addfile__input"
+                className="posts__post__createone__addfile__input"
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(e.target.files[0])}
@@ -331,21 +332,21 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             >
               supprimer
             </button>
-            <span className="posts__createone__addfile__name">
+            <span className="posts__post__createone__addfile__name">
               {image && image.name}
               {!image && post.attachment.split('posts')[1]}
             </span>
           </div>
-          <div className="posts__createone__footer">
+          <div className="posts__post__createone__footer">
             <button
-              className="posts__createone__footer__cancel"
+              className="posts__post__createone__footer__cancel"
               type="reset"
               onClick={toggleClass}
             >
               Annuler
             </button>
             <button
-              className="posts__createone__footer__validate"
+              className="posts__post__createone__footer__validate"
               type="submit"
             >
               Valider

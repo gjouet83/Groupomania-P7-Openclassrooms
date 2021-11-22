@@ -83,6 +83,7 @@ exports.createPost = (req, res, next) => {
     });
 };
 
+//on modifie un post
 exports.updatePost = (req, res, next) => {
   const updatedPost = req.file
     ? {

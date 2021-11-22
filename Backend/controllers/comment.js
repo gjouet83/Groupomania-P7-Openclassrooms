@@ -73,6 +73,28 @@ exports.createComment = (req, res, next) => {
     });
 };
 
+//on modifie un post
+exports.updateComment = (req, res, next) => {
+  const updatedComment = req.file
+    ? {
+        ...req.body,
+        attachment: `${req.protocol}://${req.get('host')}/images/userId-${
+          req.body.userId
+        }/${req.file.filename}`,
+      }
+    : { ...req.body };
+  db.comment
+    .update({ ...updatedComment }, { where: { id: req.query.id } })
+    .then(() => {
+      res.status(200).json({ message: 'Commentaire modifié avec SUCCES !' });
+    })
+    .catch(() => {
+      res
+        .status(400)
+        .json({ error: 'ECHEC de la modification du commentaire' });
+    });
+};
+
 //on supprime le commentaire
 exports.deleteComment = (req, res, next) => {
   db.comment
