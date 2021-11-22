@@ -113,12 +113,7 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
           </Link>
         </div>
         <div className="comments__comment__author__info">
-          <Link
-            className="comments__comment__author__info__link"
-            to={`/viewuserprofil?user=${comment.userId}`}
-          >
-            <h3>{comment.user.username}</h3>
-          </Link>
+          <h3>{comment.user.username}</h3>
         </div>
       </div>
       <span className="comments__comment__date">

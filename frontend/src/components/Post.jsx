@@ -279,6 +279,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
           Posté le {moment(`${post.createdAt}`).locale('fr').format('llll')}
         </span>
         <Link
+          aria-label="lien vers le profil de l'auteur du post"
           className="posts__post__header__linkavatar"
           to={`/viewuserprofil?user=${post.userId}`}
         >
@@ -292,14 +293,9 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             />
           </figure>
         </Link>
-        <Link
-          className="posts__post__header__linkauthor"
-          to={`/viewuserprofil?user=${post.userId}`}
-        >
-          <h2 className="posts__post__header__linkauthor__author">
-            {post.user.username}
-          </h2>
-        </Link>
+        <h2 className="posts__post__header__linkauthor__author">
+          {post.user.username}
+        </h2>
       </div>
       <form onSubmit={sendForm}>
         <div
