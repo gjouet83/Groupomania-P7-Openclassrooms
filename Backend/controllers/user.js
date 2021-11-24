@@ -9,8 +9,12 @@ const key = CryptoJS.enc.Hex.parse(process.env.KEY);
 const iv = CryptoJS.enc.Hex.parse(process.env.IV);
 
 // regex pour la protection d'injection de code
-const validFields = (field) => {
+const validUsername = (field) => {
   return /^(?=.*[a-zA-Z]{1,})(?=.*[\d]{0,})[a-zA-Z0-9]{1,15}$/.test(field);
+};
+
+const validJob = (job) => {
+  return /^(?=.*[a-zA-Z]{1,})(?=.*[\d]{0,})[a-zA-Z0-9]{1,15}$/.test(job);
 };
 
 // regex pour la protection d'injection de code
@@ -26,7 +30,7 @@ const validPassword = (password) => {
 
 exports.signup = (req, res, next) => {
   //on teste les champs
-  if (!validFields(req.body.username)) {
+  if (!validUsername(req.body.username)) {
     return res.status(401).json({ error: 'Caractères non valide' });
   }
   if (!validEmail(req.body.email)) {
@@ -242,11 +246,6 @@ exports.updatePassword = (req, res, next) => {
 
 //mise a jour des info user
 exports.updateUser = (req, res, next) => {
-  //on test les champs
-  if (!validFields(req.body.username)) {
-    return res.status(406).json({ message: 'Caractères non autorisés' });
-  }
-
   //on teste si la requête possède un fichier ou non
   const updatedProfil = req.file
     ? {

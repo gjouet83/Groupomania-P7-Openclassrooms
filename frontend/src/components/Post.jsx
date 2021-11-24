@@ -6,6 +6,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
+import ConfirmDelete from './ConfirmDelete';
 import jwt_decode from 'jwt-decode';
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -21,7 +22,10 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   const [colorDislike, setColorDislike] = useState('');
   const [isOpen, setOpen] = useState(false);
   const [image, setImage] = useState(null);
+  const [postDeletePanel, setPostDeletePanel] = useState(false);
+  const [imageDeletePanel, setImageDeletePanel] = useState(false);
   const contentRef = useRef();
+  const imageRef = useRef();
 
   const isProfilePage = window.location.pathname; // on stocke le pathname
   const isFigure = post.attachment ? 'appear' : 'disappear';
@@ -190,18 +194,19 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   };
 
   const deleteImagePost = () => {
+    imageRef.current.value = '';
     axios({
       headers: { Authorization: `Bearer ${currentUser}` },
       'Content-Type': 'application/json',
       url: 'http://localhost:3000/api/posts/update/:id',
       method: 'PUT',
       params: { id: post.id },
-      data: { attachment: '' },
+      data: { attachment: '', content: post.content },
     })
       .then(() => {
         // on reset les status et on referme la zone de saisie
         setPostsUpdate(!postsUpdate);
-        toggleClass();
+        imageAdvertDelete();
       })
       .catch((err) => {
         console.log(err);
@@ -225,7 +230,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
     })
       .then(() => {
         // on reset les status et on referme la zone de saisie
-        setImage(null);
+        setImage();
         toggleClass();
         setPostsUpdate(!postsUpdate);
       })
@@ -258,6 +263,20 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
     setOpen(!isOpen);
   };
 
+  const cancelImage = () => {
+    setImage();
+    imageRef.current.value = '';
+    setPostsUpdate(!postsUpdate);
+  };
+
+  const postAdvertDelete = () => {
+    setPostDeletePanel(!postDeletePanel);
+  };
+
+  const imageAdvertDelete = () => {
+    setImageDeletePanel(!imageDeletePanel);
+  };
+
   // on déclenche la récupération du nombre de like quand le statut colorLike ou colorDislike change
   useEffect(() => {
     getNbLikes();
@@ -275,6 +294,15 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   return (
     <div className="posts__post">
       <div className="posts__post__header">
+        {postDeletePanel && (
+          <>
+            <ConfirmDelete
+              thisAdvertDelete={postAdvertDelete}
+              thisDelete={deletePost}
+              message={'Voulez-vous vraiment supprimer le post ?'}
+            />
+          </>
+        )}
         <span className="posts__post__header__date">
           Posté le {moment(`${post.createdAt}`).locale('fr').format('llll')}
         </span>
@@ -305,6 +333,15 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
               : 'posts__post__createone'
           }
         >
+          {imageDeletePanel && (
+            <>
+              <ConfirmDelete
+                thisAdvertDelete={imageAdvertDelete}
+                thisDelete={deleteImagePost}
+                message={"Voulez-vous vraiment supprimer l'image ?"}
+              />
+            </>
+          )}
           <textarea
             aria-label="zone de saisie de texte"
             className="posts__post__createone__input"
@@ -319,24 +356,36 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(e.target.files[0])}
+                ref={imageRef}
               />
             </label>
-            <button
-              className="posts__post__ownerMenu__delete"
-              type="reset"
-              onClick={deleteImagePost}
-            >
-              supprimer
-            </button>
             <span className="posts__post__createone__addfile__name">
               {image && image.name}
               {!image && post.attachment && post.attachment.split('posts')[1]}
             </span>
+            {image && (
+              <button
+                className="posts__post__ownerMenu__delete"
+                type="button"
+                onClick={cancelImage}
+              >
+                Annuler la Sélection
+              </button>
+            )}
+            {post.attachment && !image && (
+              <button
+                className="posts__post__ownerMenu__delete"
+                type="button"
+                onClick={imageAdvertDelete}
+              >
+                Supprimer l'image du post
+              </button>
+            )}
           </div>
           <div className="posts__post__createone__footer">
             <button
               className="posts__post__createone__footer__cancel"
-              type="reset"
+              type="button"
               onClick={toggleClass}
             >
               Annuler
@@ -421,7 +470,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
           <button
             className="posts__post__ownerMenu__delete"
             type="button"
-            onClick={deletePost}
+            onClick={postAdvertDelete}
           >
             supprimer
           </button>

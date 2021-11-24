@@ -10,7 +10,8 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
   const currentUser = JSON.parse(localStorage.getItem('user')); // on vérifie si le token est présent dans le localstorage
   const currentUserdecoded = currentUser && jwt_decode(currentUser); // on décode le token
   const [isOpen, setOpen] = useState(false);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState();
+  const imageRef = useRef();
   const contentRef = useRef();
   //si pas de token stocké alors retour page login
   if (!currentUser) {
@@ -27,13 +28,14 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
       : false;
 
   const deleteImageComment = () => {
+    imageRef.current.value = '';
     axios({
       headers: { Authorization: `Bearer ${currentUser}` },
       'Content-Type': 'application/json',
       url: 'http://localhost:3000/api/comments/update/:id',
       method: 'PUT',
       params: { id: comment.id },
-      data: { attachment: '' },
+      data: { attachment: '', content: comment.content },
     })
       .then(() => {
         // on reset les status et on referme la zone de saisie
@@ -151,6 +153,7 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(e.target.files[0])}
+                ref={imageRef}
               />
             </label>
             <button
@@ -160,12 +163,6 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
             >
               supprimer
             </button>
-            <span className="comments__comment__createone__addfile__name">
-              {image && image.name}
-              {!image &&
-                comment.attachment &&
-                comment.attachment.split('posts')[1]}
-            </span>
           </div>
           <div className="comments__comment__createone__footer">
             <button

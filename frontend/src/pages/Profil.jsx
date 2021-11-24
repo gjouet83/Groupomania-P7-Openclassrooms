@@ -10,6 +10,7 @@ import Comment from '../components/Comment';
 import jwt_decode from 'jwt-decode';
 import { ImageContext } from '../utils/context';
 import { validPseudo } from '../components/Regexp';
+import ConfirmDelete from '../components/ConfirmDelete';
 import axios from 'axios';
 
 const Profil = () => {
@@ -34,9 +35,11 @@ const Profil = () => {
   const [job, setJob] = useState();
   const jobInputRef = useRef();
   const [profilImage, setProfilImage] = useState();
-  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [profilDeletePanel, setProfilDeletePanel] = useState(false);
+  const [avatarDeletePanel, setAvatarDeletePanel] = useState(false);
+  const imageRef = useRef();
 
-  const isAdminAccount = !currentUserdecoded.admin ? true : false;
+  const isNotAdminAccount = !currentUserdecoded.admin ? true : false;
 
   const toggleClassPosts = () => {
     setOpenPosts(!isOpenPosts);
@@ -46,8 +49,12 @@ const Profil = () => {
     setOpenComments(!isOpenComments);
   };
 
-  const advertDelete = () => {
-    setConfirmDelete(!confirmDelete);
+  const profilAdvertDelete = () => {
+    setProfilDeletePanel(!profilDeletePanel);
+  };
+
+  const avatarAdvertDelete = () => {
+    setAvatarDeletePanel(!avatarDeletePanel);
   };
 
   const getUser = () => {
@@ -110,8 +117,14 @@ const Profil = () => {
       });
   };
 
+  const cancelImage = () => {
+    setProfilImage();
+    imageRef.current.value = '';
+  };
+
   //suppression de l'image du profil avec un update dans le back avec l'image par defaut
-  const deleteProfilImage = () => {
+  const deleteAvatar = () => {
+    imageRef.current.value = '';
     const updatedUser = {
       userId: currentUserdecoded.userId,
     };
@@ -125,6 +138,7 @@ const Profil = () => {
       )
       .then(() => {
         setProfileUpdate(!profileUpdate);
+        setAvatarDeletePanel(!avatarDeletePanel);
       })
       .catch((err) => {
         console.log(err);
@@ -190,6 +204,8 @@ const Profil = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileUpdate, postsProfilUpdate, commentsProfilUpdate, job]);
 
+  console.log(profilImage);
+
   return (
     <main>
       <section className="profil">
@@ -208,32 +224,23 @@ const Profil = () => {
           </div>
           <h2 className="profil__nav__title">Profil</h2>
         </div>
-        {confirmDelete && (
-          <div className="profil__advert">
-            <div className="profil__advert__panel">
-              <span className="profil__advert__panel__message">
-                Voulez-vous vraiment supprimer votre compte ? (Cette action
-                supprimera définitivement vos commentaires, vos posts et leurs
-                commentaires )
-              </span>
-              <div className="profil__advert__panel__buttons">
-                <button
-                  className="profil__advert__panel__buttons__cancel"
-                  type="button"
-                  onClick={advertDelete}
-                >
-                  Annuler
-                </button>
-                <button
-                  className="profil__advert__panel__buttons__delete"
-                  type="button"
-                  onClick={deleteAccount}
-                >
-                  Supprimer mon compte
-                </button>
-              </div>
-            </div>
-          </div>
+        {profilDeletePanel && (
+          <>
+            <ConfirmDelete
+              thisAdvertDelete={profilAdvertDelete}
+              thisDelete={deleteAccount}
+              message="Voulez-vous vraiment supprimer votre compte ? Cette action supprimera aussi tous vos commentaires, vos posts et les commentaires associés"
+            />
+          </>
+        )}
+        {avatarDeletePanel && (
+          <>
+            <ConfirmDelete
+              thisAdvertDelete={avatarAdvertDelete}
+              thisDelete={deleteAvatar}
+              message="Voulez-vous vraiment supprimer votre photo de profil ?"
+            />
+          </>
         )}
         <figure className="profil__avatar">
           <img
@@ -255,6 +262,7 @@ const Profil = () => {
               type="file"
               accept="image/*"
               onChange={(e) => setProfilImage(e.target.files[0])}
+              ref={imageRef}
             />
           </label>
         </div>
@@ -268,13 +276,24 @@ const Profil = () => {
               Enregistrer
             </button>
           )}
-          <button
-            className="profil__buttons__delete"
-            type="button"
-            onClick={deleteProfilImage}
-          >
-            Supprimer
-          </button>
+
+          {!profilImage || profilImage === 'undefined' ? (
+            <button
+              className="profil__buttons__delete"
+              type="button"
+              onClick={avatarAdvertDelete}
+            >
+              Supprimer
+            </button>
+          ) : (
+            <button
+              className="profil__buttons__delete"
+              type="button"
+              onClick={cancelImage}
+            >
+              Annuler
+            </button>
+          )}
         </div>
         <form className="profil__form" onSubmit={updateUser}>
           <label className="profil__form__username__lbl">
@@ -372,11 +391,11 @@ const Profil = () => {
             />
           ))}
         </div>
-        {isAdminAccount && (
+        {isNotAdminAccount && (
           <button
             className="profil__deleteaccount"
             type="button"
-            onClick={advertDelete}
+            onClick={profilAdvertDelete}
           >
             Supprimer mon compte
           </button>
