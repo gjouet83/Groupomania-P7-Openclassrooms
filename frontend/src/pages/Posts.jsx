@@ -2,7 +2,7 @@ import Post from '../components/Post';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import jwt_decode from 'jwt-decode';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import axios from 'axios';
 
@@ -21,6 +21,7 @@ const Posts = () => {
   const [content, setContent] = useState('');
   const [isOpen, setOpen] = useState(false);
   const [image, setImage] = useState(null);
+  const imageRef = useRef();
 
   const getPosts = () => {
     axios
@@ -65,6 +66,12 @@ const Posts = () => {
     setOpen(!isOpen);
   };
 
+  const cancelImage = () => {
+    setImage();
+    imageRef.current.value = '';
+    setPostsUpdate(!postsUpdate);
+  };
+
   useEffect(() => {
     getPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,11 +101,21 @@ const Posts = () => {
                   type="file"
                   accept="image/*"
                   onChange={(e) => setImage(e.target.files[0])}
+                  ref={imageRef}
                 />
               </label>
               <span className="posts__createone__addfile__name">
                 {image && image.name}
               </span>
+              {image && (
+                <button
+                  className="posts__post__ownerMenu__delete"
+                  type="button"
+                  onClick={cancelImage}
+                >
+                  Annuler la Sélection
+                </button>
+              )}
             </div>
             <div className="posts__createone__footer">
               <button

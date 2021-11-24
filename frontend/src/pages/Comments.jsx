@@ -15,7 +15,7 @@ const Comments = () => {
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
   const [image, setImage] = useState();
-  const imageInputRef = useRef();
+  const imageRef = useRef();
   const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
   const currentUserdecoded = currentUser && jwt_decode(currentUser); //on décode le token
 
@@ -55,7 +55,7 @@ const Comments = () => {
       .then(() => {
         //on reset le statut de content image
         setContent('');
-        imageInputRef.current.value = '';
+        imageRef.current.value = '';
         setImage(null);
         toggleClass();
       })
@@ -67,6 +67,12 @@ const Comments = () => {
   const toggleClass = () => {
     setImage();
     setOpen(!isOpen);
+  };
+
+  const cancelImage = () => {
+    setImage();
+    imageRef.current.value = '';
+    setCommentsUpdate(!commentsUpdate);
   };
 
   useEffect(() => {
@@ -115,12 +121,21 @@ const Comments = () => {
                   type="file"
                   accept="image/*"
                   onChange={(e) => setImage(e.target.files[0])}
-                  ref={imageInputRef}
+                  ref={imageRef}
                 />
               </label>
               <span className="posts__createone__addfile__name">
                 {image && image.name}
               </span>
+              {image && (
+                <button
+                  className="posts__post__ownerMenu__delete"
+                  type="button"
+                  onClick={cancelImage}
+                >
+                  Annuler la Sélection
+                </button>
+              )}
             </div>
             <div className="comments__createone__footer">
               <button
