@@ -378,7 +378,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
                 type="button"
                 onClick={imageAdvertDelete}
               >
-                Supprimer l'image du post
+                Supprimer l'image
               </button>
             )}
           </div>

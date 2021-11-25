@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 import 'moment/locale/fr';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
+import ConfirmDelete from './ConfirmDelete';
 
 const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
   const isFigure = comment.attachment ? 'appear' : 'disappear'; //on vérifie si le commentaire a une image pour afficher l'élément figure
@@ -11,6 +12,7 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
   const currentUserdecoded = currentUser && jwt_decode(currentUser); // on décode le token
   const [isOpen, setOpen] = useState(false);
   const [image, setImage] = useState();
+  const [imageDeletePanel, setImageDeletePanel] = useState(false);
   const imageRef = useRef();
   const contentRef = useRef();
   //si pas de token stocké alors retour page login
@@ -40,11 +42,17 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
       .then(() => {
         // on reset les status et on referme la zone de saisie
         setCommentsUpdate(!commentsUpdate);
-        toggleClass();
+        imageAdvertDelete();
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const cancelImage = () => {
+    setImage();
+    imageRef.current.value = '';
+    setCommentsUpdate(!commentsUpdate);
   };
 
   //fonction mofifier un post
@@ -76,6 +84,10 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
   const toggleClass = () => {
     setImage();
     setOpen(!isOpen);
+  };
+
+  const imageAdvertDelete = () => {
+    setImageDeletePanel(!imageDeletePanel);
   };
 
   //suppression d'un commentaire
@@ -139,6 +151,15 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
               : 'comments__comment__createone'
           }
         >
+          {imageDeletePanel && (
+            <>
+              <ConfirmDelete
+                thisAdvertDelete={imageAdvertDelete}
+                thisDelete={deleteImageComment}
+                message={"Voulez-vous vraiment supprimer l'image ?"}
+              />
+            </>
+          )}
           <textarea
             aria-label="zone de saisie de texte"
             className="comments__comment__createone__input"
@@ -156,13 +177,30 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
                 ref={imageRef}
               />
             </label>
-            <button
-              className="comments__comment__ownerMenu__delete"
-              type="reset"
-              onClick={deleteImageComment}
-            >
-              supprimer
-            </button>
+            <span className="comments__comment__createone__addfile__name">
+              {image && image.name}
+              {!image &&
+                comment.attachment &&
+                comment.attachment.split('posts')[1]}
+            </span>
+            {image && (
+              <button
+                className="posts__post__ownerMenu__delete"
+                type="button"
+                onClick={cancelImage}
+              >
+                Annuler la Sélection
+              </button>
+            )}
+            {comment.attachment && !image && (
+              <button
+                className="comments__comment__ownerMenu__delete"
+                type="button"
+                onClick={imageAdvertDelete}
+              >
+                Supprimer l'image
+              </button>
+            )}
           </div>
           <div className="comments__comment__createone__footer">
             <button

@@ -204,8 +204,6 @@ const Profil = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileUpdate, postsProfilUpdate, commentsProfilUpdate, job]);
 
-  console.log(profilImage);
-
   return (
     <main>
       <section className="profil">
