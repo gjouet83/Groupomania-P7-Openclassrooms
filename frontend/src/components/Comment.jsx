@@ -12,6 +12,8 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
   const currentUserdecoded = currentUser && jwt_decode(currentUser); // on décode le token
   const [isOpen, setOpen] = useState(false);
   const [image, setImage] = useState();
+  const [commentCancelPanel, setCommentCancelPanel] = useState(false);
+  const [commentDeletePanel, setCommentDeletePanel] = useState(false);
   const [imageDeletePanel, setImageDeletePanel] = useState(false);
   const imageRef = useRef();
   const contentRef = useRef();
@@ -55,6 +57,18 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
     setCommentsUpdate(!commentsUpdate);
   };
 
+  const cancelComment = () => {
+    setImage();
+    imageRef.current.value = '';
+    contentRef.current.value = '';
+    toggleClass();
+    commentAdvertCancel();
+  };
+
+  const commentAdvertCancel = () => {
+    setCommentCancelPanel(!commentCancelPanel);
+  };
+
   //fonction mofifier un post
   const sendForm = (e) => {
     e.preventDefault();
@@ -84,6 +98,10 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
   const toggleClass = () => {
     setImage();
     setOpen(!isOpen);
+  };
+
+  const commentAdvertDelete = () => {
+    setCommentDeletePanel(!commentDeletePanel);
   };
 
   const imageAdvertDelete = () => {
@@ -116,6 +134,24 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
 
   return (
     <div className="comments__comment">
+      {commentDeletePanel && (
+        <>
+          <ConfirmDelete
+            thisAdvertDelete={commentAdvertDelete}
+            thisDelete={deleteComment}
+            message={'Voulez-vous vraiment supprimer le commentaire ?'}
+          />
+        </>
+      )}
+      {commentCancelPanel && (
+        <>
+          <ConfirmDelete
+            thisAdvertDelete={commentAdvertCancel}
+            thisDelete={cancelComment}
+            message={'Attention ! Toutes les modifications seront supprimées'}
+          />
+        </>
+      )}
       <div className="comments__comment__author">
         <div className="comments__comment__author__avatar">
           <Link to={`/viewuserprofil?user=${comment.userId}`}>
@@ -185,7 +221,7 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
             </span>
             {image && (
               <button
-                className="posts__post__ownerMenu__delete"
+                className="comments__comment__createone__addfile__cancel"
                 type="button"
                 onClick={cancelImage}
               >
@@ -194,7 +230,7 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
             )}
             {comment.attachment && !image && (
               <button
-                className="comments__comment__ownerMenu__delete"
+                className="comments__comment__createone__addfile__delete"
                 type="button"
                 onClick={imageAdvertDelete}
               >
@@ -205,8 +241,8 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
           <div className="comments__comment__createone__footer">
             <button
               className="comments__comment__createone__footer__cancel"
-              type="reset"
-              onClick={toggleClass}
+              type="button"
+              onClick={commentAdvertCancel}
             >
               Annuler
             </button>
@@ -231,7 +267,7 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
           <button
             className="comments__comment__ownerMenu__delete"
             type="button"
-            onClick={deleteComment}
+            onClick={commentAdvertDelete}
           >
             supprimer
           </button>

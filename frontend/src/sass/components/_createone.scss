@@ -64,6 +64,12 @@
     &__input {
       display: none;
     }
+    &__cancel {
+      @include button-red;
+    }
+    &__delete {
+      @include button-red;
+    }
   }
   &__footer {
     display: flex;

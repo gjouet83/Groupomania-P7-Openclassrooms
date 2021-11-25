@@ -22,6 +22,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   const [colorDislike, setColorDislike] = useState('');
   const [isOpen, setOpen] = useState(false);
   const [image, setImage] = useState(null);
+  const [postCancelPanel, setPostCancelPanel] = useState(false);
   const [postDeletePanel, setPostDeletePanel] = useState(false);
   const [imageDeletePanel, setImageDeletePanel] = useState(false);
   const contentRef = useRef();
@@ -277,6 +278,18 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
     setImageDeletePanel(!imageDeletePanel);
   };
 
+  const cancelPost = () => {
+    setImage();
+    imageRef.current.value = '';
+    contentRef.current.value = '';
+    toggleClass();
+    postAdvertCancel();
+  };
+
+  const postAdvertCancel = () => {
+    setPostCancelPanel(!postCancelPanel);
+  };
+
   // on déclenche la récupération du nombre de like quand le statut colorLike ou colorDislike change
   useEffect(() => {
     getNbLikes();
@@ -300,6 +313,15 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
               thisAdvertDelete={postAdvertDelete}
               thisDelete={deletePost}
               message={'Voulez-vous vraiment supprimer le post ?'}
+            />
+          </>
+        )}
+        {postCancelPanel && (
+          <>
+            <ConfirmDelete
+              thisAdvertDelete={postAdvertCancel}
+              thisDelete={cancelPost}
+              message={'Attention ! Toutes les modifications seront supprimées'}
             />
           </>
         )}
@@ -365,7 +387,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             </span>
             {image && (
               <button
-                className="posts__post__ownerMenu__delete"
+                className="posts__post__createone__addfile__cancel"
                 type="button"
                 onClick={cancelImage}
               >
@@ -374,7 +396,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             )}
             {post.attachment && !image && (
               <button
-                className="posts__post__ownerMenu__delete"
+                className="posts__post__createone__addfile__delete"
                 type="button"
                 onClick={imageAdvertDelete}
               >
@@ -386,7 +408,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
             <button
               className="posts__post__createone__footer__cancel"
               type="button"
-              onClick={toggleClass}
+              onClick={postAdvertCancel}
             >
               Annuler
             </button>

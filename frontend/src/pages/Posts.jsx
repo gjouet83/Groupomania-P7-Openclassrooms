@@ -1,4 +1,5 @@
 import Post from '../components/Post';
+import ConfirmDelete from '../components/ConfirmDelete';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import jwt_decode from 'jwt-decode';
@@ -20,7 +21,9 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState('');
   const [isOpen, setOpen] = useState(false);
+  const [postCancelPanel, setPostCancelPanel] = useState(false);
   const [image, setImage] = useState(null);
+  const contentRef = useRef();
   const imageRef = useRef();
 
   const getPosts = () => {
@@ -53,6 +56,7 @@ const Posts = () => {
       .then(() => {
         // on reset les status et on referme la zone de saisie
         setContent('');
+        imageRef.current.value = '';
         setImage(null);
         toggleClass();
       })
@@ -72,6 +76,19 @@ const Posts = () => {
     setPostsUpdate(!postsUpdate);
   };
 
+  const cancelPost = () => {
+    setImage();
+    imageRef.current.value = '';
+    setContent();
+    contentRef.current.value = '';
+    toggleClass();
+    postAdvertCancel();
+  };
+
+  const postAdvertCancel = () => {
+    setPostCancelPanel(!postCancelPanel);
+  };
+
   useEffect(() => {
     getPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,6 +97,15 @@ const Posts = () => {
   return (
     <main>
       <section className="posts">
+        {postCancelPanel && (
+          <>
+            <ConfirmDelete
+              thisAdvertDelete={postAdvertCancel}
+              thisDelete={cancelPost}
+              message={'Attention ! Toutes les modifications seront supprimées'}
+            />
+          </>
+        )}
         <form onSubmit={sendForm}>
           <div
             className={
@@ -90,8 +116,8 @@ const Posts = () => {
               aria-label="zone de saisie de texte"
               className="posts__createone__input"
               placeholder="Redigez votre post ici"
-              value={content}
               onChange={(e) => setContent(e.target.value)}
+              ref={contentRef}
             ></textarea>
             <div className="posts__createone__addfile">
               <label className="posts__createone__addfile__lbl">
@@ -109,7 +135,7 @@ const Posts = () => {
               </span>
               {image && (
                 <button
-                  className="posts__post__ownerMenu__delete"
+                  className="posts__createone__addfile__cancel"
                   type="button"
                   onClick={cancelImage}
                 >
@@ -120,8 +146,8 @@ const Posts = () => {
             <div className="posts__createone__footer">
               <button
                 className="posts__createone__footer__cancel"
-                type="reset"
-                onClick={toggleClass}
+                type="button"
+                onClick={postAdvertCancel}
               >
                 Annuler
               </button>

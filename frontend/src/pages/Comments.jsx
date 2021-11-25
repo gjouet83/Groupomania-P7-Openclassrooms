@@ -1,4 +1,5 @@
 import Comment from '../components/Comment';
+import ConfirmDelete from '../components/ConfirmDelete';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEdit,
@@ -15,6 +16,8 @@ const Comments = () => {
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState('');
   const [image, setImage] = useState();
+  const [commentCancelPanel, setCommentCancelPanel] = useState(false);
+  const contentRef = useRef();
   const imageRef = useRef();
   const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
   const currentUserdecoded = currentUser && jwt_decode(currentUser); //on décode le token
@@ -75,6 +78,19 @@ const Comments = () => {
     setCommentsUpdate(!commentsUpdate);
   };
 
+  const cancelComment = () => {
+    setImage();
+    imageRef.current.value = '';
+    setContent();
+    contentRef.current.value = '';
+    toggleClass();
+    commentAdvertCancel();
+  };
+
+  const commentAdvertCancel = () => {
+    setCommentCancelPanel(!commentCancelPanel);
+  };
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
     getComments();
@@ -84,6 +100,15 @@ const Comments = () => {
   return (
     <main>
       <section className="comments">
+        {commentCancelPanel && (
+          <>
+            <ConfirmDelete
+              thisAdvertDelete={commentAdvertCancel}
+              thisDelete={cancelComment}
+              message={'Attention ! Toutes les modifications seront supprimées'}
+            />
+          </>
+        )}
         <div className="comments__nav">
           <div className="comments__nav__button">
             <Link
@@ -112,6 +137,7 @@ const Comments = () => {
               className="comments__createone__input"
               placeholder="Redigez votre commentaire ici"
               onChange={(e) => setContent(e.target.value)}
+              ref={contentRef}
             ></textarea>
             <div className="comments__createone__addfile">
               <label className="posts__createone__addfile__lbl">
@@ -140,8 +166,8 @@ const Comments = () => {
             <div className="comments__createone__footer">
               <button
                 className="comments__createone__footer__cancel"
-                type="reset"
-                onClick={toggleClass}
+                type="button"
+                onClick={commentAdvertCancel}
               >
                 Annuler
               </button>
