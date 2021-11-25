@@ -1,4 +1,5 @@
 .admin {
+  @import '../components/confirmDelete';
   &__userarray {
     display: grid;
     justify-content: center;

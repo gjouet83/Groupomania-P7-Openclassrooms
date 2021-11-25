@@ -231,7 +231,6 @@ const Params = () => {
           <h3 className="params__password__title">Mot de passe</h3>
           <label>
             Mot de passe actuel
-            <input className="disappear" type="text" autoComplete="username" />
             <input
               autoComplete="current-password"
               className="params__password__old__input"

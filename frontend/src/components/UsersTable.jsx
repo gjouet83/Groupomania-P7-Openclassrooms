@@ -1,9 +1,11 @@
 import axios from 'axios';
+import ConfirmDelete from './ConfirmDelete';
 import { useEffect, useState } from 'react';
 
 const UsersTable = ({ user }) => {
   const currentUser = JSON.parse(localStorage.getItem('user')); // on vérifie si le token est présent dans le localstorage
   const [checked, setChecked] = useState(false);
+  const [profilDeletePanel, setProfilDeletePanel] = useState(false);
   const [isAdmin, setIsAdmin] = useState('');
 
   const handleChange = () => {
@@ -43,6 +45,10 @@ const UsersTable = ({ user }) => {
       });
   };
 
+  const profilAdvertDelete = () => {
+    setProfilDeletePanel(!profilDeletePanel);
+  };
+
   useEffect(() => {
     //après le premier render on n'affiche pas le user "admin", pour empécher sa suppression de la table
     if (user.username === 'Admin') {
@@ -57,11 +63,20 @@ const UsersTable = ({ user }) => {
 
   return (
     <div className="admin__userarray">
+      {profilDeletePanel && (
+        <>
+          <ConfirmDelete
+            thisAdvertDelete={profilAdvertDelete}
+            thisDelete={deleteUser}
+            message="Voulez-vous vraiment supprimer ce compte ? Cette action supprimera aussi tous les commentaires, les posts et les commentaires associés"
+          />
+        </>
+      )}
       <h3 className={`admin__userarray__name ${isAdmin}`}>{user.username}</h3>
       <button
         className={`admin__userarray__userdelete ${isAdmin}`}
         type="button"
-        onClick={deleteUser}
+        onClick={profilAdvertDelete}
       >
         Supprimer l'utilisateur
       </button>
@@ -70,7 +85,7 @@ const UsersTable = ({ user }) => {
         onSubmit={sendForm}
       >
         <label className="admin__userarray__element__lbl">
-          isAdmin ?
+          Administrateur ?
           <input
             className="admin__userarray__element__input"
             type="checkbox"
