@@ -30,7 +30,7 @@ const validPassword = (password) => {
 
 exports.signup = (req, res, next) => {
   //on teste les champs
-  if (!validUsername(req.body.username)) {
+  /* if (!validUsername(req.body.username)) {
     return res.status(401).json({ error: 'Caractères non valide' });
   }
   if (!validEmail(req.body.email)) {
@@ -40,7 +40,7 @@ exports.signup = (req, res, next) => {
     return res.status(401).json({
       error: 'password',
     });
-  }
+  }*/
   bcrypt
     // on hash le mot de passe
     .hash(req.body.password, 10)

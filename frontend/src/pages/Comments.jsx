@@ -58,8 +58,9 @@ const Comments = () => {
       .then(() => {
         //on reset le statut de content image
         setContent('');
-        imageRef.current.value = '';
+        contentRef.current.value = '';
         setImage(null);
+        imageRef.current.value = '';
         toggleClass();
       })
       .catch((err) => {
@@ -81,7 +82,7 @@ const Comments = () => {
   const cancelComment = () => {
     setImage();
     imageRef.current.value = '';
-    setContent();
+    setContent('');
     contentRef.current.value = '';
     toggleClass();
     commentAdvertCancel();

@@ -45,7 +45,6 @@ const Posts = () => {
     formData.append('userId', currentUserdecoded.userId);
     formData.append('content', content);
     formData.append('image', image);
-    console.log(formData);
     axios({
       headers: { Authorization: `Bearer ${currentUser}` },
       'Content-Type': 'application/json',
@@ -56,8 +55,9 @@ const Posts = () => {
       .then(() => {
         // on reset les status et on referme la zone de saisie
         setContent('');
-        imageRef.current.value = '';
+        contentRef.current.value = '';
         setImage(null);
+        imageRef.current.value = '';
         toggleClass();
       })
       .catch((err) => {
@@ -79,7 +79,7 @@ const Posts = () => {
   const cancelPost = () => {
     setImage();
     imageRef.current.value = '';
-    setContent();
+    setContent('');
     contentRef.current.value = '';
     toggleClass();
     postAdvertCancel();

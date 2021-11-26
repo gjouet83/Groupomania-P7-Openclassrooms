@@ -7,9 +7,9 @@ const Signup = () => {
   const [loginErr, setLoginErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
   const [pseudoErr, setPseudoErr] = useState(false);
-  const [login, setLogin] = useState();
-  const [password, setPassword] = useState();
-  const [pseudo, setPseudo] = useState();
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
+  const [pseudo, setPseudo] = useState('');
   const [backendMessagePseudo, setBackendMessagePseudo] = useState('');
   const [backendMessageEmail, setBackendMessageEmail] = useState('');
   const [signupPseudo, setSignupPseudo] = useState('');

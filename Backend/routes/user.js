@@ -1,16 +1,23 @@
 const express = require('express');
 const userCtrl = require('../controllers/user');
 const auth = require('../middleware/auth');
+const validate = require('../middleware/validateinputs');
 const multer = require('../middleware/multer');
 
 const router = express.Router();
 
 router.get('/get', auth, userCtrl.getAllUsers);
 router.get('/get/:id', auth, userCtrl.getOneUser);
-router.post('/signup', userCtrl.signup);
-router.post('/login', userCtrl.login);
-router.put('/update/login/:id', auth, multer, userCtrl.updateLogin);
-router.put('/update/password/:id', auth, multer, userCtrl.updatePassword);
+router.post('/signup', validate.email, userCtrl.signup);
+router.post('/login', validate.email, userCtrl.login);
+router.put(
+  '/update/login/:id',
+  auth,
+  validate.email,
+  validate.newEmail,
+  userCtrl.updateLogin
+);
+router.put('/update/password/:id', auth, userCtrl.updatePassword);
 router.put('/update/:id', auth, multer, userCtrl.updateUser);
 router.put('/delete/profilimage/:id', auth, multer, userCtrl.deleteProfilImage);
 router.delete('/delete/:id', auth, userCtrl.deleteUser);

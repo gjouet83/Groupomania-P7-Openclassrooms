@@ -60,7 +60,6 @@ exports.getPostByUser = (req, res, next) => {
 //on crée un post
 exports.createPost = (req, res, next) => {
   // on test si la requête contient un fichier
-  console.log(req.body);
   const newPost = req.file
     ? {
         ...req.body,

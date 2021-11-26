@@ -13,8 +13,8 @@ const Login = () => {
 
   const [loginErr, setLoginErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
-  const [login, setLogin] = useState();
-  const [password, setPassword] = useState();
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
   const [backendMessageEmail, setBackendMessageEmail] = useState('');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -59,7 +59,6 @@ const Login = () => {
         window.location.assign('/posts');
       })
       .catch((error) => {
-        console.log(error.response);
         if (error.response.status === 401 && error.response.data.errorMail) {
           setLoginEmail('wrong');
           setBackendMessageEmail(error.response.data.errorMail);

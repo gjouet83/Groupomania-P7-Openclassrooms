@@ -13,16 +13,16 @@ const Params = () => {
     window.location.assign('/login');
   }
   const currentUserdecoded = currentUser && jwt_decode(currentUser); //on décode le token
-  const [login, setLogin] = useState();
-  const [newLogin, setNewLogin] = useState();
-  const [checkNewLogin, setCheckNewLogin] = useState();
+  const [login, setLogin] = useState('');
+  const [newLogin, setNewLogin] = useState('');
+  const [checkNewLogin, setCheckNewLogin] = useState('');
   const [verifLoginErr, setVerifLoginErr] = useState(false);
   const [verifNewLoginErr, setVerifNewLoginErr] = useState(false);
   const [verifCheckNewLoginErr, setVerifCheckNewLoginErr] = useState(false);
   const [MatchLogins, setMatchLogins] = useState(false);
-  const [password, setPassword] = useState();
-  const [newPassword, setNewPassword] = useState();
-  const [checkNewPassword, setCheckNewPassword] = useState();
+  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [checkNewPassword, setCheckNewPassword] = useState('');
   const [verifPwdErr, setVerifPwdErr] = useState(false);
   const [verifNewPwdErr, setVerifNewPwdErr] = useState(false);
   const [verifCheckNewPwdErr, setVerifCheckNewPwdErr] = useState(false);
