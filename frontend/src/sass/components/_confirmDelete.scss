@@ -8,7 +8,6 @@
   display: flex;
   justify-content: center;
   z-index: 4;
-
   &__panel {
     width: 40vw;
     border-radius: 15px;
@@ -30,10 +29,10 @@
       margin-top: 10px;
       margin-bottom: 10px;
       &__cancel {
-        @include button-green;
+        @include button-red;
       }
       &__delete {
-        @include button-red;
+        @include button-green;
       }
     }
   }

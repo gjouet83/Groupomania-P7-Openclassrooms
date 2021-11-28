@@ -106,7 +106,9 @@ const Comments = () => {
             <ConfirmDelete
               thisAdvertDelete={commentAdvertCancel}
               thisDelete={cancelComment}
-              message={'Attention ! Toutes les modifications seront supprimées'}
+              message={
+                'Attention ! Toutes les modifications non validées seront supprimées'
+              }
             />
           </>
         )}

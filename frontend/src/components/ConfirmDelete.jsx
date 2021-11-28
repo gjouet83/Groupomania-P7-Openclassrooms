@@ -16,7 +16,7 @@ const ConfirmDelete = ({ thisAdvertDelete, thisDelete, message }) => {
             type="button"
             onClick={thisDelete}
           >
-            Supprimer
+            Valider
           </button>
         </div>
       </div>

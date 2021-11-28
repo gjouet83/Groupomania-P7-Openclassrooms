@@ -111,7 +111,9 @@ const Posts = () => {
             <ConfirmDelete
               thisAdvertDelete={postAdvertCancel}
               thisDelete={cancelPost}
-              message={'Attention ! Toutes les modifications seront supprimées'}
+              message={
+                'Attention ! Toutes les modifications non validées seront supprimées'
+              }
             />
           </>
         )}
