@@ -54,47 +54,55 @@
     }
   }
   &__form {
-    text-align: center;
+    display: grid;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    grid-template-columns: 2 1fr;
+    padding-bottom: 70px;
+    border-radius: 25px;
+    box-shadow: 5px 5px 10px grey;
     &__username {
       &__lbl {
+        grid-column: 1;
         display: block;
         text-align: center;
+        margin-left: auto;
       }
       &__input {
+        grid-column: 1;
         text-align: center;
         border-radius: 15px;
         display: block;
         margin-left: auto;
-        margin-right: auto;
-        height: 1.5rem;
-      }
-      &__validate {
-        @include button-green;
-        display: block;
-        margin: 10px auto 20px auto;
+        height: 2.5rem;
       }
     }
     &__job {
       text-align: center;
       &__lbl {
+        grid-column: 1;
         display: block;
         text-align: center;
+        margin-left: auto;
       }
       &__input {
+        grid-column: 1;
         text-align: center;
         border-radius: 15px;
         display: block;
         margin-left: auto;
-        margin-right: auto;
-        height: 1.5rem;
+        height: 2.5rem;
       }
       &__validate {
+        display: block;
         @include button-green;
-        margin: 10px auto 20px auto;
+        margin: -25px auto 20px auto;
       }
       &__delete {
+        grid-column: 2;
         @include button-red;
-        margin: 10px auto 20px auto;
+        margin: auto auto 0px 10px;
       }
     }
   }

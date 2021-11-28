@@ -8,39 +8,7 @@ const fs = require('fs');
 const key = CryptoJS.enc.Hex.parse(process.env.KEY);
 const iv = CryptoJS.enc.Hex.parse(process.env.IV);
 
-// regex pour la protection d'injection de code
-const validUsername = (field) => {
-  return /^(?=.*[a-zA-Z]{1,})(?=.*[\d]{0,})[a-zA-Z0-9]{1,15}$/.test(field);
-};
-
-const validJob = (job) => {
-  return /^(?=.*[a-zA-Z]{1,})(?=.*[\d]{0,})[a-zA-Z0-9]{1,15}$/.test(job);
-};
-
-// regex pour la protection d'injection de code
-const validEmail = (email) => {
-  return /^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(email);
-};
-
-const validPassword = (password) => {
-  return /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}[^@&"()!_$*€£`+=\/;?#]+$/.test(
-    password
-  );
-};
-
 exports.signup = (req, res, next) => {
-  //on teste les champs
-  /* if (!validUsername(req.body.username)) {
-    return res.status(401).json({ error: 'Caractères non valide' });
-  }
-  if (!validEmail(req.body.email)) {
-    return res.status(401).json({ error: 'Email non valide' });
-  }
-  if (!validPassword(req.body.password)) {
-    return res.status(401).json({
-      error: 'password',
-    });
-  }*/
   bcrypt
     // on hash le mot de passe
     .hash(req.body.password, 10)
@@ -71,16 +39,6 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  //on teste les champs
-  if (!validEmail(req.body.email)) {
-    return res.status(406).json({ message: 'Email non valide' });
-  }
-  if (!validPassword(req.body.password)) {
-    return res.status(406).json({
-      errorPassword:
-        'Le mot de passe doit contenir au moins 9 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
-    });
-  }
   //on cherche le user avec le même email crypté
   db.user
     .findOne({
@@ -158,10 +116,6 @@ exports.getAllUsers = (req, res, next) => {
 
 //mise a jour du login
 exports.updateLogin = (req, res, next) => {
-  //on test le champ mail
-  if (!validEmail(req.body.email)) {
-    return res.status(401).json({ message: 'Email non valide' });
-  }
   db.user
     .findOne({
       where: {
@@ -197,13 +151,6 @@ exports.updateLogin = (req, res, next) => {
 
 // mise a jour du password
 exports.updatePassword = (req, res, next) => {
-  //on test le champ password
-  if (!validPassword(req.body.password)) {
-    return res.status(401).json({
-      error:
-        'Le mot de passe doit contenir au moins 9 caractères avec : une majuscule, une minuscule, un chiffre et ne doit pas contenir de caractères spéciaux',
-    });
-  }
   db.user
     .findOne({ where: { id: req.body.userId } })
     .then((user) => {

@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/get', auth, postCtrl.getAllPosts);
 router.get('/get/byUserId', auth, postCtrl.getPostByUser);
 router.post('/create', auth, multer, validate.content, postCtrl.createPost);
-router.put('/update/:id', auth, multer, postCtrl.updatePost);
+router.put('/update/:id', auth, multer, validate.content, postCtrl.updatePost);
 router.delete('/delete/:id', auth, postCtrl.deletePost);
 
 module.exports = router;

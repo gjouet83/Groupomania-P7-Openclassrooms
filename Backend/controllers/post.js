@@ -60,6 +60,9 @@ exports.getPostByUser = (req, res, next) => {
 //on crée un post
 exports.createPost = (req, res, next) => {
   // on test si la requête contient un fichier
+  if (req.body.content === '' && !req.file) {
+    throw err;
+  }
   const newPost = req.file
     ? {
         ...req.body,
@@ -84,6 +87,9 @@ exports.createPost = (req, res, next) => {
 
 //on modifie un post
 exports.updatePost = (req, res, next) => {
+  if (req.body.content === '' && !req.file) {
+    throw err;
+  }
   const updatedPost = req.file
     ? {
         ...req.body,

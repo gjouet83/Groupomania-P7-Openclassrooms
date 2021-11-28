@@ -8,8 +8,14 @@ const router = express.Router();
 
 router.get('/get', auth, userCtrl.getAllUsers);
 router.get('/get/:id', auth, userCtrl.getOneUser);
-router.post('/signup', validate.email, userCtrl.signup);
-router.post('/login', validate.email, userCtrl.login);
+router.post(
+  '/signup',
+  validate.email,
+  validate.username,
+  validate.password,
+  userCtrl.signup
+);
+router.post('/login', validate.email, validate.password, userCtrl.login);
 router.put(
   '/update/login/:id',
   auth,
@@ -17,8 +23,14 @@ router.put(
   validate.newEmail,
   userCtrl.updateLogin
 );
-router.put('/update/password/:id', auth, userCtrl.updatePassword);
-router.put('/update/:id', auth, multer, userCtrl.updateUser);
+router.put(
+  '/update/password/:id',
+  auth,
+  validate.password,
+  validate.newPassword,
+  userCtrl.updatePassword
+);
+router.put('/update/:id', auth, multer, validate.profil, userCtrl.updateUser);
 router.put('/delete/profilimage/:id', auth, multer, userCtrl.deleteProfilImage);
 router.delete('/delete/:id', auth, userCtrl.deleteUser);
 

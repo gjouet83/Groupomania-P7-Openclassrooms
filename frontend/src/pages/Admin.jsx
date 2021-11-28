@@ -15,6 +15,7 @@ const Admin = () => {
   }
 
   const [users, setUsers] = useState([]);
+  const [forceUpdate, setForceUpdate] = useState(false);
 
   const getUsers = () => {
     axios
@@ -32,7 +33,7 @@ const Admin = () => {
   useEffect(() => {
     getUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [forceUpdate]);
 
   return (
     <main>
@@ -54,7 +55,12 @@ const Admin = () => {
         </div>
         {/* boucle dans tableau users pour récupérer chaque user que l'on passe en props */}
         {users.map((user) => (
-          <UsersTable key={user.id} user={user} />
+          <UsersTable
+            key={user.id}
+            user={user}
+            forceUpdate={forceUpdate}
+            setForceUpdate={setForceUpdate}
+          />
         ))}
       </section>
     </main>

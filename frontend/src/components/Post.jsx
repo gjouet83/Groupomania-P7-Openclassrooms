@@ -21,6 +21,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   const [colorLike, setColorLike] = useState('');
   const [colorDislike, setColorDislike] = useState('');
   const [isOpen, setOpen] = useState(false);
+  const [emptyPostPanel, setEmptyPostPanel] = useState(false);
   const [image, setImage] = useState(null);
   const [postCancelPanel, setPostCancelPanel] = useState(false);
   const [postDeletePanel, setPostDeletePanel] = useState(false);
@@ -196,6 +197,9 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
 
   const deleteImagePost = () => {
     imageRef.current.value = '';
+    if (post.content === '') {
+      emptyPostAdvert();
+    }
     axios({
       headers: { Authorization: `Bearer ${currentUser}` },
       'Content-Type': 'application/json',
@@ -268,6 +272,11 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
     setImage();
     imageRef.current.value = '';
     setPostsUpdate(!postsUpdate);
+  };
+
+  const emptyPostAdvert = () => {
+    imageDeletePanel && setImageDeletePanel(!imageDeletePanel);
+    setEmptyPostPanel(!emptyPostPanel);
   };
 
   const postAdvertDelete = () => {
@@ -363,6 +372,26 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
                 message={"Voulez-vous vraiment supprimer l'image ?"}
               />
             </>
+          )}
+          {emptyPostPanel && (
+            <div className="advert">
+              <div className="advert__panel">
+                <span className="advert__panel__message">
+                  Le post ne peut pas être vide, veuillez d'abord écrire un
+                  texte. Si vous souhaitez changer l'image cliquez sur "choisir
+                  une image"
+                </span>
+                <div className="advert__panel__buttons">
+                  <button
+                    className="advert__panel__buttons__cancel"
+                    type="button"
+                    onClick={emptyPostAdvert}
+                  >
+                    Ok
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
           <textarea
             aria-label="zone de saisie de texte"

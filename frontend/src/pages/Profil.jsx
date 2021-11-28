@@ -30,9 +30,11 @@ const Profil = () => {
   const [userComments, setUserComments] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
   const [user, setUser] = useState(0);
-  const [pseudo, setPseudo] = useState();
+  const [pseudo, setPseudo] = useState(user.username);
   const [pseudoErr, setPseudoErr] = useState(false);
-  const [job, setJob] = useState();
+  const pseudoRef = useRef();
+  const [jobErr, setJobErr] = useState(false);
+  const [job, setJob] = useState(user.job);
   const jobInputRef = useRef();
   const [profilImage, setProfilImage] = useState();
   const [profilDeletePanel, setProfilDeletePanel] = useState(false);
@@ -78,28 +80,30 @@ const Profil = () => {
   };
 
   const updateUser = () => {
-    const updatedUser = {
-      userId: currentUserdecoded.userId,
-      username: pseudo,
-      job: job,
-    };
-    axios
-      .put('http://localhost:3000/api/users/update/:id', updatedUser, {
-        headers: { Authorization: `Bearer ${currentUser}` },
-      })
-      .then((ok) => {
-        setProfileUpdate(!profileUpdate);
+    if (validPseudo.test(pseudo) || validPseudo.test(job)) {
+      const updatedUser = {
+        userId: user.id,
+        username: pseudo,
+        job: job,
+      };
+      axios
+        .put('http://localhost:3000/api/users/update/:id', updatedUser, {
+          headers: { Authorization: `Bearer ${currentUser}` },
+        })
+        .then((ok) => {
+          setProfileUpdate(!profileUpdate);
 
-        console.log(ok);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          console.log(ok);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const updateProfilImage = () => {
     let formData = new FormData();
-    formData.append('userId', currentUserdecoded.userId);
+    formData.append('userId', user.id);
     formData.append('image', profilImage);
     axios({
       headers: { Authorization: `Bearer ${currentUser}` },
@@ -111,6 +115,7 @@ const Profil = () => {
       .then(() => {
         getUserImageProfile(profilImage);
         setProfilImage(!profilImage);
+        setProfileUpdate(!profileUpdate);
       })
       .catch((err) => {
         console.log(err);
@@ -126,7 +131,7 @@ const Profil = () => {
   const deleteAvatar = () => {
     imageRef.current.value = '';
     const updatedUser = {
-      userId: currentUserdecoded.userId,
+      userId: user.id,
     };
     axios
       .put(
@@ -193,6 +198,11 @@ const Profil = () => {
       setPseudoErr(true);
     } else {
       setPseudoErr(false);
+    }
+    if (job && !validPseudo.test(job)) {
+      setJobErr(true);
+    } else {
+      setJobErr(false);
     }
   }, [pseudo, job]);
 
@@ -293,40 +303,40 @@ const Profil = () => {
             </button>
           )}
         </div>
-        <form className="profil__form" onSubmit={updateUser}>
-          <label className="profil__form__username__lbl">
-            Pseudo:
-            <input
-              className="profil__form__username__input"
-              name="pseudo"
-              type="text"
-              placeholder={user.username}
-              onChange={(e) => setPseudo(e.target.value)}
-            />
-          </label>
-          {pseudoErr && <span className="alerte">Caractères invalides</span>}
-          <button className="profil__form__username__validate" type="submit">
-            Enregistrer
-          </button>
-          <label className="profil__form__job__lbl">
-            Poste dans l'entreprise:
-            <input
-              className="profil__form__job__input"
-              name="job"
-              type="text"
-              placeholder={user.job}
-              onChange={(e) => setJob(e.target.value)}
-              ref={jobInputRef}
-            />
-          </label>
-          {pseudoErr && <span className="alerte">Caractères invalides</span>}
-          <button
-            className="profil__form__job__delete"
-            type="submit"
-            onClick={deleteJob}
-          >
-            Supprimer
-          </button>
+        <form onSubmit={updateUser}>
+          <fieldset className="profil__form">
+            <label className="profil__form__username__lbl">
+              Pseudo:
+              <input
+                className="profil__form__username__input"
+                name="pseudo"
+                type="text"
+                placeholder={user.username}
+                onChange={(e) => setPseudo(e.target.value)}
+                ref={pseudoRef}
+              />
+            </label>
+            {pseudoErr && <span className="alerte">Caractères invalides</span>}
+            <label className="profil__form__job__lbl">
+              Poste dans l'entreprise:
+              <input
+                className="profil__form__job__input"
+                name="job"
+                type="text"
+                placeholder={user.job}
+                onChange={(e) => setJob(e.target.value)}
+                ref={jobInputRef}
+              />
+            </label>
+            {jobErr && <span className="alerte">Caractères invalides</span>}
+            <button
+              className="profil__form__job__delete"
+              type="submit"
+              onClick={deleteJob}
+            >
+              Supprimer
+            </button>
+          </fieldset>
           <button className="profil__form__job__validate" type="submit">
             Enregistrer
           </button>

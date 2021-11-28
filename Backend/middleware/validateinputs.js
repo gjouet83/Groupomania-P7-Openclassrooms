@@ -34,13 +34,64 @@ exports.newEmail = [
   },
 ];
 
-exports.content = [
-  body('content')
+exports.username = [
+  body('username')
     .not()
     .isEmpty()
     .trim()
     .escape()
     .withMessage('Caractères Invalides !'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ errors: errors.array() });
+    next();
+  },
+];
+
+exports.profil = [
+  body('username')
+    .if(body('username').exists())
+    .trim()
+    .escape()
+    .isAlphanumeric('fr-FR', { ignore: ' -_' })
+    .withMessage('Caractères invalides'),
+  body('job')
+    .if(body('job').exists())
+    .trim()
+    .escape()
+    .isAlphanumeric('fr-FR', { ignore: ' -_' })
+    .withMessage('Caractères invalides'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ errors: errors.array() });
+    next();
+  },
+];
+
+exports.password = [
+  body('password').isLength({ min: 9 }).isAlphanumeric(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ errors: errors.array() });
+    next();
+  },
+];
+
+exports.newPassword = [
+  body('newPassword').isLength({ min: 9 }).isAlphanumeric(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ errors: errors.array() });
+    next();
+  },
+];
+
+exports.content = [
+  body('content').trim().escape(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())

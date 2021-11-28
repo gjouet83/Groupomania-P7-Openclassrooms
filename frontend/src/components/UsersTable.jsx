@@ -2,7 +2,7 @@ import axios from 'axios';
 import ConfirmDelete from './ConfirmDelete';
 import { useEffect, useState } from 'react';
 
-const UsersTable = ({ user }) => {
+const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
   const currentUser = JSON.parse(localStorage.getItem('user')); // on vérifie si le token est présent dans le localstorage
   const [checked, setChecked] = useState(false);
   const [profilDeletePanel, setProfilDeletePanel] = useState(false);
@@ -38,7 +38,7 @@ const UsersTable = ({ user }) => {
         params: { userId: user.id },
       })
       .then(() => {
-        window.location.reload();
+        setForceUpdate(!forceUpdate);
       })
       .catch((err) => {
         console.log(err);
