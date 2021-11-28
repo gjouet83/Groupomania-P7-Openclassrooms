@@ -63,6 +63,9 @@
     border-radius: 25px;
     box-shadow: 5px 5px 10px grey;
     &__username {
+      grid-column: 1;
+      margin-left: auto;
+      margin-right: auto;
       &__lbl {
         grid-column: 1;
         display: block;
@@ -79,7 +82,10 @@
       }
     }
     &__job {
-      text-align: center;
+      grid-column: 1;
+      grid-row: 4;
+      margin-left: auto;
+      margin-right: auto;
       &__lbl {
         grid-column: 1;
         display: block;

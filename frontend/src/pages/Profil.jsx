@@ -9,7 +9,7 @@ import Post from '../components/Post';
 import Comment from '../components/Comment';
 import jwt_decode from 'jwt-decode';
 import { ImageContext } from '../utils/context';
-import { validPseudo } from '../components/Regexp';
+import { validPseudo, validJob } from '../components/Regexp';
 import ConfirmDelete from '../components/ConfirmDelete';
 import axios from 'axios';
 
@@ -80,7 +80,7 @@ const Profil = () => {
   };
 
   const updateUser = () => {
-    if (validPseudo.test(pseudo) || validPseudo.test(job)) {
+    if (validPseudo.test(pseudo) && validJob.test(job)) {
       const updatedUser = {
         userId: user.id,
         username: pseudo,
@@ -199,7 +199,7 @@ const Profil = () => {
     } else {
       setPseudoErr(false);
     }
-    if (job && !validPseudo.test(job)) {
+    if (job && !validJob.test(job)) {
       setJobErr(true);
     } else {
       setJobErr(false);
@@ -316,7 +316,9 @@ const Profil = () => {
                 ref={pseudoRef}
               />
             </label>
-            {pseudoErr && <span className="alerte">Caractères invalides</span>}
+            {pseudoErr && (
+              <span className="profil__form__username alerte">Invalide</span>
+            )}
             <label className="profil__form__job__lbl">
               Poste dans l'entreprise:
               <input
@@ -328,7 +330,9 @@ const Profil = () => {
                 ref={jobInputRef}
               />
             </label>
-            {jobErr && <span className="alerte">Caractères invalides</span>}
+            {jobErr && (
+              <span className="profil__form__job alerte">Invalide</span>
+            )}
             <button
               className="profil__form__job__delete"
               type="submit"

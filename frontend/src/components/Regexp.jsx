@@ -5,6 +5,6 @@ export const validPassword = new RegExp(
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}[^@&"()!_$*€£`+=/;?#]+$/
 );
 
-export const validPseudo = new RegExp(
-  /^(?=.*[a-zA-Z]{1,})(?=.*[\d]{0,})[a-zA-Z0-9]{1,15}$/
-);
+export const validPseudo = new RegExp(/^[a-zA-Z\d\-_\séèàçù]{2,15}$/);
+
+export const validJob = new RegExp(/^[a-zA-Z\d\-_\séèàçù]{3,}$/);

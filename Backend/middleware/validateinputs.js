@@ -36,6 +36,7 @@ exports.newEmail = [
 
 exports.username = [
   body('username')
+    .isLength({ min: 2, max: 15 })
     .not()
     .isEmpty()
     .trim()
@@ -52,12 +53,14 @@ exports.username = [
 exports.profil = [
   body('username')
     .if(body('username').exists())
+    .isLength({ min: 2, max: 15 })
     .trim()
     .escape()
     .isAlphanumeric('fr-FR', { ignore: ' -_' })
     .withMessage('Caractères invalides'),
   body('job')
     .if(body('job').exists())
+    .isLength({ min: 3 })
     .trim()
     .escape()
     .isAlphanumeric('fr-FR', { ignore: ' -_' })

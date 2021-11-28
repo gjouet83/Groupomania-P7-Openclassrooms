@@ -99,7 +99,7 @@ const Signup = () => {
                 required
               />
             </label>
-            {pseudoErr && <span className="alerte">Caractères invalides</span>}
+            {pseudoErr && <span className="alerte">Invalide</span>}
             {backendMessagePseudo && (
               <span className="alerte">{backendMessagePseudo}</span>
             )}

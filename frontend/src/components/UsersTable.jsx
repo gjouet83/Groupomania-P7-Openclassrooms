@@ -1,34 +1,19 @@
 import axios from 'axios';
 import ConfirmDelete from './ConfirmDelete';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { validPseudo } from '../components/Regexp';
 
 const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
   const currentUser = JSON.parse(localStorage.getItem('user')); // on vérifie si le token est présent dans le localstorage
-  const [checked, setChecked] = useState(false);
   const [profilDeletePanel, setProfilDeletePanel] = useState(false);
+  const [avatarDeletePanel, setAvatarDeletePanel] = useState(false);
   const [isAdmin, setIsAdmin] = useState('');
-
-  const handleChange = () => {
-    setChecked(!checked);
-  };
-
-  //fonction mise a jour user => admin
-  const sendForm = () => {
-    const updatedUser = {
-      userId: user.id,
-      admin: checked,
-    };
-    axios
-      .put('http://localhost:3000/api/users/update/:id', updatedUser, {
-        headers: { Authorization: `Bearer ${currentUser}` },
-      })
-      .then((ok) => {
-        console.log(ok);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const [pseudo, setPseudo] = useState(user.username);
+  const [pseudoErr, setPseudoErr] = useState(false);
+  const pseudoRef = useRef();
+  const [job, setJob] = useState(user.job);
+  const [jobErr, setJobErr] = useState(false);
+  const jobInputRef = useRef();
 
   //fonction suppression d'un user
   const deleteUser = () => {
@@ -45,8 +30,61 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
       });
   };
 
+  const deleteAvatar = () => {
+    const updatedUser = {
+      userId: user.id,
+    };
+    axios
+      .put(
+        'http://localhost:3000/api/users/delete/profilimage/:id',
+        updatedUser,
+        {
+          headers: { Authorization: `Bearer ${currentUser}` },
+        }
+      )
+      .then(() => {
+        setForceUpdate(!forceUpdate);
+        setAvatarDeletePanel(!avatarDeletePanel);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const updateUser = () => {
+    if (validPseudo.test(pseudo) || validPseudo.test(job)) {
+      const updatedUser = {
+        userId: user.id,
+        username: pseudo,
+        job: job,
+      };
+      axios
+        .put('http://localhost:3000/api/users/update/:id', updatedUser, {
+          headers: { Authorization: `Bearer ${currentUser}` },
+        })
+        .then((ok) => {
+          setForceUpdate(!forceUpdate);
+
+          console.log(ok);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const deleteJob = () => {
+    setJob('Non communiqué');
+    jobInputRef.current.value = 'Non communiqué';
+    updateUser(setJob('Non communiqué'));
+  };
+
   const profilAdvertDelete = () => {
     setProfilDeletePanel(!profilDeletePanel);
+  };
+
+  const avatarAdvertDelete = () => {
+    setAvatarDeletePanel(!avatarDeletePanel);
   };
 
   useEffect(() => {
@@ -54,12 +92,21 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
     if (user.username === 'Admin') {
       setIsAdmin('disappear');
     }
-    //on verifie si le user est admin ou pas et on met a jour le satut
-    if (user.admin === 1) {
-      setChecked(true);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (pseudo && !validPseudo.test(pseudo)) {
+      setPseudoErr(true);
+    } else {
+      setPseudoErr(false);
+    }
+    if (job && !validPseudo.test(job)) {
+      setJobErr(true);
+    } else {
+      setJobErr(false);
+    }
+  }, [pseudo, job]);
 
   return (
     <div className="admin__userarray">
@@ -72,6 +119,76 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
           />
         </>
       )}
+      {avatarDeletePanel && (
+        <>
+          <ConfirmDelete
+            thisAdvertDelete={avatarAdvertDelete}
+            thisDelete={deleteAvatar}
+            message="Voulez-vous vraiment supprimer votre photo de profil ?"
+          />
+        </>
+      )}
+      <div className={`admin__userarray__buttons ${isAdmin}`}>
+        <button
+          className="admin__userarray__buttons__delete"
+          type="button"
+          onClick={avatarAdvertDelete}
+        >
+          Supprimer l'avatar
+        </button>
+      </div>
+      <form
+        className={`admin__userarray__form ${isAdmin}`}
+        onSubmit={updateUser}
+      >
+        <fieldset className={`admin__userarray__form__fieldset ${isAdmin}`}>
+          <label className="admin__userarray__form__fieldset__username__lbl">
+            Pseudo:
+            <input
+              className="admin__userarray__form__fieldset__username__input"
+              name="pseudo"
+              type="text"
+              placeholder={user.username}
+              onChange={(e) => setPseudo(e.target.value)}
+              ref={pseudoRef}
+            />
+          </label>
+          {pseudoErr && (
+            <span className="admin__userarray__form__fieldset__username alerte">
+              Caractères invalides
+            </span>
+          )}
+          <label className="admin__userarray__form__fieldset__job__lbl">
+            Poste dans l'entreprise:
+            <input
+              className="admin__userarray__form__fieldset__job__input"
+              name="job"
+              type="text"
+              placeholder={user.job}
+              onChange={(e) => setJob(e.target.value)}
+              ref={jobInputRef}
+            />
+          </label>
+          {jobErr && (
+            <span className="admin__userarray__form__fieldset__job alerte">
+              Caractères invalides
+            </span>
+          )}
+          <button
+            className="admin__userarray__form__fieldset__job__delete"
+            type="submit"
+            onClick={deleteJob}
+          >
+            Supprimer
+          </button>
+        </fieldset>
+        <button
+          className={`admin__userarray__form__fieldset__job__validate ${isAdmin}`}
+          type="submit"
+        >
+          Enregistrer
+        </button>
+      </form>
       <h3 className={`admin__userarray__name ${isAdmin}`}>{user.username}</h3>
       <button
         className={`admin__userarray__userdelete ${isAdmin}`}
@@ -80,23 +197,6 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
       >
         Supprimer l'utilisateur
       </button>
-      <form
-        className={`admin__userarray__element ${isAdmin}`}
-        onSubmit={sendForm}
-      >
-        <label className="admin__userarray__element__lbl">
-          Administrateur ?
-          <input
-            className="admin__userarray__element__input"
-            type="checkbox"
-            id="admin"
-            name="admin"
-            checked={checked}
-            onChange={handleChange}
-          ></input>
-        </label>
-        <button type="submit">Valider</button>
-      </form>
     </div>
   );
 };
