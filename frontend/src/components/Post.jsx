@@ -222,8 +222,6 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   //fonction mofifier un post
   const sendForm = (e) => {
     e.preventDefault();
-    console.log(post.image);
-    console.log(post.content);
     if (contentRef.current.value === '' && imageRef.current.value === '') {
       emptyPostAdvert();
     } else {
