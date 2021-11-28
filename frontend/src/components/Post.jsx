@@ -22,7 +22,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   const [colorDislike, setColorDislike] = useState('');
   const [isOpen, setOpen] = useState(false);
   const [emptyPostPanel, setEmptyPostPanel] = useState(false);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const [postCancelPanel, setPostCancelPanel] = useState(false);
   const [postDeletePanel, setPostDeletePanel] = useState(false);
   const [imageDeletePanel, setImageDeletePanel] = useState(false);
@@ -197,51 +197,58 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
 
   const deleteImagePost = () => {
     imageRef.current.value = '';
-    if (post.content === '') {
+    if (post.content === '' && contentRef.current.value === '') {
       emptyPostAdvert();
-    }
-    axios({
-      headers: { Authorization: `Bearer ${currentUser}` },
-      'Content-Type': 'application/json',
-      url: 'http://localhost:3000/api/posts/update/:id',
-      method: 'PUT',
-      params: { id: post.id },
-      data: { attachment: '', content: post.content },
-    })
-      .then(() => {
-        // on reset les status et on referme la zone de saisie
-        setPostsUpdate(!postsUpdate);
-        imageAdvertDelete();
+    } else {
+      axios({
+        headers: { Authorization: `Bearer ${currentUser}` },
+        'Content-Type': 'application/json',
+        url: 'http://localhost:3000/api/posts/update/:id',
+        method: 'PUT',
+        params: { id: post.id },
+        data: { attachment: '', content: post.content },
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then(() => {
+          // on reset les status et on referme la zone de saisie
+          setPostsUpdate(!postsUpdate);
+          imageAdvertDelete();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   //fonction mofifier un post
   const sendForm = (e) => {
     e.preventDefault();
-    let formData = new FormData();
-    formData.append('userId', currentUserdecoded.userId);
-    formData.append('content', contentRef.current.value);
-    formData.append('image', image);
-    axios({
-      headers: { Authorization: `Bearer ${currentUser}` },
-      'Content-Type': 'application/json',
-      url: 'http://localhost:3000/api/posts/update/:id',
-      method: 'PUT',
-      params: { id: post.id },
-      data: formData,
-    })
-      .then(() => {
-        // on reset les status et on referme la zone de saisie
-        setImage();
-        toggleClass();
-        setPostsUpdate(!postsUpdate);
+    console.log(post.image);
+    console.log(post.content);
+    if (contentRef.current.value === '' && imageRef.current.value === '') {
+      emptyPostAdvert();
+    } else {
+      let formData = new FormData();
+      formData.append('userId', currentUserdecoded.userId);
+      formData.append('content', contentRef.current.value);
+      formData.append('image', image);
+      axios({
+        headers: { Authorization: `Bearer ${currentUser}` },
+        'Content-Type': 'application/json',
+        url: 'http://localhost:3000/api/posts/update/:id',
+        method: 'PUT',
+        params: { id: post.id },
+        data: formData,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then(() => {
+          // on reset les status et on referme la zone de saisie
+          setImage();
+          toggleClass();
+          setPostsUpdate(!postsUpdate);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   //fonction suppression d'un post

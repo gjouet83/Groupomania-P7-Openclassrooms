@@ -23,6 +23,7 @@ const Posts = () => {
   const [isOpen, setOpen] = useState(false);
   const [postCancelPanel, setPostCancelPanel] = useState(false);
   const [image, setImage] = useState(null);
+  const [emptyPostPanel, setEmptyPostPanel] = useState(false);
   const contentRef = useRef();
   const imageRef = useRef();
 
@@ -41,28 +42,32 @@ const Posts = () => {
 
   const sendForm = (e) => {
     e.preventDefault();
-    let formData = new FormData();
-    formData.append('userId', currentUserdecoded.userId);
-    formData.append('content', content);
-    formData.append('image', image);
-    axios({
-      headers: { Authorization: `Bearer ${currentUser}` },
-      'Content-Type': 'application/json',
-      url: 'http://localhost:3000/api/posts/create',
-      method: 'POST',
-      data: formData,
-    })
-      .then(() => {
-        // on reset les status et on referme la zone de saisie
-        setContent('');
-        contentRef.current.value = '';
-        setImage(null);
-        imageRef.current.value = '';
-        toggleClass();
+    if (contentRef.current.value === '' && imageRef.current.value === '') {
+      emptyPostAdvert();
+    } else {
+      let formData = new FormData();
+      formData.append('userId', currentUserdecoded.userId);
+      formData.append('content', content);
+      formData.append('image', image);
+      axios({
+        headers: { Authorization: `Bearer ${currentUser}` },
+        'Content-Type': 'application/json',
+        url: 'http://localhost:3000/api/posts/create',
+        method: 'POST',
+        data: formData,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then(() => {
+          // on reset les status et on referme la zone de saisie
+          setContent('');
+          contentRef.current.value = '';
+          setImage(null);
+          imageRef.current.value = '';
+          toggleClass();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const toggleClass = () => {
@@ -83,6 +88,10 @@ const Posts = () => {
     contentRef.current.value = '';
     toggleClass();
     postAdvertCancel();
+  };
+
+  const emptyPostAdvert = () => {
+    setEmptyPostPanel(!emptyPostPanel);
   };
 
   const postAdvertCancel = () => {
@@ -112,6 +121,26 @@ const Posts = () => {
               isOpen ? 'posts__createone opencreatepost' : 'posts__createone'
             }
           >
+            {emptyPostPanel && (
+              <div className="advert">
+                <div className="advert__panel">
+                  <span className="advert__panel__message">
+                    Le post ne peut pas être vide, veuillez d'abord écrire un
+                    texte. Si vous souhaitez changer l'image cliquez sur
+                    "choisir une image"
+                  </span>
+                  <div className="advert__panel__buttons">
+                    <button
+                      className="advert__panel__buttons__cancel"
+                      type="button"
+                      onClick={emptyPostAdvert}
+                    >
+                      Ok
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
             <textarea
               aria-label="zone de saisie de texte"
               className="posts__createone__input"

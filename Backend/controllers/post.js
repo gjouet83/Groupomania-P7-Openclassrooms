@@ -87,9 +87,6 @@ exports.createPost = (req, res, next) => {
 
 //on modifie un post
 exports.updatePost = (req, res, next) => {
-  if (req.body.content === '' && !req.file) {
-    throw err;
-  }
   const updatedPost = req.file
     ? {
         ...req.body,
