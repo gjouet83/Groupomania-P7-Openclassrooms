@@ -2,7 +2,7 @@
 
 ## Prérequis:
 
-- Avoir installé GIT et Mysql sur sa machine
+- Avoir installé GIT et Mysql 5.7 sur sa machine
 
 ## INSTRUCTIONS
 

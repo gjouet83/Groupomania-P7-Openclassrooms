@@ -34,6 +34,9 @@
       &__delete {
         @include button-green;
       }
+      &__ok {
+        @include button-green;
+      }
     }
   }
 }

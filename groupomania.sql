@@ -67,7 +67,7 @@ CREATE TABLE `comments` (
   KEY `postId` (`postId`),
   CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`postId`) REFERENCES `posts` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,7 +138,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,1,'Bienvenue à tous sur Groupomania !!!!!!!','http://localhost:3000/images/userId-1/userId-1posts1637531842137.png','2021-11-21 21:57:22','2021-11-22 04:51:09');
+INSERT INTO `posts` VALUES (1,1,'Bienvenue à tous sur Groupomania !!!!!','http://localhost:3000/images/userId-1/userId-1posts1637743041910.png','2021-11-21 21:57:22','2021-11-24 08:37:21');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +162,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,7 +171,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','jW/fnEeQX38gT1I9NMYnYj0MZn9GQ9vikCIQOMM1Rqw=','$2b$10$7GQf25qO7kSYEQCClkTSc.Oa6h6LA3t6D6f/6c2h0N8blhX0L4PP.','Administrateur','http://localhost:3000/images/userId-1/userId-1avatar1637531798380.png','2021-11-21','2021-11-21',1);
+INSERT INTO `users` VALUES (1,'Admin','jW/fnEeQX38gT1I9NMYnYj0MZn9GQ9vikCIQOMM1Rqw=','$2b$10$7GQf25qO7kSYEQCClkTSc.Oa6h6LA3t6D6f/6c2h0N8blhX0L4PP.','Administrateur','http://localhost:3000/images/userId-1/userId-1avatar1637742882473.png','2021-11-21','2021-11-24',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -184,4 +184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-22  6:01:44
+-- Dump completed on 2021-12-01  8:57:00

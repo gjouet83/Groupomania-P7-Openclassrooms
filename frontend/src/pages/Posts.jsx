@@ -133,11 +133,11 @@ const Posts = () => {
                   </span>
                   <div className="advert__panel__buttons">
                     <button
-                      className="advert__panel__buttons__cancel"
+                      className="advert__panel__buttons__ok"
                       type="button"
                       onClick={emptyPostAdvert}
                     >
-                      Ok
+                      OK
                     </button>
                   </div>
                 </div>

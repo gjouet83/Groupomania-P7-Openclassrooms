@@ -17,6 +17,7 @@ const Comments = () => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState();
   const [commentCancelPanel, setCommentCancelPanel] = useState(false);
+  const [emptyCommentPanel, setEmptyCommentPanel] = useState(false);
   const contentRef = useRef();
   const imageRef = useRef();
   const currentUser = JSON.parse(localStorage.getItem('user')); //on récupère le token dans le localstorage
@@ -43,29 +44,33 @@ const Comments = () => {
 
   const sendForm = (e) => {
     e.preventDefault();
-    let formData = new FormData();
-    formData.append('userId', currentUserdecoded.userId);
-    formData.append('postId', id);
-    formData.append('content', content);
-    formData.append('image', image);
-    axios({
-      headers: { Authorization: `Bearer ${currentUser}` },
-      'Content-Type': 'application/json',
-      url: 'http://localhost:3000/api/comments/create',
-      method: 'POST',
-      data: formData,
-    })
-      .then(() => {
-        //on reset le statut de content image
-        setContent('');
-        contentRef.current.value = '';
-        setImage(null);
-        imageRef.current.value = '';
-        toggleClass();
+    if (contentRef.current.value === '' && imageRef.current.value === '') {
+      emptyCommentAdvert();
+    } else {
+      let formData = new FormData();
+      formData.append('userId', currentUserdecoded.userId);
+      formData.append('postId', id);
+      formData.append('content', content);
+      formData.append('image', image);
+      axios({
+        headers: { Authorization: `Bearer ${currentUser}` },
+        'Content-Type': 'application/json',
+        url: 'http://localhost:3000/api/comments/create',
+        method: 'POST',
+        data: formData,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then(() => {
+          //on reset le statut de content image
+          setContent('');
+          contentRef.current.value = '';
+          setImage(null);
+          imageRef.current.value = '';
+          toggleClass();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const toggleClass = () => {
@@ -86,6 +91,10 @@ const Comments = () => {
     contentRef.current.value = '';
     toggleClass();
     commentAdvertCancel();
+  };
+
+  const emptyCommentAdvert = () => {
+    setEmptyCommentPanel(!emptyCommentPanel);
   };
 
   const commentAdvertCancel = () => {
@@ -111,6 +120,26 @@ const Comments = () => {
               }
             />
           </>
+        )}
+        {emptyCommentPanel && (
+          <div className="advert">
+            <div className="advert__panel">
+              <span className="advert__panel__message">
+                Le commentaire ne peut pas être vide, veuillez d'abord écrire un
+                texte. Si vous souhaitez changer l'image cliquez sur "choisir
+                une image"
+              </span>
+              <div className="advert__panel__buttons">
+                <button
+                  className="advert__panel__buttons__ok"
+                  type="button"
+                  onClick={emptyCommentAdvert}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
         )}
         <div className="comments__nav">
           <div className="comments__nav__button">

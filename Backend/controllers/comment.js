@@ -53,6 +53,9 @@ exports.getCommentByUser = (req, res, next) => {
 //on crée un commentaire
 exports.createComment = (req, res, next) => {
   // on test si la requête contient un fichier
+  if (req.body.content === '' && !req.file) {
+    throw err;
+  }
   const newComment = req.file
     ? {
         ...req.body,

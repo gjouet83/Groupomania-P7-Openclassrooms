@@ -301,7 +301,15 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   };
 
   const postAdvertCancel = () => {
-    setPostCancelPanel(!postCancelPanel);
+    if (
+      contentRef.current.value === '' &&
+      imageRef.current.value === '' &&
+      !isOpen
+    ) {
+      emptyPostAdvert();
+    } else {
+      setPostCancelPanel(!postCancelPanel);
+    }
   };
 
   // on déclenche la récupération du nombre de like quand le statut colorLike ou colorDislike change
@@ -390,11 +398,11 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
                 </span>
                 <div className="advert__panel__buttons">
                   <button
-                    className="advert__panel__buttons__cancel"
+                    className="advert__panel__buttons__ok"
                     type="button"
                     onClick={emptyPostAdvert}
                   >
-                    Ok
+                    OK
                   </button>
                 </div>
               </div>
