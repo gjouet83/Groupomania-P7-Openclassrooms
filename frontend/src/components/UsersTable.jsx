@@ -14,6 +14,7 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
   const [job, setJob] = useState(user.job);
   const [jobErr, setJobErr] = useState(false);
   const jobInputRef = useRef();
+  const [backendMessagePseudo, setBackendMessagePseudo] = useState('');
 
   //fonction suppression d'un user
   const deleteUser = () => {
@@ -51,7 +52,9 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
       });
   };
 
-  const updateUser = () => {
+  const updateUser = (e) => {
+    e.preventDefault();
+    setBackendMessagePseudo('');
     if (validPseudo.test(pseudo) || validPseudo.test(job)) {
       const updatedUser = {
         userId: user.id,
@@ -67,16 +70,22 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
 
           console.log(ok);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          if (
+            error.response.data.errno === 1062 &&
+            error.response.data.errField.username
+          ) {
+            setBackendMessagePseudo('Pseudo déjà utilsé');
+          }
+          console.log(error);
         });
     }
   };
 
-  const deleteJob = () => {
+  const deleteJob = (e) => {
     setJob('Non communiqué');
     jobInputRef.current.value = 'Non communiqué';
-    updateUser(setJob('Non communiqué'));
+    updateUser(e);
   };
 
   const profilAdvertDelete = () => {
@@ -155,7 +164,12 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
           </label>
           {pseudoErr && (
             <span className="admin__userarray__form__fieldset__username alerte">
-              Caractères invalides
+              Invalide
+            </span>
+          )}
+          {backendMessagePseudo && (
+            <span className="admin__userarray__form__fieldset__username alerte">
+              {backendMessagePseudo}
             </span>
           )}
           <label className="admin__userarray__form__fieldset__job__lbl">
@@ -171,7 +185,7 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
           </label>
           {jobErr && (
             <span className="admin__userarray__form__fieldset__job alerte">
-              Caractères invalides
+              Invalide
             </span>
           )}
           <button
@@ -181,6 +195,9 @@ const UsersTable = ({ user, forceUpdate, setForceUpdate }) => {
           >
             Supprimer
           </button>
+          <span className="admin__userarray__form__fieldset__job__instruction alerte">
+            Cliquez sur enregistrer après toutes modifications
+          </span>
         </fieldset>
         <button
           className={`admin__userarray__form__fieldset__job__validate ${isAdmin}`}
