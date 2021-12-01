@@ -209,8 +209,10 @@ exports.updateUser = (req, res, next) => {
     .then(() => {
       res.status(200).json({ message: 'Profil modifié avec SUCCES !' });
     })
-    .catch(() => {
-      res.status(400).json({ error: 'ECHEC de la modification du profil' });
+    .catch((error) => {
+      res
+        .status(400)
+        .json({ errno: error.parent.errno, errField: error.fields });
     });
 };
 

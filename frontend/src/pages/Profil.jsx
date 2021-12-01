@@ -32,6 +32,7 @@ const Profil = () => {
   const [user, setUser] = useState(0);
   const [pseudo, setPseudo] = useState(user.username);
   const [pseudoErr, setPseudoErr] = useState(false);
+  const [backendMessagePseudo, setBackendMessagePseudo] = useState('');
   const pseudoRef = useRef();
   const [jobErr, setJobErr] = useState(false);
   const [job, setJob] = useState(user.job);
@@ -73,13 +74,14 @@ const Profil = () => {
       });
   };
 
-  const deleteJob = () => {
+  const deleteJob = (e) => {
     setJob('Non communiqué');
     jobInputRef.current.value = 'Non communiqué';
-    updateUser(setJob('Non communiqué'));
+    updateUser(e);
   };
-
-  const updateUser = () => {
+  const updateUser = (e) => {
+    e.preventDefault();
+    setBackendMessagePseudo('');
     if (validPseudo.test(pseudo) && validJob.test(job)) {
       const updatedUser = {
         userId: user.id,
@@ -95,8 +97,14 @@ const Profil = () => {
 
           console.log(ok);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          if (
+            error.response.data.errno === 1062 &&
+            error.response.data.errField.username
+          ) {
+            setBackendMessagePseudo('Pseudo déjà utilsé');
+          }
+          console.log(error);
         });
     }
   };
@@ -319,6 +327,11 @@ const Profil = () => {
             {pseudoErr && (
               <span className="profil__form__username alerte">Invalide</span>
             )}
+            {backendMessagePseudo && (
+              <span className="profil__form__username alerte">
+                {backendMessagePseudo}
+              </span>
+            )}
             <label className="profil__form__job__lbl">
               Poste dans l'entreprise:
               <input
@@ -340,6 +353,9 @@ const Profil = () => {
             >
               Supprimer
             </button>
+            <span className="profil__form__job__instruction alerte">
+              Cliquez sur enregistrer après toutes modifications
+            </span>
           </fieldset>
           <button className="profil__form__job__validate" type="submit">
             Enregistrer

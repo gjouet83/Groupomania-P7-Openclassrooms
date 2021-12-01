@@ -59,7 +59,7 @@
     margin-left: auto;
     margin-right: auto;
     grid-template-columns: 2 1fr;
-    padding-bottom: 70px;
+    padding-bottom: 30px;
     border-radius: 25px;
     box-shadow: 5px 5px 10px grey;
     &__username {
@@ -99,6 +99,10 @@
         display: block;
         margin-left: auto;
         height: 2.5rem;
+      }
+      &__instruction {
+        grid-column: 1 / 3;
+        text-align: center;
       }
       &__validate {
         display: block;
