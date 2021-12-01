@@ -6,6 +6,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
+import { decode } from 'html-entities';
 import ConfirmDelete from './ConfirmDelete';
 import jwt_decode from 'jwt-decode';
 import moment from 'moment';
@@ -322,7 +323,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
   useEffect(() => {
     getLikeStatus();
     getNbComment();
-    contentRef.current.value = post.content;
+    contentRef.current.value = decode(post.content);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -474,7 +475,7 @@ const Post = ({ post, setPostsUpdate, postsUpdate }) => {
           alt={`média de la publication de ${post.user.username} en date du ${post.createdAt}`}
         ></img>
       </figure>
-      <p className="posts__post__content">{post.content}</p>
+      <p className="posts__post__content">{decode(post.content)}</p>
       <div className="posts__post__footer">
         <div className="posts__post__footer__like">
           <button

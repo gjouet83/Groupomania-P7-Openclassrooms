@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 import 'moment/locale/fr';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
+import { decode } from 'html-entities';
 import ConfirmDelete from './ConfirmDelete';
 
 const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
@@ -150,7 +151,7 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
   };
 
   useEffect(() => {
-    contentRef.current.value = comment.content;
+    contentRef.current.value = decode(comment.content);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -221,7 +222,9 @@ const Comment = ({ comment, setCommentsUpdate, commentsUpdate }) => {
             alt={`média de la publication de ${comment.user.username} en date du ${comment.createdAt}`}
           ></img>
         </figure>
-        <p className="comments__comment__main__content">{comment.content}</p>
+        <p className="comments__comment__main__content">
+          {decode(comment.content)}
+        </p>
       </div>
       <form onSubmit={sendForm}>
         <div
