@@ -23,10 +23,10 @@ ReactDOM.render(
           <Route exact path="/">
             <Login />
           </Route>
-          <Route exact path="/signup">
+          <Route path="/signup">
             <Signup />
           </Route>
-          <Route exact path="/login">
+          <Route path="/login">
             <Login />
           </Route>
           <Route path="/posts">
