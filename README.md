@@ -24,7 +24,7 @@ Projet n°7 du parcours développeur web chez OpenClassrooms qui a pour objectif
 - Cloner le repository avec la commande
 
 ```bash
-git clone https://github.com/gjouet83/guillaumejouet_7_28092021.git
+git clone https://github.com/gjouet83/Groupomania-P7-Openclassrooms.git
 ```
 
 ## MySQL
