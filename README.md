@@ -1,8 +1,21 @@
-# P7/OPENCLASSROOMS/GROUPOMANIA - CREER UN RESEAU SOCIAL D'ENTREPRISE
+# CREER UN RESEAU SOCIAL D'ENTREPRISE
+Projet n°7 du parcours développeur web chez OpenClassrooms qui a pour objectif: 
+- Authentifier un utilisateur et maintenir sa session
+- Personnaliser le contenu envoyé à un client web
+- Gérer un stockage de données à l'aide de SQL
+- Implémenter un stockage de données sécurisé en utilisant SQL
+
+## Technologies utilisées
+- React
+- Sass
+- NodeJS
+- ExpressJS
+- MySQL
+- Sequelize ORM
 
 ## Prérequis:
 
-- Avoir installé GIT et Mysql 5.7 sur sa machine
+- Avoir installé GIT, NODE, npm et Mysql 5.7 sur sa machine
 
 ## INSTRUCTIONS
 
@@ -42,7 +55,7 @@ USER_TOKEN=
 ```
 
 - DB_PORT: pour personnaliser le port de la bdd (laisser vide pour le port par defaut)
-- DB_USERNAME: votre nom d'utilisiteur pour votre base de données.
+- DB_USERNAME: votre nom d'utilisateur pour votre base de données.
 - DB_PASSWORD: votre mot de passe pour votre base de données.
 - USER_TOKEN = variable de votre choix.
 
@@ -51,7 +64,7 @@ USER_TOKEN=
 - Dans un nouveau terminal, a partir du dossier précédemment téléchargé, on accède au dossier Backend
 
 ```bash
-cd Backend
+cd backend
 ```
 
 - puis on installe les dépendances
