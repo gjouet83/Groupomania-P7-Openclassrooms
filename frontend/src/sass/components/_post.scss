@@ -60,6 +60,10 @@
     }
   }
   &__content {
+    overflow: hidden;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+    hyphens: auto;
     padding: 0 20px 20px 20px;
   }
   &__footer {

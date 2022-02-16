@@ -55,6 +55,10 @@
       @media all and (min-width: 768px) {
         padding-left: 20px;
       }
+      overflow: hidden;
+      overflow-wrap: break-word;
+      white-space: pre-line;
+      hyphens: auto;
       padding-left: 10px;
       width: 100%;
     }
