@@ -53,6 +53,8 @@ const Admin = () => {
           </div>
           <h2 className="admin__nav__title">Administrateur</h2>
         </div>
+        {users.length <= 1 && 
+        (<span>Il n'y a aucun utilisateur actuellement</span>)}
         {/* boucle dans tableau users pour récupérer chaque user que l'on passe en props */}
         {users.map((user) => (
           <UsersTable
